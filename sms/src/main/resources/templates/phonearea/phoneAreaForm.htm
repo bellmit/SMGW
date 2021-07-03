@@ -1,0 +1,102 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="前3位：" prop="pref">
+        	<el-input type="text" v-model="form.pref" placeholder="前3位" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="前7位：" prop="phone">
+        	<el-input type="text" v-model="form.phone" placeholder="前7位" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="省份：" prop="province">
+        	<el-input type="text" v-model="form.province" placeholder="省份" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="地市：" prop="city">
+        	<el-input type="text" v-model="form.city" placeholder="地市" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="运营商：" prop="isp">
+        	<el-input type="text" v-model="form.isp" placeholder="运营商" maxlength="200"></el-input>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	pref:'',
+            	phone:'',
+            	province:'',
+            	city:'',
+            	isp:''
+            },
+            formrules:{
+            	pref:[{required:true,message:"前3位不能为空",trigger:"blur"}],
+            	phone:[{required:true,message:"前7位不能为空",trigger:"blur"}],
+            	province:[{required:true,message:"省份不能为空",trigger:"blur"}],
+            	city:[{required:true,message:"地市不能为空",trigger:"blur"}],
+            	isp:[{required:true,message:"运营商不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	if(dialogData.id!="0"){
+	        	$.ajax({
+					url:"${ctx}/phoneArea/findById",
+					type:"post",
+					dataType:"json",
+					async:false,
+					data:{id:dialogData.id},
+					success:function({result,data}){
+						if(result=="success"){
+							that.form.id = data.id;
+							that.form.pref = data.pref;
+							that.form.phone = data.phone;
+							that.form.province = data.province;
+							that.form.city = data.city;
+							that.form.isp = data.isp;
+						}else{
+							toastr.error("加载失败！");
+						}
+					}
+				});
+        	}
+        },
+        methods:{
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                    	 	let param = JSON.parse(JSON.stringify(this.form));
+                      		$.ajax({
+	         					url:"${ctx}/phoneArea/saveOrUpdate",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"phoneAreaFormDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error(data);
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>
+<style>
+	.el-select .el-input{width:200px;}
+</style>

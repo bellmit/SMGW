@@ -1,0 +1,191 @@
+<#include "../common/_header.htm">
+<body class="gray-bg" onload="ipWhite.init();">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>登录IP白名单</h5>
+				<div class="ibox-tools"></div>
+			</div>
+			<div class="ibox-content">
+				<div class="form-group">
+					<div class="form-inline">
+						<label class="control-label">关键字：</label>
+						<input type="text" placeholder="" class="form-control fc-clear" style="width: 300px;" id="keyword">
+						<span class="btnCon">
+							<button type="button" class="btn btn-primary btn-sm" onclick="ipWhite.query();">查询</button>
+							 <input type="button" id="newadd" class="btn btn-primary btn-sm newadd" onclick="ipWhite.form();" value="新增" />
+                            <input type="button" id="del" class="btn btn-primary btn-sm delBtn" onclick="ipWhite.del();" value="删除" />
+						</span>
+					</div>
+				</div>
+				<div class="example">
+					<table data-mobile-responsive="true" data-click-to-select="true" id="table"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	var ipWhite = {
+		init:function(){
+		    let height = jQuery(window).height()-180;
+			$('#table').bootstrapTable({
+			     url:"${ctx}/ip/white/ipList",//请求数据url
+			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
+			         return {
+			        	 pageNumber: (params.offset / params.limit),  //页码
+			        	 pageSize: params.limit, //页面大小
+			        	 keyword:keyword
+			         };
+			     },
+			     // striped: true,                      //是否显示行间隔色
+			     showHeader : true,
+			     height:height,
+			     pagination: true,                   //是否显示分页（*）
+			     sidePagination : 'server',//服务器端分页
+			     strictSearch: true,
+			     pageNumber : 1,
+			     resizable:true,
+			     //showColumns:true,
+			     pageSize: 20,                       //每页的记录行数（*）
+			     pageList: [20,100],//分页步进值
+			     //表格的列
+			     columns: [
+			    	 { 
+			             field:'checked', 
+			             halign: 'center',
+			             align: 'center',
+			             checkbox : true
+			         },
+			         {
+			             title: '序号',//标题
+			             halign: 'center',
+			             align: 'center',
+			             width:'50px',
+			             formatter: function (value, row, index) {
+ 							return index+1;
+ 						 }
+			         },
+			         {
+			             field: 'ip',
+			             halign: 'center',
+			             align: 'center',
+			             title: 'IP'
+			         },
+			         {
+			             field: 'visitCount',
+			             halign: 'center',
+			             align: 'center',
+			             title: '访问次数'
+			         }
+			     ],
+			     onLoadSuccess: function () {
+			    	 setFixedTableBorder($('#table'),$("div.fixed-table-border"));
+			     }
+			 });
+		},
+		query: function () {
+			$("#table").bootstrapTable('refresh',{
+				 pageNumber : 1
+			 });
+		},
+		form : function (id) {
+			var ipFormDialog = top.dialog({
+            	id:"ipFormDialog",
+                title: '新增IP',
+                modal: true,
+                url: "${ctx}ip/white/ipForm?_t"+Math.random(),
+                height: 250,
+                width: 550,
+                data:{},
+                onclose:function(){
+                	if (ipFormDialog.data.submit) {
+						toastr.success("操作成功!");
+						ipWhite.query();
+                	}
+                }
+            });
+			ipFormDialog.show();
+            return false;
+		},
+		del:function(){
+			let arr = $('#table').bootstrapTable('getAllSelections');
+			if(arr.length<=0){
+				toastr.warning("请选择要删除的信息");
+				return false;
+			}
+            var d = top.dialog({
+                title: '提示',
+                width : 250,
+                height : 50,
+                padding:50,
+                content: '<div class="jyTit" style="margin-left: 65px;">您确定要删除么？</div>',
+                okValue: '确 定',
+                ok: function () {
+                    let ids = arr.map(item=>{
+                        return item.id;
+                    }).join(",");
+                    $.ajax({
+                        url:"${ctx}/ip/white/delete",
+                        type:"post",
+                        dataType:"json",
+                        async:false,
+                        data:{
+                            ids:ids
+                        },
+                        success:function({result,data}){
+                            if(result=="success"){
+                                toastr.success("操作成功!");
+                                ipWhite.query();
+                            }else{
+                                toastr.error("操作失败！");
+                            }
+                            d.close()
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () {
+                }
+            });
+            d.showModal();
+		},
+		exportList:function(){
+			let arr = $('#table').bootstrapTable('getAllSelections');
+			if(arr.length>0){
+				downCheck(arr);
+			}else{
+			
+	    	let keyword = $.trim($("#keyword").val());
+	    	var data = {
+	    		keyword:keyword	
+	    	};
+	 		var url="${ctx}/ip/white/downExcel";
+	         $(".loadingMask").show();
+	 		downExcel(url,data,function () {
+	             $(".loadingMask").hide();
+	 		})}
+		}
+	}
+	 function downCheck(data) {
+        let titles = [
+			{
+			    field: 'ip',//域值
+			    title: 'IP',//内容
+			},
+			{
+			    field: 'visitCount',//域值
+			    title: '访问次数',//内容
+			}
+        ];
+        downCSV(titles, data, '登录IP白名单');
+    }
+</script>
+	<style>
+.mt5 {
+	margin-top: 5px;
+}
+</style>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<#include "../common/_header.htm">
+<div id="messageForm" v-cloak>
+    <el-card>
+        <el-form :inline="false" ref="form" :model="form" :rules="formrules" :label-position="labelPosition" label-width="180px" >
+            <el-form-item label="每个用户最大任务个数" prop="taskCount">
+                <el-input type="text" v-model="form.taskCount" placeholder="" maxlength="200"></el-input>
+            </el-form-item>
+        </el-form>
+        <div style="margin-left: 180px;margin-top: 10px;">
+            <el-button size="small" type="primary" @click="saveOrUpdate" style="font-size: 14px;">确定</el-button>
+        </div>
+
+    </el-card>
+
+</div>
+<script>
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	taskCount:''
+            },
+            formrules:{
+            	taskCount:[{required:true,message:"个数不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	$.ajax({
+				url:"${ctx}/sysConfig/getConfig",
+				type:"post",
+				dataType:"json",
+				async:false,
+				data:{},
+				success:function({result,data}){
+					if(result=="success"){
+						that.form.taskCount = data.taskCount;
+					}else{
+						toastr.error("加载失败！");
+					}
+				}
+			});
+        },
+        methods:{
+        	saveOrUpdate:function(){
+        		this.$refs['form'].validate((valid) => {
+                    if (valid) {
+                    	let param = {
+                    		taskCount:this.form.taskCount
+                    	}
+                     	$.ajax({
+         					url:"${ctx}/sysConfig/saveOrUpdate",
+         					type:"post",
+         					dataType:"json",
+         					async:false,
+         					data:param,
+         					success:function({result,data}){
+         						if(result=="success"){
+         							toastr.success("操作成功！");
+         						}else{
+         							toastr.error("操作失败！");
+         						}
+         					}
+         				});
+                    }
+        		});
+        	}
+        }
+    });
+</script>
+<style>
+	.el-form-item__content{margin-left:0!important;}
+</style>

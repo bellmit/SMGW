@@ -1,0 +1,101 @@
+<#include "../common/_header.htm">
+<body class="" onload="chooseTemplateForm.init();">
+	<div class="wrapper wrapper-content animated fadeInRight" style="padding:0;height:700px;overflow:auto;">
+		<div class="form-group">
+			<div class="form-inline">
+				<label class="control-label">发送状态：</label>
+				<select id="sendStatus" class="form-control" style="width: 160px;">
+					<option value="-1" selected="selected">全部</option>
+					<option value="0">待发送</option>
+					<option value="1">发送成功</option>
+					<option value="2">发送失败</option>
+					<option value="3">已终止</option>
+					<option value="4">发送中</option>
+				</select>
+				<label class="control-label">关键字：</label>
+				<input type="text" placeholder="手机号码/短信内容" class="form-control fc-clear" style="width: 300px;" id="keyword">
+				<span class="btnCon">
+					<button type="button" class="btn btn-primary btn-sm" onclick="chooseTemplateForm.query();">查询</button>
+				</span>
+			</div>
+		</div>
+		<div class="example">
+			<table id="table"></table>
+		</div>
+	</div>
+	<script type="text/javascript">
+	var dialog = top.dialog.get(window);
+	var dialogData = dialog.data; // 获取对话框传递过来的数据
+	var chooseTemplateForm = {
+		init:function(){
+		    let height = jQuery(window).height()-120;
+			$('#table').bootstrapTable({
+				url:"${ctx}/sms/getTaskDetailList",//请求数据url
+			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
+			         return {
+			        	 pageNumber: (params.offset / params.limit),  //页码
+			        	 pageSize: params.limit,  //页面大小
+			        	 sendStatus:$("#sendStatus").val(),
+			        	 taskId:dialogData.id,
+			        	 keyword:keyword
+			         };
+			     },
+			     // striped: true,                      //是否显示行间隔色
+			     showHeader : true,
+			     height:height,
+			     pagination: true,                   //是否显示分页（*）
+			     sidePagination : 'server',//服务器端分页
+			     strictSearch: true,
+			     pageNumber : 1,
+			     resizable:true,
+			     //showColumns:true,
+			     pageSize: 20,                       //每页的记录行数（*）
+			     pageList: [20,100],//分页步进值
+			     //表格的列
+			     columns: [
+			    	 { 
+			             field:'checked', 
+			             checkbox : true
+			         },
+			         {field: 'mid',title: 'mid'},
+			         {field: 'phone',title: '手机号码'},
+			         {field: 'content',title: '短信内容'},
+			         {field: 'sendTime',title: '发送时间',formatter:function (value, row, index) {
+		                    if(value){
+		                        var date = new Date(value);
+		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+		                    }else{
+		                        return '-';
+		                    }
+		                }},
+			         {field: 'sendStatus',title: '发送状态',formatter:function (value, row, index) {
+		                    if(value=='0'){
+		                    	return '待发送';
+		                    }else if(value=='1'){
+		                    	return '发送成功';
+		                    }else if(value=='2'){
+		                    	return '发送失败';
+		                    }else if(value=='3'){
+		                    	return '已终止';
+		                    }else if(value=='4'){
+		                    	return '发送中';
+		                    }else{
+		                        return '-';
+		                    }
+		                }}
+			     ],
+			     onLoadSuccess: function () {
+			    	 setFixedTableBorder($('#table'),$("div.fixed-table-border"));
+			     }
+			 });
+		},
+		query: function () {
+			$("#table").bootstrapTable('refresh',{
+				 pageNumber : 1
+			 });
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,2721 @@
+<#include "../common/_header.htm">
+<body  style="height:auto;padding:0 20px 20px 20px;font-size:14px;">
+<h2 align="center">SMS57 Json for SMGW 客户接口说明文档</h2>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">1.&nbsp;</span><strong style="font-size: 16px;"><span style="font-family: 微软雅黑;font-size: 29px">短信发送接口</span></strong>
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用户客户端向网关提交短信</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">1.1.&nbsp;</span><strong style="font-size: 16px;"><span style="font-family: 黑体;font-size: 21px">参数说明</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">参数需要</span> <span style="font-family:Times New Roman">URLENCODE</span><span style="font-family:微软雅黑">，编码方式采用</span><span style="font-family:Times New Roman">UTF-8</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="583">
+    <tbody>
+        <tr class="firstRow">
+            <td width="112" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">参数名称</span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">含义</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action</span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求动作</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">设置为固定的</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">:send</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account</span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">发送用户帐号</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号，由系统管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">发送帐号密码</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">非加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MD5(password+extno+content+mobile)</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">mobile</span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">全部被叫号码</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">发信发送的目的号码</span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px">.</span><span style=";font-family:微软雅黑;font-size:14px">多个号码之间用半角逗号隔开<span style="font-family:Times New Roman">,</span><span style="font-family:微软雅黑">最多</span><span style="font-family:Times New Roman">500</span><span style="font-family:微软雅黑">个号码</span></span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+                </p>
+            </td>
+        </tr>
+        <tr style="height:6px">
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">content</span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">发送内容</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">短信的内容，内容需要<span style="font-family:Times New Roman">UTF-8 URLEncode</span><span style="font-family:微软雅黑">编码</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">extno</span></span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接入号</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接入号，即<span style="font-family:Times New Roman">SP</span><span style="font-family:微软雅黑">服务号（</span><span style="font-family:Times New Roman">106XXXXXX</span><span style="font-family:微软雅黑">）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="112" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">rt</span></span>
+                </p>
+            </td>
+            <td width="177" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">响应数据类型</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">json</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">例如：</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">http://host:port/sms?</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action=send&amp;account=</span><span style=";font-family:微软雅黑;font-size:14px">账号</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;password=</span><span style=";font-family:微软雅黑;font-size:14px">密码</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;mobile=</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000001</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">,</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000002</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;content=</span><span style=";font-family:微软雅黑;font-size:14px">内容</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">extno=1069012345&amp;rt=json</span></span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">1.2.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">响应数据</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;status&quot;: &quot;0&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;balance&quot;: -153278040,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;list&quot;: [</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C2CA88382720003&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000001</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;result&quot;: 0</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">},</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C2CA88382720004&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000002</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;result&quot;: 0</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">]</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="513">
+    <tbody>
+        <tr class="firstRow">
+            <td width="142" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">status</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求结果，具体参见<span style="font-family:Times New Roman">STATUS</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">当前账户余额，单位厘</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">list</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">短信提交响应列表</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mid</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">消息<span style="font-family:Times New Roman">ID</span><span style="font-family:微软雅黑">（用于状态报告匹配）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mobile</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机号码</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">result</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">短信提交错误代码，参见<span style="font-family:Times New Roman">RESULT</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">2.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px">点对点发送</span></strong>
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用于客户端向网关提交点对点短信，即一个号码一个内容的短信</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">2.1.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">参数</span></strong><strong><span style="font-family: 黑体;font-size: 21px">说明</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">参数需要</span> <span style="font-family:Times New Roman">URLENCODE</span><span style="font-family:微软雅黑">，编码方式采用</span><span style="font-family:Times New Roman">UTF-8</span></span>
+</p>
+<table cellspacing="0" width="583">
+    <tbody>
+        <tr class="firstRow">
+            <td width="127" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">参数名称</span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">含义</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="127" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action</span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求动作</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">设置为固定的</span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px">:</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">p2p</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="127" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account</span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">发送用户帐号</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号，由系统管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="127" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">发送帐号密码</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">非加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MD5(password+</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">extno+mobileContentList</span></span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px">)</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">(</span><span style="font-family:微软雅黑">加密时</span><span style="font-family:Times New Roman">mobileContentList</span><span style="font-family:微软雅黑">换行符去掉</span><span style="font-family:Times New Roman">)</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="127" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mobileContentList</span></span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">号码短信内容列表</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">号码内容格式为：</span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px">M</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">obile#Content</span></span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px">多个号码之间用换行分割如：</span><span style="font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13800000001#</span><span style="font-family:微软雅黑">下发内容</span><span style="font-family:Times New Roman">1</span></span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13800000002#</span><span style="font-family:微软雅黑">下发内容</span><span style="font-family:Times New Roman">2</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="127" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">extno</span></span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接入号</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接入号，即<span style="font-family:Times New Roman">SP</span><span style="font-family:微软雅黑">服务号（</span><span style="font-family:Times New Roman">106XXXXXX</span><span style="font-family:微软雅黑">）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="127" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">rt</span></span>
+                </p>
+            </td>
+            <td width="162" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">响应数据类型</span>
+                </p>
+            </td>
+            <td width="294" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">json</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">例如：</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">http://192.168.1.4:7822/sms?action=p2p&amp;rt=json&amp;account=922011&amp;password=123456&amp;mobileContentList=13800000001%23%e4%b8%8b%e5%8f%91%e5%86%85%e5%ae%b91%0d13800000002%23%e4%b8%8b%e5%8f%91%e5%86%85%e5%ae%b92%0d13800000003%23%e4%b8%8b%e5%8f%91%e5%86%85%e5%ae%b93%0d13800000004%23%e4%b8%8b%e5%8f%91%e5%86%85%e5%ae%b94%0d&amp;extno=10690231221</span></span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">2.2.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">响应数据</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;status&quot;: &quot;0&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;balance&quot;: -153278280,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;list&quot;: [</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C372C4382720007&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;13800000001&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;result&quot;: 0</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">},</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C372C4382720008&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;13800000002&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;result&quot;: 0</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">]</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="513">
+    <tbody>
+        <tr class="firstRow">
+            <td width="142" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">status</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求结果，具体参见<span style="font-family:Times New Roman">STATUS</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">当前账户余额，单位厘</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">list</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">短信提交响应列表</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mid</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">消息<span style="font-family:Times New Roman">ID</span><span style="font-family:微软雅黑">（用于状态报告匹配）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mobile</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机号码</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">result</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">短信提交错误代码，参见<span style="font-family:Times New Roman">RESULT</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">3.&nbsp;</span><strong style="font-size: 16px;"><span style="font-family: 微软雅黑;font-size: 29px">余额查询接口</span></strong>
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用于客户端查询当前账户余额</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">3.1.&nbsp;</span><strong style="font-size: 16px;"><span style="font-family: 黑体;font-size: 21px">参数说明</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">参数需要</span> <span style="font-family:Times New Roman">URLENCODE</span><span style="font-family:微软雅黑">，编码方式采用</span><span style="font-family:Times New Roman">UTF-8</span></span>
+</p>
+<table cellspacing="0" width="583">
+    <tbody>
+        <tr class="firstRow">
+            <td width="140" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">参数名称</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">含义</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求动作</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">设置为固定的：<span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号，由系统管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">帐号密码</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">非加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">加密：<span style="font-family:Times New Roman">MD5(</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span><span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">)</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">rt</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">响应数据类型</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">json</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">例如：</span>
+</p>
+<p>
+    <a href="http://123.57.173.186:7822/sms?action=send"><span style="text-decoration:underline;"><span style="font-family: 微软雅黑;color: #0000FF"><span style="font-family:Times New Roman">http://host:port/sms?action=</span></span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span></a><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&amp;</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account=</span><span style=";font-family:微软雅黑;font-size:14px">账号</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;password=</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">密码</span><span style="font-family:Times New Roman">&amp;rt=json</span></span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">3.2.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">响应数据</span></strong>
+</h2>
+<p>
+    <span style=";font-family:&#39;Courier New&#39;;font-size:13px">{&quot;status&quot;:0,&quot;balance&quot;:-153278040,&quot;chargeType&quot;:&quot;POSTCHARGE&quot;}</span><span style=";font-family:&#39;Courier New&#39;;font-size:13px"><br/></span>
+</p>
+<table cellspacing="0" width="513">
+    <tbody>
+        <tr class="firstRow">
+            <td width="142" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">status</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求结果，具体参见<span style="font-family:Times New Roman">STATUS</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">当前账户余额，单位厘</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">chargeType</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">POSTCHARGE=</span><span style="font-family:微软雅黑">后付费 </span><span style="font-family:Times New Roman">PRECHARGE=</span><span style="font-family:微软雅黑">预付费 &nbsp;</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Courier New&#39;;font-size:13px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">4.&nbsp;</span>客户端主动获取状态报告接口
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用于客户端到网关获取短信发送的状态报告</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">4.1.&nbsp;</span><strong style="font-size: 16px;"><span style="font-family: 黑体;font-size: 21px">参数说明</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">参数需要</span> <span style="font-family:Times New Roman">URLENCODE</span><span style="font-family:微软雅黑">，编码方式采用</span><span style="font-family:Times New Roman">UTF-8</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="583">
+    <tbody>
+        <tr class="firstRow">
+            <td width="140" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">参数名称</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">含义</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求动作</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">设置为固定的：<span style="font-family:Times New Roman">report</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号，由系统管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">帐号密码</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">非加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">加密：<span style="font-family:Times New Roman">MD5(</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span><span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">)</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">size</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">获取报告的数量</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">默认<span style="font-family:Times New Roman">1000</span><span style="font-family:微软雅黑">，最小</span><span style="font-family:Times New Roman">10</span><span style="font-family:微软雅黑">，最大</span><span style="font-family:Times New Roman">10000</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">rt</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">响应数据类型</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">json</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">例如：</span>
+</p>
+<p>
+    <a href="http://123.57.173.186:7822/sms?action=send"><span style="text-decoration:underline;"><span style="font-family: 微软雅黑;color: #0000FF"><span style="font-family:Times New Roman">http://host:port/sms?action=report</span></span></span></a><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&amp;</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action=</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">report</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;account=</span><span style=";font-family:微软雅黑;font-size:14px">账号</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;password=</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">密码</span><span style="font-family:Times New Roman">&amp;size=10&amp;rt=json</span></span>
+</p>
+<h2>
+    <strong><span style="font-family: 黑体;font-size: 21px"><span style="font-family:Arial">4.2.</span></span></strong><strong> </strong><strong><span style="font-family: 黑体;font-size: 21px">响应数据</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;color:#FF0000;font-size:14px">有报告可以获取的示例：</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;status&quot;: &quot;0&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;balance&quot;: -153278040,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;list&quot;: [</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;flag&quot;: 1,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C36654382720005&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;spid&quot;: &quot;922011&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;accessCode&quot;: &quot;106901234&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000001</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;stat&quot;: &quot;MA:0029&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;time&quot;: &quot;2017-04-12 01:38:21&quot;</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">},</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;flag&quot;: 1,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C36654382720006&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;spid&quot;: &quot;922011&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;accessCode&quot;: &quot;106901234&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000002</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;stat&quot;: &quot;MA:0029&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;time&quot;: &quot;2017-04-12 01:38:21&quot;</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">]</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;color:#FF0000;font-size:14px">没有报告可以获取的示例：</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;status&quot;: &quot;0&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;balance&quot;: -153278040,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;list&quot;: []</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="513">
+    <tbody>
+        <tr class="firstRow">
+            <td width="142" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">status</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求结果，具体参见<span style="font-family:Times New Roman">status</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">当前账户余额，单位厘</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">list</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">详细状态报告列表</span><span style=";font-family:微软雅黑;font-size:14px">，没有报告可以获取时为空</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">flag</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">1=</span><span style="font-family:微软雅黑">状态报告</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mid</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">消息<span style="font-family:Times New Roman">ID(</span><span style="font-family:微软雅黑">与提交时响应的消息</span><span style="font-family:Times New Roman">ID</span><span style="font-family:微软雅黑">匹配</span><span style="font-family:Times New Roman">)</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">spid</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">归属账号（可忽略）</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mobile</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机号码</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">accessCode</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">下发号码</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">stat</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">状态报告代码，参见<span style="font-family:Times New Roman">STAT</span><span style="font-family:微软雅黑">状态报告代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">time</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">状态报告的具体时间</span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">5.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px"><span style="font-family:微软雅黑">客户端主动获取手机上行接口</span></span></strong>
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用户客户端向网关获取手机上行回复的短信</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">5.1.&nbsp;</span><strong style="font-size: 16px;"><span style="font-family: 黑体;font-size: 21px">参数说明</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">参数需要</span> <span style="font-family:Times New Roman">URLENCODE</span><span style="font-family:微软雅黑">，编码方式采用</span><span style="font-family:Times New Roman">UTF-8</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="583">
+    <tbody>
+        <tr class="firstRow">
+            <td width="140" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">参数名称</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">含义</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">任务名称</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">设置为固定的：<span style="font-family:Times New Roman">mo</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号，由系统管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">帐号密码</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">非加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">加密：<span style="font-family:Times New Roman">MD5(</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span><span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">)</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">szie</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">获取上行数量</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">默认<span style="font-family:Times New Roman">1000</span><span style="font-family:微软雅黑">，最小</span><span style="font-family:Times New Roman">10</span><span style="font-family:微软雅黑">，最大</span><span style="font-family:Times New Roman">1000</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">rt</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">响应数据类型</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">json</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">例如：</span>
+</p>
+<p>
+    <a href="http://123.57.173.186:7822/sms?action=send"><span style="text-decoration:underline;"><span style="font-family: 微软雅黑;color: #0000FF"><span style="font-family:Times New Roman">http://host:port/sms?action=mo</span></span></span></a><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;account=</span><span style=";font-family:微软雅黑;font-size:14px">账号</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;password=</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">密码</span><span style="font-family:Times New Roman">&amp;size=10&amp;rt=json</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">5.2.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">响应数据</span></strong>
+</h2>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;color:#FF0000;font-size:14px">有上行可以获取的示例：</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;status&quot;: &quot;0&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;balance&quot;: -153278040,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;list&quot;: [</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;flag&quot;: 0,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C36654382720005&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;spid&quot;: &quot;922011&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;accessCode&quot;: &quot;10690&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000001</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;content&quot;: &quot;</span><span style="font-family:微软雅黑">上行内容</span><span style="font-family:Times New Roman">1&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;time&quot;: &quot;2017-04-12 01:38:21&quot;</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">},</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;flag&quot;: 0,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C36654382720006&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;spid&quot;: &quot;922011&quot;,</span></span>
+</p>
+<p style="text-indent:72px">
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;accessCode&quot;: &quot;10690&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000003</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;content&quot;: &quot;</span><span style="font-family:微软雅黑">上行内容</span><span style="font-family:Times New Roman">2&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;time&quot;: &quot;2017-04-12 01:38:21&quot;</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">]</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;color:#FF0000;font-size:14px">没有上行可以获取的示例：</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;status&quot;: &quot;0&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;balance&quot;: -153278040,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;list&quot;: []</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">}</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="513">
+    <tbody>
+        <tr class="firstRow">
+            <td width="142" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">status</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求结果，具体参见<span style="font-family:Times New Roman">STATUS</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">当前账户余额，单位厘</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">list</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">详细上行列表</span><span style=";font-family:微软雅黑;font-size:14px">，没有上行可以获取时为空</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">flag</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">0=</span><span style="font-family:微软雅黑">手机用户上行</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mid</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">上行消息<span style="font-family:Times New Roman">ID</span>（可忽略）</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">spid</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">归属账号（可忽略）</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mobile</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机号码</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">accessCode</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接收号码，即<span style="font-family:Times New Roman">SP</span><span style="font-family:微软雅黑">服务号（</span><span style="font-family:Times New Roman">106XXXXXX</span><span style="font-family:微软雅黑">）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">content</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机上行的具体内容</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">time</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机上行的具体时间</span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><br clear="all" style="page-break-before:always"/></span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">6.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px">客户端被动接收上行和状态报告</span></strong>
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用于网关向客户端推送状态报告</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">6.1.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">请求地址</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">由客户端向网关报备推送地址，请求方式</span> <span style="font-family:微软雅黑">由网关采用</span><span style="font-family:Times New Roman">POST</span><span style="font-family:微软雅黑">方式，推送到客户端</span></span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">6.2.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">请求参数</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">[</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;flag&quot;: 0,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C36654382720005&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;spid&quot;: &quot;922011&quot;,</span></span>
+</p>
+<p style="text-indent:72px">
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;accessCode&quot;: &quot;10690&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000001</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;content&quot;: &quot;</span><span style="font-family:微软雅黑">上行内容</span><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;time&quot;: &quot;2017-04-12 01:38:21&quot;</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">},</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">{</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;flag&quot;: 1,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mid&quot;: &quot;4C36654382720006&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;spid&quot;: &quot;922011&quot;,</span></span>
+</p>
+<p style="text-indent:72px">
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;accessCode&quot;: &quot;10690&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;mobile&quot;: &quot;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">13100000004</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;stat&quot;: &quot;DELIVRD&quot;,</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">&quot;time&quot;: &quot;2017-04-12 01:38:21&quot;</span></span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:Times New Roman">}</span></span>
+</p>
+<p style="text-indent:24px">
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">]</span></span>
+</p>
+<p style="text-indent:24px">
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="589">
+    <tbody>
+        <tr class="firstRow">
+            <td width="110" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">flag</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">0=</span><span style="font-family:微软雅黑">手机用户上行 </span><span style="font-family:Times New Roman">1=</span><span style="font-family:微软雅黑">状态报告</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mid</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">flag=1</span><span style="font-family:微软雅黑">时，消息</span><span style="font-family:Times New Roman">ID</span><span style="font-family:微软雅黑">与提交时响应的消息</span><span style="font-family:Times New Roman">ID</span><span style="font-family:微软雅黑">匹配；</span><span style="font-family:Times New Roman">flag=0</span><span style="font-family:微软雅黑">时，表示该条上行的消息</span><span style="font-family:Times New Roman">ID</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">spid</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">归属账号（可忽略）</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">mobile</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机号码</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">accessCode</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接收号码，即<span style="font-family:Times New Roman">SP</span><span style="font-family:微软雅黑">服务号（</span><span style="font-family:Times New Roman">106XXXXXX</span><span style="font-family:微软雅黑">）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">content</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机上行的具体内容；<span style="font-family:Times New Roman">flag=1</span><span style="font-family:微软雅黑">时，该字段无效</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">stat</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">状态报告代码，具体参见<span style="font-family:Times New Roman">STAT</span><span style="font-family:微软雅黑">状态代码表；</span><span style="font-family:Times New Roman">flag=0</span><span style="font-family:微软雅黑">时，该字段无效</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="110" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">time</span></span>
+                </p>
+            </td>
+            <td width="478" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">手机上行的具体时间</span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">6.3.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">客户端响应</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">客户端接收成功，响应文本</span><span style="font-family:Times New Roman">OK</span><span style="font-family:微软雅黑">即可</span></span><span style=";font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">OK</span></span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">7.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px">获取</span></strong><strong><span style="font-family: 微软雅黑;font-size: 29px">统计信息</span></strong><strong><span style="font-family: 微软雅黑;font-size: 29px">接口</span></strong>
+</h1>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">用户客户端向网关获取</span><span style=";font-family:微软雅黑;font-size:14px">统计信息</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">7.1.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">参数说明</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">参数需要</span> <span style="font-family:Times New Roman">URLENCODE</span><span style="font-family:微软雅黑">，编码方式采用</span><span style="font-family:Times New Roman">UTF-8</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="583">
+    <tbody>
+        <tr class="firstRow">
+            <td width="140" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">参数名称</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">含义</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">action</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">任务名称</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">设置为固定的：</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">statis</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">account</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">用户帐号，由系统管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">帐号密码</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">非加密：</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">加密：<span style="font-family:Times New Roman">MD5(</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">password</span><span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">)</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">beginTime</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">开始时间</span>
+                </p>
+            </td>
+            <td width="306" valign="top" rowspan="2" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">格式：<span style="font-family:Times New Roman">yyyymmdd</span><span style="font-family:微软雅黑">，例：</span><span style="font-family:Times New Roman">20210224</span></span>
+                </p>
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">注：开始时间与结束时间不能大于<span style="font-family:Times New Roman">31</span><span style="font-family:微软雅黑">天</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">endTime</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">结束时间</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="140" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">rt</span></span>
+                </p>
+            </td>
+            <td width="137" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">响应数据类型</span>
+                </p>
+            </td>
+            <td width="306" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">json</span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">例如：</span>
+</p>
+<p>
+    <a href="http://123.57.173.186:7822/sms?action=send"><span style="text-decoration:underline;"><span style="font-family: 微软雅黑;color: #0000FF"><span style="font-family:Times New Roman">http://host:port/sms?action=</span></span></span><span style="text-decoration:underline;"><span style="font-family: 微软雅黑;color: #0000FF"><span style="font-family:Times New Roman">statis</span></span></span></a><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;account=</span><span style=";font-family:微软雅黑;font-size:14px">账号</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&amp;password=</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">密码</span><span style="font-family:Times New Roman">&amp;</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">beginTime</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">=</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">20210224&amp;endTime=20210224</span></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">&amp;rt=json</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h2 style="margin-left:38px">
+    <span style="font-family: 黑体;font-size: 21px">7.2.&nbsp;</span><strong><span style="font-family: 黑体;font-size: 21px">响应数据</span></strong>
+</h2>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">{</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&quot;status&quot;:0,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&quot;balance&quot;:-400,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&quot;list&quot;:[</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;statisTIme&quot;:&quot;20210222&quot;,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;total&quot;:10,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;success&quot;:0,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;unknown&quot;:0,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;fail&quot;:10,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;successRate&quot;:0</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">.0</span></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;statisTIme&quot;:&quot;20210224&quot;,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;total&quot;:9,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;success&quot;:1,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;unknown&quot;:0,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;fail&quot;:8,</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;successRate&quot;:11.11</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;&nbsp;&nbsp;&nbsp;]</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px"><br/></span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">}</span>
+</p>
+<table cellspacing="0" width="513">
+    <tbody>
+        <tr class="firstRow">
+            <td width="142" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">字段</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">status</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">请求结果，具体参见<span style="font-family:Times New Roman">STATUS</span><span style="font-family:微软雅黑">错误代码表</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">balance</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">当前账户余额，单位厘</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">list</span></span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">详细</span><span style=";font-family:微软雅黑;font-size:14px">统计</span><span style=";font-family:微软雅黑;font-size:14px">列表</span><span style=";font-family:微软雅黑;font-size:14px">，没有</span><span style=";font-family:微软雅黑;font-size:14px">统计信息</span><span style=";font-family:微软雅黑;font-size:14px">获取时为空</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">statisTIme</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">时间</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">total</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">总数</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">success</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">成功数</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">unknown</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">未知数</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">fail</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">失败数</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="142" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">successRate</span>
+                </p>
+            </td>
+            <td width="371" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">成功率</span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><br clear="all" style="page-break-before:always"/></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">8.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px"><span style="font-family:Times New Roman">STATUS</span><span style="font-family:微软雅黑">错误代码表</span></span></strong>
+</h1>
+<table cellspacing="0" width="568">
+    <tbody>
+        <tr class="firstRow">
+            <td width="111" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">错误代码</span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">具体含义</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">1</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">消息包格式错误</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">2</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">IP</span><span style="font-family:微软雅黑">鉴权错误</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">3</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">账号密码不正确</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">4</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">版本号错误</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">5</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">其它错误</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">6</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">接入点错误（如账户本身开的是<span style="font-family:Times New Roman">CMPP</span><span style="font-family:微软雅黑">接入）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">7</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">账号状态异常（账号已停用）</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">8</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">号码不能为空</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">9</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">内容不能为空</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">21</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">连接过多</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">30</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">endTime&lt;begin</span><span style="font-family:微软雅黑">或 </span><span style="font-family:Times New Roman">endTime-beginTime&gt;31</span></span><span style="font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px">结束时间不能小于开始时间</span><span style="font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px">统计间隔不能大于<span style="font-family:Times New Roman">31</span><span style="font-family:微软雅黑">天（在</span><span style="font-family:Times New Roman">statis</span><span style="font-family:微软雅黑">下，建议不大于</span><span style="font-family:Times New Roman">31</span><span style="font-family:微软雅黑">天）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">31</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">时间禁止（在<span style="font-family:Times New Roman">statis</span><span style="font-family:微软雅黑">下，过于频繁，建议一个小时一次）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">100</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">系统内部错误，</span><span style=";font-family:微软雅黑;font-size:14px">请联系管理员</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">102</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">单次提交的号码数过多（建议<span style="font-family:Times New Roman">200</span><span style="font-family:微软雅黑">以内）</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">0</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">鉴权成功</span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">9.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px"><span style="font-family:Times New Roman">RESULT</span><span style="font-family:微软雅黑">错误代码表</span></span></strong>
+</h1>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<table cellspacing="0" width="568">
+    <tbody>
+        <tr class="firstRow">
+            <td width="111" valign="top" style="padding: 0px 7px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">错误代码</span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">具体含义</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">10</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">原发号码错误，即<span style="font-family:Times New Roman">extno</span><span style="font-family:微软雅黑">错误</span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">15</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">余额不足</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">17</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">账号签名无效</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="111" valign="top" style="padding: 0px 7px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style="font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">0</span></span>
+                </p>
+            </td>
+            <td width="457" valign="top" style="padding: 0px 7px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">提交成功</span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">10.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px"><span style="font-family:Times New Roman">STAT</span><span style="font-family:微软雅黑">状态代码表</span></span></strong>
+</h1>
+<table cellspacing="0" width="562">
+    <tbody>
+        <tr class="firstRow">
+            <td width="106" valign="center" style="padding: 1px; border-width: 1px; border-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">错误代码</span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top-width: 1px; border-top-color: windowtext; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">说明</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="top" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:Times New Roman">DELIVRD</span></span>
+                </p>
+            </td>
+            <td width="456" valign="top" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:微软雅黑;font-size:14px">短信投递成功</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="top" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">EXPIRED</span>
+                </p>
+            </td>
+            <td width="456" valign="top" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">Message validity period has</span><span style="font-family:微软雅黑;font-size:14px">&nbsp;</span><span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">expired</span>
+                </p>
+            </td>
+        </tr>
+        <tr style="height:23px">
+            <td width="106" valign="top" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">DELETED</span>
+                </p>
+            </td>
+            <td width="456" valign="top" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">Message has been deleted.</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="top" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">REJECTED</span>
+                </p>
+            </td>
+            <td width="456" valign="top" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">Message is in a rejected state</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0001 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">全局黑名单号码 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0002 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">内容非法 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0003 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">无法找到下级路由 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0004 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">未知 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0005 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">目的号码格式错误 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0006 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">系统拒绝 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0009 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">未定义错误 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0011 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">未知系统内部错误 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0012 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">防钓鱼 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0013 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">非法错误的包时序 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0014 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">非法的<span style="font-family:Times New Roman">OP_ISDN</span><span style="font-family:微软雅黑">号段 </span></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0021 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">号码格式错误 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0022 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">号码超过半小时下发次数限制 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0023 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">客户黑名单号码 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0024 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">内容未报备 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0025 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">不支持该短信 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0026 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">分条发送，组包超时 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0027 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">通道黑名单 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0028 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">全局黑名单号段 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0029 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">通道黑名单号段 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MA:0030 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">直接产生拒绝报告 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MO:200 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">不支持分条短信 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MO:0254 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">转发提交超时 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MO:0255 </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">转发提交过程中，连接断开 </span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="106" valign="center" style="padding: 1px; border-left-width: 1px; border-left-color: windowtext; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">MO:NNNN </span>
+                </p>
+            </td>
+            <td width="456" valign="center" style="padding: 1px; border-left: none; border-right-width: 1px; border-right-color: windowtext; border-top: none; border-bottom-width: 1px; border-bottom-color: windowtext;">
+                <p>
+                    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">NNNN<span style="font-family:微软雅黑">为对外提交过程中，上级网关的返回值，具体含义需上级网关解释 </span></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<h1 style="margin-left:28px">
+    <span style="font-family: 微软雅黑;font-size: 29px">11.&nbsp;</span><strong><span style="font-family: 微软雅黑;font-size: 29px">常见错误</span></strong>
+</h1>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <strong><span style="font-family: 黑体;font-size: 21px"><span style="font-family:黑体">错误码</span><span style="font-family:Arial">10</span></span></strong><span style=";font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">提交短信过程中返回</span><span style="font-family:Times New Roman">10</span><span style="font-family:微软雅黑">，接入码错误，即</span><span style="font-family:Times New Roman">extno=106XXXXXX </span><span style="font-family:微软雅黑">不正确，</span></span><span style=";font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><br/></span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">解决方法：填写正确的接入码（网关管理员</span> <span style="font-family:微软雅黑">可以从生产账号摘要中获取该接入号）</span></span>
+</p>
+<p>
+    <strong><span style="font-family: 黑体;font-size: 21px"><span style="font-family:黑体">错误码</span><span style="font-family:Arial">17</span></span></strong>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">提交短信过程中返回</span><span style="font-family:Times New Roman">17</span><span style="font-family:微软雅黑">，签名错误</span></span><span style=";font-family:微软雅黑;font-size:14px"><br/></span>
+</p>
+<p>
+    <strong><span style="font-family: 黑体;font-size: 21px"><br/></span></strong><span style=";font-family:微软雅黑;font-size:14px">解决方法：</span><span style=";font-family:微软雅黑;font-size:14px"><br/></span>
+</p>
+<p style="margin-left:28px">
+    <span style="font-family:Wingdings;font-size:14px">l&nbsp;</span><span style=";font-family:微软雅黑;font-size:14px">提交内容中带上网关管理员已经报备的签名</span>
+</p>
+<p style="margin-left:28px">
+    <span style="font-family:Wingdings;font-size:14px">l&nbsp;</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">网关管理员</span> <span style="font-family:微软雅黑">在（客户管理</span><span style="font-family:Times New Roman">-&gt;</span><span style="font-family:微软雅黑">账号签名报备）中关闭该账号的签名校验功能</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <strong><span style="font-family: 黑体;font-size: 21px"><span style="font-family:黑体">错误码</span><span style="font-family:Arial">15</span></span></strong>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">提交短信过程中返回</span><span style="font-family:Times New Roman">15 </span><span style="font-family:微软雅黑">余额不足</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <span style=";font-family:微软雅黑;font-size:14px">解决方法：</span>
+</p>
+<p style="margin-left:28px">
+    <span style="font-family:Wingdings;font-size:14px">l&nbsp;</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">网关管理员</span> <span style="font-family:微软雅黑">对该账号充值</span></span>
+</p>
+<p style="margin-left:28px">
+    <span style="font-family:Wingdings;font-size:14px">l&nbsp;</span><span style=";font-family:微软雅黑;font-size:14px"><span style="font-family:微软雅黑">网关管理员</span> <span style="font-family:微软雅黑">将该账号设置为后付费</span></span>
+</p>
+<p>
+    <span style=";font-family:&#39;Times New Roman&#39;;font-size:14px">&nbsp;</span>
+</p>
+<p>
+    <br/>
+</p>
+</body>

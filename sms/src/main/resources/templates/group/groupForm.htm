@@ -1,0 +1,77 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="分组：" prop="groupName">
+        	<el-input type="text" v-model="form.groupName" placeholder="分组" maxlength="200"></el-input>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	groupName:''
+            },
+            formrules:{
+            	groupName:[{required:true,message:"分组不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	if(dialogData.id!="0"){
+	        	$.ajax({
+					url:"${ctx}/group/findById",
+					type:"post",
+					dataType:"json",
+					async:false,
+					data:{id:dialogData.id},
+					success:function({result,data}){
+						if(result=="success"){
+							that.form.groupName = data.groupName;
+						}else{
+							toastr.error("加载失败！");
+						}
+					}
+				});
+        	}
+        },
+        methods:{
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+	                      	let param = {
+	                      		id:dialogData.id,
+	                      		groupName:this.form.groupName
+	                      	};
+                      		$.ajax({
+	         					url:"${ctx}/group/saveOrUpdate",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"groupFormDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error(data);
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>

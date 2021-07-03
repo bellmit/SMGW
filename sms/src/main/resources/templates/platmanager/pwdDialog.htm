@@ -1,0 +1,280 @@
+<#include "../common/_header.htm">
+<div id="pwdForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item  label="当前密码：" prop="currentPassword">
+        	<el-input type="text" v-model="form.currentPassword" placeholder="新密码" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item  label="新密码：" prop="confirmPassword">
+        	<el-input type="text" v-model="form.confirmPassword" placeholder="新密码" maxlength="200"></el-input>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var pwdForm=new Vue({
+        el:"#pwdForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	currentPassword:'',
+            	confirmPassword:''
+            },
+            formrules:{
+            	currentPassword:[{required:true,message:"密码不能为空",trigger:"blur"}],
+            	confirmPassword:[{required:true,message:"密码不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        },
+        methods:{
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                      	let param = {
+                     		currentPassword:this.form.currentPassword,
+                     		confirmPassword:this.form.confirmPassword
+                      	};
+                        $.ajax({
+         					url:"${ctx}/platManager/modifyPassWord",
+         					type:"post",
+         					dataType:"json",
+         					async:false,
+         					data:param,
+         					success:function({result,data}){
+         						if(result=="success"){
+         			            	top.dialog({id:"pwdDialog"}).data.submit=1;
+         			                dialog.close().remove();
+         						}else{
+         							toastr.error(data);
+         						}
+         					}
+         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>
+<style>
+    .el-color-picker__trigger{
+        border: none;
+        height: 32px;
+    }
+    .el-color-picker {
+        vertical-align: -webkit-baseline-middle;
+    }
+    .el-input{
+        width: 300px;
+    }
+    div#setNodeColor {
+        margin-left: 20px;
+    }
+    .el-color-picker__color{
+        border: none;
+    }
+    .qxcenter {
+    	text-align:center;
+    	background:#fff;
+        position: absolute;
+        width:100%;
+        bottom: 0;
+		padding-bottom:10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .imglist{
+    	height:120px!important;
+    }
+    .imglist li{
+		width:120px;
+		height:120px;
+		display:block;
+		position:relative;
+		float:left;
+	}
+	.imglist li img{
+		margin:10px;
+	}
+	.imgX{
+		background-image: url(${ctx}imgs/no.jpg);
+		background-position:center center;
+		background-size:30px 30px;
+		background-repeat:no-repeat;
+		width:30px;
+		height:30px;
+		position:absolute;
+		border-radius:15px;
+		z-index:2;
+		display:block;
+		right:0;
+		top:0;
+	    cursor:pointer;
+	}
+	.el-tabs__header{
+		margin: 0;
+	}
+	/*form表单样式修改*/
+	label.el-form-item__label {
+		width: 100px;
+		font-weight: 400;
+	}
+	input.el-input__inner {
+		width: 300px;
+		height: 30px;
+		border-radius: 0;
+	}
+	.el-form-item {
+		width: auto;
+		display: inline-flex;
+		margin-right: 25px;
+		height: 30px;
+	}
+	.el-form-item.pwdFormGnms {
+		display: contents;
+	}
+	.el-textarea {
+		width: 85%;
+	}
+	.el-form-item.pwdFormGnms .el-form-item__label {
+		line-height: 82px;
+	}
+	.el-form-item.pwdFormGnms .el-form-item__content {
+		margin-top: 20px;
+	}
+	textarea.el-textarea__inner {
+		border-radius: 0;
+	}
+	div#pane-first {
+		height: 600px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.el-form-item__error{
+		padding-top: 6px;
+	}
+	.editBtn {
+		margin: 10px 0 0;
+	}
+	.newAdd-contentt {
+        width: 980px;
+        margin: 0 auto;
+    }
+    .content {
+        background-color: #eef3f7;
+    }
+    .row{
+        background-color: white;
+        padding: 15px 28px 15px 28px;
+    }
+    .newAdd{
+        margin-bottom: 15px;
+        line-height: 35px;
+    }
+    .newAdd-trouble{
+        color: #6f7689;
+        font-size: 14px;
+        font-weight: 400;
+        margin-bottom: 15px;
+        float: left;
+        margin-right: 25px;
+    }
+    .bulkInsert{
+        margin-top: 20px;
+        margin-left: 55px;
+    }
+    .bulkInsert .bulk-input{
+        width: 50%;
+        height: 35px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        padding: 6px;
+        outline: none
+    }
+    input::-webkit-input-placeholder {
+        color: #ccc;
+    }
+    .bulkInsert .newAdd-trouble{
+        color: #6f7689;
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .bulkInsert-iqre,.bulkInsert-epty,.bulkInsert-sure,.bulkInsert-back{
+        width: 70px;
+        margin-left: 15px;
+        background-color: #4695ed;
+        height: 32px;
+        font-size: 14px;
+        border: 1px solid transparent;
+        color: white;
+        border-radius: 4px;
+        text-align:center;
+        cursor:pointer;
+    }
+    .bulkInsert-epty {
+        background-color: #e7e7e7;
+        color: black;
+        border-color: #adadad;
+    }
+    .newAdd-input{
+        width: 800px;
+        height: 35px;
+        border-radius: 4px;
+        border: 1px solid #e4e4e4;
+        outline:none;
+        padding: 0 8px 0 8px;
+        display: block;
+    }
+    .el-tag + .el-tag {
+        margin-left: 10px;
+    }
+    .button-new-tag {
+        margin-left: 10px;
+        height: 32px;
+        line-height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .input-new-tag {
+        width: 90px;
+        margin-left: 10px;
+        vertical-align: bottom;
+    }
+    div#batchKey {
+        height: 200px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width:85%;
+        display:inline-block;
+    }
+    .el-tag .el-icon-close{
+        color: white;
+    }
+    .el-tag{
+        background-color: #4695ed;
+        color: #fff;
+    }
+    .newAdd-answer {
+        margin-bottom: 35px;
+    }
+    div#container {
+        margin-left: 55px;
+    }
+    input.bulkInsert-sure,input.bulkInsert-back {
+        width: 100px;
+    }
+    .sureBack {
+        text-align: center;
+        margin-top: 25px;
+    }
+    div#edui1_iframeholder {
+        height: 200px!important;
+    }
+</style>

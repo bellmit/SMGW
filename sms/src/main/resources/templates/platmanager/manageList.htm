@@ -1,0 +1,367 @@
+<#include "../common/_header.htm">
+<body  onload="platManager.init();">
+<div class="wrapper wrapper-content animated fadeInRight">
+ <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>用户管理</h5>
+                <div class="ibox-tools"></div>
+            </div>
+            <div class="ibox-content">
+                    <div class="input-group fgHeight">
+                        <div class="form-inline">
+                            <label class="control-label">关键字：</label>
+                            <input type="text" placeholder="请输入关键词" class="form-control fc-clear" style="width: 300px;" id="keyword">
+                            <span class="btnCon">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="platManager.query();"> 搜索</button>
+                                <input type="button"  class="btn btn-primary btn-sm newadd" onclick="platManager.form();" value="新增" />
+                            </span>
+                        </div>
+                    </div>
+                <div class="example mt10">
+                    <table id="platManagerTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	var is_submit=false;
+	var platManager = {
+		init:function(){
+			$('#platManagerTable').bootstrapTable({
+			     url:"${ctx}/platManager/list",//请求数据url
+			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
+			         return {
+			        	 pageNumber: (params.offset / params.limit),  //页码
+			        	 pageSize: params.limit,  //页面大小
+			        	 keyword:keyword
+			         };
+			     },
+			     //striped: true,                      //是否显示行间隔色
+			     showHeader : true,
+			     pagination: true,                   //是否显示分页（*）
+			     sidePagination : 'server',//服务器端分页
+			     strictSearch: true,
+			     pageNumber : 1,
+			     //resizable:true,
+			     //showColumns:true,
+			     pageSize: 10,                       //每页的记录行数（*）
+			     pageList: [10, 20, 50,100],//分页步进值
+			     //表格的列
+			     columns: [
+			         {
+			             title: '序号',//标题
+			             align: 'center',
+			             visible: true,//false表示不显示
+			             formatter: function (value, row, index) {
+ 							return index+1;
+ 						 }
+
+			         },
+			         {
+			             field: 'loginName',//域值
+			             align: 'center',
+			             title: '登录名',//内容
+			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'nickName',//域值
+			             align: 'center',
+			             title: '名称',//内容
+			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'roleName',//域值
+			             align: 'center',
+			             title: '角色名称',//内容
+			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'money',//域值
+			             title: '余额',//内容
+			             visible: true,//false表示不显示
+			             formatter: function(value, row, index){
+		            	 	return value+'元';
+			             }
+			         },
+			         {
+			             field: 'price',//域值
+			             title: '费率',//内容
+			             visible: true,//false表示不显示
+			             formatter: function(value, row, index){
+		            	 	return value+'元/条';
+			             }
+			         },
+			         {
+			             field: 'priority',//域值
+			             title: '优先级',//内容
+			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'phone',//域值
+			             align: 'center',
+			             title: '联系电话',//内容
+			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'state',//域值
+			             align: 'center',
+			             title: '状态',//内容
+			             visible: true,//false表示不显示
+			             formatter: function(value, row, index){
+			            	 if(value == 100){
+				            	 return '启用';
+			            	 }else{
+				            	 return '禁用';
+			            	 }
+			             }
+			         },
+			         {
+			             field: 'id',//域值
+			             halign: 'center',
+			             align: 'center',
+			             title: '操作',//内容
+			             visible: true,//false表示不显示
+			             formatter: function(value, row, index){
+			            	 var html='';
+			            	 if(row.state == 100){
+				            	 html+='<a href="javascript:void(0)" onclick="platManager.abledForm(\''+value+'\',200)">禁用</a>&nbsp;&nbsp';
+			            	 }else{
+				            	 html+='<a href="javascript:void(0)" onclick="platManager.abledForm(\''+value+'\',100)">启用</a>&nbsp;&nbsp';
+			            	 }
+			            	 html+='<a href="javascript:void(0)" onclick="platManager.form(\''+value+'\')">编辑</a>&nbsp;&nbsp';
+			            	 html+='<a href="javascript:void(0)" onclick="platManager.pay(\''+value+'\')">充值</a>&nbsp;&nbsp';
+			            	 html+='<a href="javascript:void(0)" onclick="platManager.resetPwd(\''+value+'\')">重置密码</a>&nbsp;&nbsp';
+			            	 html+='<a href="javascript:void(0)" onclick="platManager.cleanLog(\''+value+'\')">清除记录</a>&nbsp;&nbsp';
+			            	 html+='<a href="javascript:void(0)" onclick="platManager.del(\''+value+'\')">删除</a>';
+		            		 return html;
+			             }
+			         }
+			     ],
+			     onLoadSuccess: function () {
+		    	 	
+			     },
+			 });
+		},
+		query: function () {
+			$("#platManagerTable").bootstrapTable('refresh',{
+				 pageNumber : 1
+			 });
+		},
+		pay : function (id) {
+			let param={
+					id:id
+			}
+			var payDialog = top.dialog({
+            	id:"payDialog",
+                title: "在线充值",
+                modal: true,
+                url: "${ctx}wallet/payDialog?_t"+Math.random(),
+                height: 300,
+                width: 600,
+                data:param,
+                onclose:function(){
+                	if (payDialog.data.submit) {
+						toastr.success("操作成功!");
+						platManager.query();
+                	}
+                }
+            });
+			payDialog.show();
+            return false;
+		},
+		abledForm : function (id, state) {
+			$.ajax({
+				url : "${ctx}/platManager/changeState",
+				type : 'post',
+				dataType : 'json',
+				async : false,
+				data : {"id" : id, "state" : state},
+				success : function(data) {
+					if (data.result == 'success') {
+						toastr.success("操作成功!");
+						platManager.query();
+					}else{
+						toastr.error("操作失败!");
+					}
+				}
+			});
+		},
+		form : function (id) {
+			if(is_submit){
+				return;
+			}
+			is_submit=true;
+			id = id?id:"0";
+			var title ="新增用户";
+			if(id!=0){
+				title ="修改用户";
+				}
+			var j = 0;
+			base.getView({
+				url:"${ctx}platManager/manageForm?id="+id,
+				success:function(result){
+					bootbox.dialog({
+						title:title,
+						message:result,
+						size:"large",
+						closeButton : false,
+						buttons:{
+							sure:{
+								label:"确定",
+								className:"btn btn-primary",
+								callback:function(){
+									if (j != 0) {
+										is_submit=false;
+										return ;
+									}
+									j++;
+									if($("#addPlatManager").valid()){
+										$.ajax({
+											url:"${ctx}/platManager/save",
+											type:"post",
+											dataType:"json",
+											async:false,
+											data:$("#addPlatManager").serialize(),
+											success:function(result){
+												j = 0;
+												is_submit=false;
+												if(result.result=="success"){
+													toastr.success("操作成功!");
+													bootbox.hideAll();
+													platManager.query();
+												}else{
+													toastr.error("操作失败!");
+												}
+											}
+										});
+									}else{
+										j = 0;
+										is_submit=false;
+									}
+									return false;
+								}
+							},
+                            cancel:{
+                                label:"取消",
+                                className:"btn btn-secondary",
+                                callback:function(){
+                                    is_submit=false;
+                                }
+                            }
+						}
+					})
+				}
+			});
+		},
+		resetPwd : function (id) {
+			bootbox.confirm("确认要重置密码吗?", function (result) {
+				if(result){
+					$.ajax({
+						url:"${ctx}/platManager/resetPassWord",
+						type:"post",
+						dataType:"json",
+						async:false,
+						data:{
+							id:id
+						},
+						success:function(result){
+							if(result.result=="success"){
+								toastr.success("操作成功!");
+								platManager.query();
+							}else{
+								toastr.error("操作失败!");
+							}
+						}
+					});
+				}
+            })
+		},
+		del:function(id){
+            var d = top.dialog({
+                title: '提示',
+                width : 250,
+                height : 50,
+                padding:50,
+                content: '<div class="jyTit" style="margin-left: 65px;">您确定要删除么？</div>',
+                okValue: '确 定',
+                ok: function () {
+                    $.ajax({
+                        url:"${ctx}/platManager/delete",
+                        type:"post",
+                        dataType:"json",
+                        async:false,
+                        data:{
+                            id:id
+                        },
+                        success:function(result){
+                            if(result.result=="success"){
+                                toastr.success("操作成功!");
+                                platManager.query();
+                            }else{
+                                toastr.error("操作失败!");
+                            }
+                            d.close()
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () {
+                }
+            });
+            d.showModal();
+		},
+		cleanLog:function(id){
+            var d = top.dialog({
+                title: '提示',
+                width : 300,
+                height : 50,
+                padding: 40,
+                content: '<div class="jyTit" style="margin-left: 30px;">您确定要清除该用户的记录么？</div>',
+                okValue: '确 定',
+                ok: function () {
+                    $.ajax({
+                        url:"${ctx}/platManager/cleanLog",
+                        type:"post",
+                        dataType:"json",
+                        async:false,
+                        data:{
+                        	userId:id
+                        },
+                        success:function(result){
+                            if(result.result=="success"){
+                                toastr.success("操作成功!");
+                                platManager.query();
+                            }else{
+                                toastr.error("操作失败!");
+                            }
+                            d.close()
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () {
+                }
+            });
+            d.showModal();
+		}
+	}
+</script>
+<style>
+    label.control-label {
+        float: left;
+        margin-top: 10px;
+    }
+    .btnCon{
+        vertical-align: text-top;
+    }
+    .ibox{
+        padding: 0 20px;
+    }
+</style>
+</body>
+</html>

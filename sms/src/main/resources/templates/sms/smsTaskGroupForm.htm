@@ -1,0 +1,90 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+	  <div style="margin: 15px 0;"></div>
+	  <el-checkbox-group v-model="checked" @change="handleCheckedChange">
+	    <el-checkbox v-for="group in groups" :label="group.id" >{{group.groupName}}</el-checkbox>
+	  </el-checkbox-group>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+        	taskId:'0',
+        	checked: [],
+        	groups:[],
+            checkAll: false,
+            isIndeterminate: false
+        },
+        created:function() {
+        	if(dialogData.taskId) this.taskId = dialogData.taskId;
+        	let that = this;
+        	$.ajax({
+				url:"${ctx}/group/getGroup",
+				type:"post",
+				dataType:"json",
+				async:false,
+				data:{},
+				success:function({result,data}){
+					if(result=="success"){
+						that.groups=data;
+					}else{
+						toastr.error(data);
+					}
+				}
+			});
+        },
+        methods:{
+        	  handleCheckAllChange(val) {
+        		  let that=this;
+        		  this.checked=[];
+        		  if(val){
+        			  $(this.groups).each(function(i,item){
+        				  that.checked.push(item.id);
+        			  })
+        		  }
+       	        this.isIndeterminate = false;
+       	      },
+       	   	  handleCheckedChange(value) {
+       	        let checkedCount = value.length;
+       	        this.checkAll = checkedCount === this.groups.length;
+       	        this.isIndeterminate = checkedCount > 0 && checkedCount < this.groups.length;
+       	      },
+            onSubmit(){
+       	    	  if(this.checked.length==0){
+       	    		  toastr.warning("请选择分组");
+       	    		  return false;
+       	    	  }
+                  	 	let param = {
+                 	 			taskId:this.taskId,
+                 	 			groupIds:this.checked.join(",")
+                  	 	};
+                   		$.ajax({
+        					url:"${ctx}/smsTask/groupPhone",
+        					type:"post",
+        					dataType:"json",
+        					async:false,
+        					data:param,
+        					success:function({result,data}){
+        						if(result=="success"){
+        			            	top.dialog({id:"showGroupDialog"}).data.submit=1;
+        			            	top.dialog({id:"showGroupDialog"}).data.taskId=data;
+        			                dialog.close().remove();
+        						}else{
+        							toastr.error(data);
+        						}
+        					}
+        				});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>

@@ -1,0 +1,139 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item  label="分组：" prop="groupId">
+        	 <el-select v-model="form.groupId" placeholder="请选择">
+			    <el-option
+			      v-for="item in groupList"
+			      :key="item.id"
+			      :label="item.groupName"
+			      :value="item.id">
+			    </el-option>
+			  </el-select>
+        </el-form-item>
+        <el-form-item label="手机号码：" prop="phone">
+        	<el-input type="text" v-model="form.phone" placeholder="手机号码" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名：">
+        	<el-input type="text" v-model="form.name" placeholder="姓名" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item  label="生日：">
+        	<el-date-picker v-model="form.birthdayStr" type="date"
+	            format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择开始时间">
+	        </el-date-picker>
+        </el-form-item>
+        <el-form-item label="联系地址：">
+        	<el-input type="text" v-model="form.address" placeholder="联系地址" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="公司：">
+        	<el-input type="text" v-model="form.company" placeholder="公司" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="qq：">
+        	<el-input type="text" v-model="form.qq" placeholder="qq" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：">
+        	<el-input type="textarea" v-model="form.memo" placeholder="备注" maxlength="1000"></el-input>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            groupList:[],
+            form:{
+            	groupId:'',
+            	phone:'',
+            	name:'',
+            	birthdayStr:'',
+            	address:'',
+            	company:'',
+            	qq:'',
+            	memo:''
+            },
+            formrules:{
+            	groupId:[{required:true,message:"请选择分组",trigger:"blur"}],
+            	phone:[{required:true,message:"手机号码不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	$.ajax({
+				url:"${ctx}/group/getGroup",
+				type:"post",
+				dataType:"json",
+				async:false,
+				data:{id:dialogData.id},
+				success:function({result,data}){
+					if(result=="success"){
+						that.groupList=[...data];
+					}else{
+						toastr.error("加载失败！");
+					}
+				}
+			});
+        	
+        	
+        	if(dialogData.id!="0"){
+	        	$.ajax({
+					url:"${ctx}/groupMember/findById",
+					type:"post",
+					dataType:"json",
+					async:false,
+					data:{id:dialogData.id},
+					success:function({result,data}){
+						if(result=="success"){
+							that.form=data;
+							that.form.groupId = that.form.groupId+'';
+							
+							if(that.form.birthday){
+								that.form.birthdayStr=new Date(that.form.birthday).format("yyyy-MM-dd")
+							}
+							delete that.form.birthday;
+							delete that.form.createTime;
+						}else{
+							toastr.error("加载失败！");
+						}
+					}
+				});
+        	}
+        },
+        methods:{
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                      	let param = JSON.parse(JSON.stringify(this.form));
+                      	if(param.birthdayStr) param.birthdayStr = new Date(param.birthdayStr).format("yyyy-MM-dd hh:mm");
+                      	delete param.createTime;
+                      	delete param.txlBirthday;
+                      		$.ajax({
+	         					url:"${ctx}/groupMember/saveOrUpdate",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"txlFormDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error("操作失败！");
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>

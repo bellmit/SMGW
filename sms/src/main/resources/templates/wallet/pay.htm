@@ -1,0 +1,62 @@
+<#include "../common/_header.htm">
+<div id="messageForm" v-cloak>
+    <el-card>
+        <el-form :inline="false" ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+            <el-form-item label="充值金额" prop="money">
+                <el-input type="text" v-model="form.money" placeholder="" maxlength="200"></el-input>
+            </el-form-item>
+        </el-form>
+        <div style="margin-left: 120px;margin-top: 10px;">
+            <el-button size="small" @click="resetAll">重置</el-button>
+            <el-button size="small" type="primary" @click="payMoney" >确定</el-button>
+        </div>
+
+    </el-card>
+
+</div>
+<script>
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	money:''
+            },
+            formrules:{
+            	money:[{required:true,message:"充值金额不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        },
+        methods:{
+        	resetAll:function(){
+        		this.form.money='';
+        	},
+        	payMoney:function(){
+        		this.$refs['form'].validate((valid) => {
+                    if (valid) {
+                    	let param = {
+                    		money:this.form.money
+                    	}
+                     	$.ajax({
+         					url:"${ctx}/wallet/payMoney",
+         					type:"post",
+         					dataType:"json",
+         					async:false,
+         					data:param,
+         					success:function({result,data}){
+         						if(result=="success"){
+         							toastr.success("操作成功！");
+         							messageForm.resetAll();
+         						}else{
+         							toastr.error("操作失败！");
+         						}
+         					}
+         				});
+                    }
+        		});
+        	}
+        }
+    });
+</script>

@@ -1,0 +1,268 @@
+<#include "../common/_header.htm">
+<body  onload="platRoles.init();">
+<div class="wrapper wrapper-content animated fadeInRight">
+ <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>角色管理</h5>
+                <div class="ibox-tools"></div>
+            </div>
+            <div class="ibox-content">
+                    <div class="input-group fgHeight">
+                        <div class="form-inline">
+                            <label class="control-label">关键字：</label>
+                            <input type="text" placeholder="请输入关键词" class="form-control fc-clear" style="width: 300px;" id="keyword">
+                            <span class="btnCon">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="platRoles.query();"> 搜索</button>
+                                <input type="button"  class="btn btn-primary btn-sm newadd" onclick="platRoles.form();" value="新增" />
+                            </span>
+                        </div>
+                    </div>
+                <div class="example mt10">
+                    <table id="roleListTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	var is_submit=false;
+	var platRoles = {
+		init:function(){
+			$('#roleListTable').bootstrapTable({
+			     url:"${ctx}/platrole/list",//请求数据url
+			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
+			         return {
+			        	 pageNumber: (params.offset / params.limit),  //页码
+			        	 pageSize: params.limit,  //页面大小
+			        	 keyword:keyword
+			         };
+			     },
+			     //striped: true,                      //是否显示行间隔色
+			     showHeader : true,
+			     pagination: true,                   //是否显示分页（*）
+			     sidePagination : 'server',//服务器端分页
+			     strictSearch: true,
+			     pageNumber : 1,
+			     //resizable:true,
+			     //showColumns:true,
+			     pageSize: 10,                       //每页的记录行数（*）
+			     pageList: [10, 20, 50,100],//分页步进值
+			     //表格的列
+			     columns: [
+			         {
+			             title: '序号',//标题
+			             halign: 'center',
+			             align: 'center',
+			             visible: true,//false表示不显示
+			             width : '10%',
+			             formatter: function (value, row, index) {
+ 							return index+1;
+ 						 }
+
+			         },
+			         {
+			             field: 'roleCode',//域值
+			             halign: 'center',
+			             align: 'center',
+			             title: '角色编码',//内容
+			             visible: true,//false表示不显示
+			             width : '30%'
+			         },
+			         {
+			             field: 'roleName',//域值
+			             halign: 'center',
+			             align: 'center',
+			             title: '角色名',//内容
+			             visible: true,//false表示不显示
+			             width : '30%'
+			         },
+			         {
+			             field: 'roleId',//域值
+			             halign: 'center',
+			             align: 'center',
+			             title: '操作',//内容
+			             visible: true,//false表示不显示
+			             width : '30%',
+			             formatter: function(value, row, index){
+			            	 var rc = row.roleCode;
+			            	 var html='';
+			            	   if(rc=='ADMIN'){
+			            		   html+='<a href="javascript:void(0)" onclick="platRoles.form(\''+value+'\')">编辑</a>&nbsp;&nbsp';
+			            		   html+='<a href="javascript:void(0)" onclick="platRoles.authorizationForm(\''+value+'\',\''+row.roleName+'\')">角色授权</a>&nbsp;&nbsp';
+						       }else{
+				            	 html+='<a href="javascript:void(0)" onclick="platRoles.form(\''+value+'\')">编辑</a>&nbsp;&nbsp';
+				            	 html+='<a href="javascript:void(0)" onclick="platRoles.authorizationForm(\''+value+'\',\''+row.roleName+'\')">角色授权</a>&nbsp;&nbsp';
+				            	 html+='<a href="javascript:void(0)" onclick="platRoles.del(\''+value+'\')">删除</a>';
+			            	   }
+			            	 return html;
+			             }
+			         }
+			     ],
+			     onLoadSuccess: function () {
+		    	 	
+			     },
+			 });
+		},
+		query: function () {
+			$("#roleListTable").bootstrapTable('refresh',{
+				 pageNumber : 1
+			 });
+		},
+		form : function(id){
+			if(is_submit){
+				return;
+			}
+			is_submit=true;
+			id = id ? id : "";
+			var title = id?"修改角色":"新增角色";
+			var j = 0;
+			base.getView({
+				url:"${ctx}/platrole/form?roleId="+id,
+				success:function(result){
+					bootbox.dialog({
+						title:title,
+						message:result,
+						size:"middle",
+						closeButton : false,
+						buttons:{
+							sure:{
+								label:"确定",
+								className:"btn btn-primary",
+								callback:function(){
+									if (j != 0) {
+										is_submit=false;
+										return ;
+									}
+									j++;
+									if($("#addPlatRole").valid()){
+										$.ajax({
+											url:"${ctx}/platrole/save",
+											type:"post",
+											dataType:"json",
+											async:false,
+											data:$("#addPlatRole").serialize(),
+											success:function(result){
+												j = 0;
+												is_submit=false;
+												if(result.result=="success"){
+													toastr.success("操作成功!");
+													bootbox.hideAll();
+													platRoles.query();
+												}else{
+													toastr.error("操作失败!");
+												}
+											}
+										});
+									}else{
+										j = 0;
+										is_submit=false;
+									}
+									return false;
+								}
+							},
+                            cancel:{
+                                label:"取消",
+                                className:"btn btn-secondary",
+                                callback:function(){
+                                    is_submit=false;
+                                }
+                            }
+						}
+					})
+				}
+			})
+		},
+		authorizationForm : function(id,roleName){
+			id = id?id:"";
+			var authorizationForm = top.dialog({
+            	id:"authorizationForm",
+                title: '角色授权',
+                modal: true,
+				url:"${ctx}/platrole/authorizationForm?roleId="+id,
+                height: 600,
+                width: 800,
+                data:{},
+                onclose:function(){
+                	if (authorizationForm.data.submit) {
+						toastr.success("操作成功!");
+						platRoles.query();
+                	}
+                }
+            });
+			authorizationForm.show();
+            return false;
+		},
+		del:function(roleId){
+            var d = top.dialog({
+                title: '提示',
+                width : 250,
+                height : 50,
+                padding:50,
+                content: '<div class="jyTit" style="margin-left: 65px;">您确定要删除么？</div>',
+                okValue: '确 定',
+                ok: function () {
+                    $.ajax({
+                        url:"${ctx}/platrole/delete",
+                        type:"post",
+                        dataType:"json",
+                        async:false,
+                        data:{
+                            roleId:roleId
+                        },
+                        success:function(result){
+                            if(result.result=="success"){
+                                toastr.success("操作成功!");
+                                platRoles.query();
+                            }else{
+                                toastr.error("操作失败!");
+                            }
+                            d.close()
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () {
+                }
+            });
+            d.showModal();
+			/*bootbox.confirm("确认删除?", function (result) {
+				if(result){
+					$.ajax({
+						url:"${ctx}/platrole/delete",
+						type:"post",
+						dataType:"json",
+						async:false,
+						data:{
+							roleId:roleId
+						},
+						success:function(result){
+							if(result.result=="success"){
+								toastr.success("操作成功!");
+								platRoles.query();
+							}else{
+								toastr.error("操作失败!");
+							}
+						}
+					});
+				}
+            })*/
+		}
+	}
+</script>
+<style>
+    label.control-label {
+        float: left;
+        margin-top: 10px;
+    }
+    .btnCon{
+        vertical-align: text-top;
+    }
+    .ibox{
+        padding: 0 20px;
+    }
+</style>
+</body>
+</html>

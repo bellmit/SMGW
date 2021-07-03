@@ -1,0 +1,170 @@
+<#include "../common/_header.htm">
+<body  onload="txl.init();">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="form-group">
+					<div class="form-inline">
+						<label class="control-label">关键字：</label>
+						<input type="text" placeholder="分组名称" class="form-control fc-clear" style="width: 300px;" id="keyword">
+						<span class="btnCon">
+							<button type="button" class="btn btn-primary btn-sm" onclick="txl.query();">查询</button>
+							<input type="button" id="newadd" class="btn btn-primary btn-sm newadd" onclick="txl.form();" value="新增" />
+                            <input type="button" id="del" class="btn btn-primary btn-sm delBtn" onclick="txl.del();" value="删除" />
+						</span>
+					</div>
+				</div>
+				<div class="example">
+					<table id="table"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	var txl = {
+		init:function(){
+		    let height = jQuery(window).height()-180;
+			$('#table').bootstrapTable({
+			     url:"${ctx}/group/getGroupList",//请求数据url
+			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
+			         return {
+			        	 pageNumber: (params.offset / params.limit),  //页码
+			        	 pageSize: params.limit,  //页面大小
+			        	 keyword:keyword
+			         };
+			     },
+			     // striped: true,                      //是否显示行间隔色
+			     showHeader : true,
+			     height:height,
+			     pagination: true,                   //是否显示分页（*）
+			     sidePagination : 'server',//服务器端分页
+			     strictSearch: true,
+			     pageNumber : 1,
+			     resizable:true,
+			     //showColumns:true,
+			     pageSize: 20,                       //每页的记录行数（*）
+			     pageList: [20,100],//分页步进值
+			     //表格的列
+			     columns: [
+			    	 { 
+			             field:'checked', 
+		                 align: 'center',
+		                 halign: 'center',
+		                 width:'50px',
+			             checkbox : true
+			         },
+			         {
+			             title: '序号',//标题
+			             halign: 'center',
+			             align: 'center',
+			             width:'50px',
+			             formatter: function (value, row, index) {
+ 							return index+1;
+ 						 }
+			         },
+			         {field: 'groupName',halign: 'center',align: 'center',title: '分组'},
+			         {field: 'createTime',halign: 'center',align: 'center',title: '创建时间',width:'200px',formatter:function (value, row, index) {
+		                    if(value){
+		                        var date = new Date(value);
+		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+		                    }else{
+		                        return '-';
+		                    }
+		                }},
+			         {
+			             field: 'id',//域值
+			             halign: 'center',
+			             align: 'center',
+			             title: '操作',//内容
+			             width:'100px',
+			             formatter: function(value, row, index){
+			            	 let html='<a href="javascript:void(0)" onclick="txl.form(\''+value+'\')">修改</a>';
+		            		 return html;
+			             }
+			         }
+			     ],
+			     onLoadSuccess: function () {
+			    	 setFixedTableBorder($('#table'),$("div.fixed-table-border"));
+			     }
+			 });
+		},
+		query: function () {
+			$("#table").bootstrapTable('refresh',{
+				 pageNumber : 1
+			 });
+		},
+		form : function (id) {
+			id = id?id:"0";
+			var title ="修改分组";
+			if(id=='0'){
+				 title = "新增分组";
+			}
+			let param={
+					id:id
+			}
+			var groupFormDialog = top.dialog({
+            	id:"groupFormDialog",
+                title: title,
+                modal: true,
+                url: "${ctx}group/groupForm?_t"+Math.random(),
+                height: 200,
+                width: 600,
+                data:param,
+                onclose:function(){
+                	if (groupFormDialog.data.submit) {
+						toastr.success("操作成功!");
+						txl.query();
+                	}
+                }
+            });
+            groupFormDialog.show();
+            return false;
+		},
+		del:function(){
+			let arr = $('#table').bootstrapTable('getAllSelections');
+			if(arr.length<=0){
+				toastr.warning("请选择要删除的信息");
+				return false;
+			}
+            var d = top.dialog({
+                title: '提示',
+                width : 250,
+                height : 50,
+                padding:50,
+                content: '<div class="jyTit" style="margin-left: 65px;">您确定要删除么？</div>',
+                okValue: '确 定',
+                ok: function () {
+                    let ids = arr.map(item=>{
+                        return item.id;
+                    }).join(",");
+                    $.ajax({
+                        url:"${ctx}/group/delete",
+                        type:"post",
+                        dataType:"json",
+                        async:false,
+                        data:{
+                            ids:ids
+                        },
+                        success:function({result,data}){
+                            if(result=="success"){
+                                toastr.success("操作成功!");
+                                txl.query();
+                            }else{
+                                toastr.error("操作失败！");
+                            }
+                            d.close()
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () {
+                }
+            });
+            d.showModal();
+		}
+	}
+</script>
+</body>
+</html>

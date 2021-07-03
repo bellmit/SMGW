@@ -1,0 +1,61 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="充值金额：" prop="money">
+        	<el-input type="text" v-model="form.money" placeholder="" maxlength="200" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>元
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	money:''
+            },
+            formrules:{
+            	money:[{required:true,message:"充值金额不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        },
+        methods:{
+        	onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                    	 	let param = {
+                    	 			money:this.form.money,
+                    	 			id:dialogData.id
+                    	 	};
+                      		$.ajax({
+	         					url:"${ctx}/wallet/payMoney2",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"payDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error(data);
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>

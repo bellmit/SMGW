@@ -1,0 +1,173 @@
+<form id="addPlatManager">
+	<input type="hidden" name="id" value="${platManager.id!}" />
+	<div class="form-group form-inline">
+			<span class="btStar">*</span>
+			<label class="labelWid">角色：</label>
+			<select class="form-control" name="roleIds" id="roleIds" style="width: 148px;" required <#if platManager.id??>disabled</#if>  onchange="selectRole();" >
+				<option value="">--请选择--</option>
+				<#list platRoleList as pr>
+                      	<option value="${pr.roleId}" <#if myPlatRoleIdSet?? && myPlatRoleIdSet?seq_contains(pr.roleId)>selected</#if> >${pr.roleName}</option>
+                  </#list>
+			</select>
+	</div>
+	<div class="form-group form-inline">
+		<span class="btStar">*</span>
+			<label class="labelWid">名称：</label>
+			<input class="form-control" type="text" name="nickName" id="nickName" value="${platManager.nickName!}" maxlength="25" />
+	</div>
+	<div class="form-group form-inline">
+		<span class="btStar">*</span>
+			<label class="labelWid">登录名：</label>
+			<input class="form-control" type="text" name="loginName" id="loginName" value="${platManager.loginName!}" placeholder="建议使用手机号码" maxlength="25" />
+	</div>
+	<div class="form-group form-inline">
+		<span class="btStar">*</span>
+			<label class="labelWid">联系电话：</label>
+			<input class="form-control" type="text" name="phone" id="phone" value="${platManager.phone!}" maxlength="12" />
+	</div>
+	<div class="form-group form-inline">
+		<span class="btStar">*</span>
+			<label class="labelWid">费率：</label>
+			<input class="form-control" type="text" name="price" id="price" value="${platManager.price!}" maxlength="12" />元/条
+	</div>
+	<div class="form-group form-inline">
+		<span class="btStar">*</span>
+			<label class="labelWid">优先级：</label>
+			<input class="form-control" type="text" name="priority" id="priority" value="${platManager.priority!}" maxlength="12" />
+	</div>
+	<div class="form-group form-inline">
+			<label class="qyzt">启用状态：</label>
+			<#if platManager.state??>
+				<label><input type="radio" class="minimal" name="state"  value="100" <#if platManager.state = 100>checked</#if> >启用&nbsp;&nbsp;</label>
+				<label><input type="radio" class="minimal" name="state"  value="200" <#if platManager.state = 200>checked</#if> >&nbsp;&nbsp;禁用</label>
+			<#else>
+				<label><input type="radio" class="minimal" name="state"  value="100" checked >启用&nbsp;&nbsp;</label>
+				<label><input type="radio" class="minimal" name="state"  value="200" >&nbsp;&nbsp;禁用</label>
+			</#if>
+	</div>
+</form>
+<script>
+	$("#addPlatManager").validate({
+        rules: {
+        	nickName: {
+        		trimRequired: true,
+        		unContainSpace: true
+            },
+        	loginName: {
+        		trimRequired: true,
+        		unContainSpace: true,
+                verifyLoginNameUnique : true
+            },
+            phone: {
+        		trimRequired: true,
+        		unContainSpace: true
+            },
+            price: {
+        		trimRequired: true,
+        		unContainSpace: true
+            },
+            companyId: {
+        		verifyIsAgent: true
+            }
+        },
+        messages: {
+        	loginName: {
+                required: "该字段不能为空"
+            }
+        }
+	});
+	
+	// 验证输入内容去前后空格后不能为空。返回true验证通过， 返回false验证不通过 
+	$.validator.addMethod("trimRequired", function(value, element) {
+		if (value == '') {
+			return false;
+		}
+		if ($.trim(value) == '') {
+			return false;
+		}
+		return true;
+	}, "该字段不能为空");
+	
+	// 验证输入内容不包含空格。返回true验证通过， 返回false验证不通过 
+	$.validator.addMethod("unContainSpace", function(value, element) {
+		if (value == '' || $.trim(value) == '') {
+			return true;
+		}
+		if ($.trim(value).search(/\s/) != -1) {
+			return false;
+		}
+		return true;
+	}, "该字段不能包含空格");
+	
+	// 验证登录名唯一。返回true验证通过， 返回false验证不通过 
+	$.validator.addMethod("verifyLoginNameUnique", function(value, element) {
+		var id = $(":input[name='id']").val();
+		
+		var verificationPassed = false;
+		$.ajax({
+			url : "${ctx}/platManager/verifyLoginNameUnique",
+			type : 'post',
+			dataType : 'json',
+			async : false,
+			data : {"id" : id, "loginName" : value},
+			success : function(data) {
+				if (data.result == 'success') {
+					verificationPassed = true;
+				}
+			}
+		});
+		
+		return verificationPassed;
+	}, "登录名不能为重复");
+	
+	$.validator.addMethod("verifyIsAgent", function(value, element) {
+		var verificationPassed = true;
+		var roleIds = $("#roleIds").val();
+		var companyId = $("#companyId").val();
+		if(roleIds=='2' && !companyId){
+			verificationPassed = false;
+		}
+		return verificationPassed;
+	}, "请选择物业公司");
+	
+	function selectRole(){
+		var roleIds = $("#roleIds").val();
+		if(roleIds=='2'){
+			$("#companyDiv").show();
+		}else{
+			$("#companyDiv").hide();
+		}
+	}
+</script>
+<style>
+	.form-group.form-inline {
+		display: block;
+		line-height: 7px;
+	}
+	.labelWid {
+		width: 70px;
+		text-align: right;
+	}
+	label.qyzt {
+		width: 79px;
+		padding-left: 13px;
+	}
+	input.minimal {
+		position: relative;
+		top: 2px;
+	}
+	div#roleIds-error,
+	div#nickName-error,
+	div#loginName-error,
+	div#phone-error{
+		background: none;
+		border: none;
+		color: red;
+		padding-left: 82px;
+		margin: 0;
+	}
+	.alert {
+		padding: 0px;
+		padding-top: 10px;
+	}
+</style>

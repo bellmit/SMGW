@@ -1,0 +1,53 @@
+<#include "../common/_header.htm">
+<style>
+    .nav > li > a{
+        background: #eee;
+        color: #666;
+    }
+    .nav > li.active {
+        background: none;
+    }
+    .nav > li.active > a {
+        border-left: none;
+        background: #4d49d6;
+    }
+    .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+        background-color: #6c8bff;
+        color: #fff;
+    }
+</style>
+<div class="content-wrapper" style="height:100%;">
+        <section class="content" style="height:100%;">
+            <div class="row tranrow" style="height:100%;">
+                <div class="watnav-content" style="height:100%;display:flex;flex-direction: column;">
+                    <div class="watnav">
+                        <ul class="nav nav-tabs">
+                            <#if Session.code_menuIdMap["txlList"]?exists ><li data-index="0" role="presentation"><a href="javascript:void(0);"><i class="fa fa-database"></i>通讯录</a></li></#if>
+                            <#if Session.code_menuIdMap["txlTypeList"]?exists ><li data-index="1" role="presentation"><a href="javascript:void(0);"><i class="fa fa-align-left"></i>分组</a></li></#if>
+                        </ul>
+                    </div>
+                    <iframe name="accountStatistics" style="flex:1;" class="iframe-wrap" src="" frameborder="0" height="100%" width="100%"></iframe>
+                </div>
+            </div>
+        </section>
+    </div>
+ 	<script type="text/javascript">
+	 	$(function(){
+	        $(".watnav li").click(function() {
+	            $(this).siblings('li').removeClass('active');
+	            $(this).addClass('active');
+	        });
+	        $(".watnav li").click(function() {
+	            var index =$(this).attr("data-index");
+	            if(index == 0){
+	                $(".iframe-wrap").prop("src","${ctx}/groupMember/groupMemberList");
+	            }
+	            else if(index == 1){
+	                $(".iframe-wrap").prop("src","${ctx}/group/groupList");
+	            }
+	        });
+	        $(".watnav li").eq(0).click();
+	    });
+ 	</script>
+</body>
+</html>

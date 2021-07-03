@@ -1,0 +1,141 @@
+<#include "../common/_header.htm">
+<form action="${ctx}/platrole/authorization" method="post" enctype="multipart/form-data" id="authorizationForm">
+	<input type="hidden" name="roleId" value="${roleId!}" />
+	<table class="menuTable">
+		<tr align="conter">
+			<th width="20%">一级菜单</th>
+			<th width="20%">二级菜单</th>
+			<th width="60%">三级菜单</th>
+		</tr>
+		<#list firstLevelMenuList as menu>
+		<tr>
+			<#if secondLevelMenuMap["${menu.menuId}"]?? && (secondLevelMenuMap["${menu.menuId}"]?size>0)>
+			<#assign secondLevelMenuList=secondLevelMenuMap["${menu.menuId}"]/>
+			<td rowspan="${secondLevelMenuList?size +1}">
+				<#if authorityMenuIdSet?seq_contains(menu.menuId)>
+				<input type="checkbox" class="minimal1" name="menuId" value="${menu.menuId}" checked>&nbsp;&nbsp;${menu.menuName}
+				<#else>
+				<input type="checkbox" class="minimal1" name="menuId" value="${menu.menuId}">&nbsp;&nbsp;${menu.menuName}
+			</#if></td>
+			<#else>
+			<td><#if authorityMenuIdSet?seq_contains(menu.menuId)>
+				<input type="checkbox" class="minimal1" name="menuId" value="${menu.menuId}" checked>&nbsp;&nbsp;${menu.menuName}
+				<#else>
+				<input type="checkbox" class="minimal1" name="menuId" value="${menu.menuId}">&nbsp;&nbsp;${menu.menuName}
+			</#if></td>
+			<td></td>
+			<td></td>
+		</#if>
+		</tr>
+		<#if secondLevelMenuMap["${menu.menuId}"]?? && (secondLevelMenuMap["${menu.menuId}"]?size>0)>
+		<#list secondLevelMenuMap["${menu.menuId}"] as secondMenu>
+		<tr>
+			<td><#if authorityMenuIdSet?seq_contains(secondMenu.menuId)>
+				<input type="checkbox" class="minimal2" p1="${menu.menuId}" name="menuId" value="${secondMenu.menuId}" checked>&nbsp;&nbsp;${secondMenu.menuName}
+				<#else>
+				<input type="checkbox" class="minimal2" p1="${menu.menuId}" name="menuId" value="${secondMenu.menuId}">&nbsp;&nbsp;${secondMenu.menuName}
+			</#if></td>
+			<td>
+				<#if (thirdLevelMenuMap["${secondMenu.menuId}"]??) && (thirdLevelMenuMap["${secondMenu.menuId}"]?size>0)>
+				<#list thirdLevelMenuMap["${secondMenu.menuId}"] as thirdMenu>
+				<#if authorityMenuIdSet?seq_contains(thirdMenu.menuId)>
+				<input type="checkbox" class="minimal3" p1="${menu.menuId}" p2="${secondMenu.menuId}" name="menuId" value="${thirdMenu.menuId}" checked>&nbsp;&nbsp;${thirdMenu.menuName}
+				<#else>
+				<input type="checkbox" class="minimal3" p1="${menu.menuId}" p2="${secondMenu.menuId}" name="menuId" value="${thirdMenu.menuId}">&nbsp;&nbsp;${thirdMenu.menuName}
+			</#if>
+		</#list>
+	</#if>
+	</td>
+	</tr>
+</#list>
+</#if>
+</#list>
+</table>
+</form>
+   <div class="qxcenter">
+       <button type="button" class="btn btn-primary" onclick="onSubmit()">确定</button>
+       <button type="button" class="btn" onclick="onCancel()">取消</button>
+   </div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+  $(function () {
+	  $('input[type="checkbox"]').iCheck({
+	      checkboxClass: 'icheckbox_minimal-blue'
+      });
+	  
+	  $('input[type="checkbox"].minimal1').on('ifChecked', function (event) {
+		  let menuId =$(this).attr('value');
+		  $('input[p1="'+menuId+'"]').iCheck('check');
+	  });
+	  
+	  $('input[type="checkbox"].minimal1').on('ifUnchecked', function (event) {
+		  let menuId =$(this).attr('value');
+		  $('input[p1="'+menuId+'"]').iCheck('uncheck');
+	  });
+	  
+	  $('input[type="checkbox"].minimal2').on('ifChecked', function (event) {
+		  let menuId =$(this).attr('value');
+		  $('input[p2="'+menuId+'"]').iCheck('check');
+	  });
+	  
+	  $('input[type="checkbox"].minimal2').on('ifUnchecked', function (event) {
+		  let menuId =$(this).attr('value');
+		  $('input[p2="'+menuId+'"]').iCheck('uncheck');
+	  });
+  })
+  function onSubmit(){
+	  if($("#authorizationForm").valid()){
+			$.ajax({
+				url:"${ctx}/platrole/authorization",
+				type:"post",
+				dataType:"json",
+				async:false,
+				data:$("#authorizationForm").serialize(),
+				success:function(result){
+					if(result.result=="success"){
+						top.dialog({id:"authorizationForm"}).data.submit=1;
+		                dialog.close().remove();
+					}else{
+						toastr.error("操作失败!");
+					}
+				}
+			});
+		}
+  }
+  function onCancel(){
+	  dialog.close().remove();
+  }
+</script>
+<style>
+	.menuTable tr th, .menuTable tr td { border:1px solid #b9cdff;padding-left:20px;padding-right:20px;}
+	.menuTable {
+		width: 100%;
+		min-height: 24px;
+		line-height: 24px;
+		padding:0px 17px;
+	}
+	.qxcenter {
+    	text-align:center;
+    	background:#fff;
+        position: absolute;
+        width:100%;
+        bottom: 0;
+		padding-bottom:10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    label{
+    	margin-bottom:-5px;
+    }
+    .text-label{
+   	    margin-bottom: 5px;
+	    font-weight: normal;
+	    display: inline-block;
+	    vertical-align: middle;
+    }
+    #authorizationForm{
+    	height:550px;
+    	overflow:auto;
+    }
+</style>

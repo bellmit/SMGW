@@ -1,0 +1,138 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="模板名称：" prop="title">
+        	<el-input type="text" v-model="form.title" placeholder="模板名称" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="短信内容：" prop="content">
+        	<el-input type="textarea" id="textarea" v-model="form.content" placeholder="短信内容" maxlength="500" :rows="5"></el-input>
+        </el-form-item>
+        <el-form-item label="插入变量：" >
+        	<el-select v-model="cell" placeholder="请选择" style="width:200px;">
+			    <el-option
+			      v-for="item in options"
+			      :key="item.value"
+			      :label="item.label"
+			      :value="item.value">
+			    </el-option>
+			  </el-select>
+     		<el-button size="small" @click="insertCell" >插入</el-button>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	title:'',
+            	content:''
+            },
+            cell:'B',
+            options:[
+            	{label:'B',value:'B'},
+            	{label:'C',value:'C'},
+            	{label:'D',value:'D'},
+            	{label:'E',value:'E'},
+            	{label:'F',value:'F'},
+            	{label:'G',value:'G'},
+            	{label:'H',value:'H'},
+            	{label:'I',value:'I'},
+            	{label:'J',value:'J'},
+            	{label:'K',value:'K'},
+            	{label:'L',value:'L'},
+            	{label:'M',value:'M'},
+            	{label:'N',value:'N'},
+            	{label:'O',value:'O'},
+            	{label:'P',value:'P'},
+            	{label:'Q',value:'Q'},
+            	{label:'R',value:'R'},
+            	{label:'S',value:'S'},
+            	{label:'T',value:'T'},
+            	{label:'U',value:'U'},
+            	{label:'V',value:'V'},
+            	{label:'W',value:'W'},
+            	{label:'X',value:'X'},
+            	{label:'Y',value:'Y'},
+            	{label:'Z',value:'Z'}
+            ],
+            formrules:{
+            	title:[{required:true,message:"模板名称不能为空",trigger:"blur"}],
+            	content:[{required:true,message:"短信内容不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	if(dialogData.id!="0"){
+	        	$.ajax({
+					url:"${ctx}/smsTemplate/findById",
+					type:"post",
+					dataType:"json",
+					async:false,
+					data:{id:dialogData.id},
+					success:function({result,data}){
+						if(result=="success"){
+							that.form.id = data.id;
+							that.form.title = data.title;
+							that.form.content = data.content;
+						}else{
+							toastr.error("加载失败！");
+						}
+					}
+				});
+        	}
+        },
+        methods:{
+        	async insertCell(){
+        		const myField=document.querySelector("#textarea");
+        		if(myField.selectionStart||myField.selectionStart==0){
+        			console.log(this.cell)
+        			let startPos = myField.selectionStart;
+        			let endPos = myField.selectionEnd;
+        			this.form.content=myField.value.substring(0,startPos)+'$'+'{'+this.cell+'}'+myField.value.substring(endPos,myField.value.length);
+        			await this.$nextTick();
+        			myField.focus();
+        			myField.setSelectionRange(endPos+4,endPos+4);
+        		}else{
+        			console.log(this.cell)
+        			this.form.content='$'+'{'+this.cell+'}';
+        		}
+        	},
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                    	 	let param = JSON.parse(JSON.stringify(this.form));
+                      		$.ajax({
+	         					url:"${ctx}/smsTemplate/saveOrUpdate",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"smsTemplateFormDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error(data);
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>
+<style>
+	.el-select .el-input{width:200px;}
+</style>

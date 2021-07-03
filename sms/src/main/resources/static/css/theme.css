@@ -1,0 +1,242 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+.navbar-header {
+    height: 48px;
+    background-color: #605bff;
+    line-height: 48px;
+}
+
+.el-button--primary {
+    background-color: #605bff;
+}
+
+#page-wrapper .navbar-header {
+    color: #555;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.navbar-static-side {
+    background-color: #fff;
+    border-right: 1px solid #f5f5f5;
+}
+
+/*.nav>li{*/
+/*    height: 50px;*/
+/*}*/
+.skin-1 .nav > li > a {
+    color: #666
+}
+
+.skin-1 .navbar-default .nav > li > a:hover, .skin-1 .navbar-default .nav > li > a:focus {
+    background: none;
+    color: #001c6b;
+}
+
+.skin-1 .nav > li.active {
+    background: #e1f1ff;
+    color: #666;
+}
+
+.skin-1 .nav > li.active > a {
+    color: #001c6b;
+}
+
+.ibox-title {
+    margin-top: 0;
+    border: none;
+}
+
+.navbar-form-custom, .navbar-form-custom .form-control {
+    height: 40px;
+}
+
+.form-control {
+    background: #fff;
+}
+
+.skin-1 .minimalize-styl-2 {
+    margin: 10px 15px;
+}
+
+.example-title {
+    margin-top: 20px;
+}
+
+body.fixed-sidebar.mini-navbar .navbar-static-side {
+    width: 50px;
+}
+
+body.fixed-sidebar.mini-navbar #page-wrapper {
+    margin-left: 50px;
+}
+
+.skin-1 .navbar-minimalize {
+    margin: 0 15px;
+    padding: 0;
+    background: none;
+    color: #333;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.btn-success {
+    background: #605bff;
+    border-color: #605bff;
+}
+
+.page-list .dropdown .btn-default {
+    background: #fff;
+    color: #333;
+    height: 30px;
+    padding: 0 10px;
+}
+
+.form-control:focus, .single-line:focus {
+    border-color: #605bff;
+}
+
+.content-tabs {
+    height: initial;
+    background: #fff;
+}
+
+.skin-1 .content-tabs {
+    border-bottom: 1px solid #eee;
+}
+
+.content-tabs .roll-nav {
+    height: 100%;
+}
+
+nav.page-tabs .page-tabs-content a {
+    height: 40px;
+    line-height: 40px;
+}
+
+nav.page-tabs .page-tabs-content a .fa {
+    margin-left: 10px;
+}
+
+.skin-1 .page-tabs a.active {
+    background: #e1f1ff;
+}
+
+.skin-1 .page-tabs a.active:hover, .skin-1 .page-tabs a.active i:hover {
+    background: #f2f2f2;
+}
+
+.content-tabs button {
+    height: 100%;
+}
+
+.headerHold {
+    position: relative;
+    height: 100%;
+}
+
+.headerHold .activeTriangle {
+    margin-top: -8px;
+    margin-left: 24px;
+}
+
+.headerHold .fa {
+    margin-right: 5px;
+
+}
+.bg-color-30, .bg-color-60, .bg-color-90{
+    color: #000;
+    border-radius: 10px;
+    padding: 2px 4px;
+}
+.bg-color-30 {
+    background: #ffFF00;
+}
+
+.bg-color-60 {
+    background: #ffB600;
+}
+
+.bg-color-90 {
+    background: #FF0000;
+}
+.listTitle td.right, .listTitle td.left, .listTitle td.center{
+    background: none;
+    color: #333;
+    padding: 20px;
+    font-size: 18px;
+}
+.btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open .dropdown-toggle.btn-success{
+    background: #46a3ff;
+    border-color: #46a3ff;
+    outline: none;
+}
+.btn-success.active.focus, .btn-success.active:focus, .btn-success.active:hover, .btn-success:active.focus, .btn-success:active:focus, .btn-success:active:hover, .open>.dropdown-toggle.btn-success.focus, .open>.dropdown-toggle.btn-success:focus, .open>.dropdown-toggle.btn-success:hover{
+    background: #46a3ff;
+    border-color: #46a3ff;
+    outline: none;
+}
+.table > thead > tr > th{
+    background: #f3f9ff;
+    font-weight: normal;
+}
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td{
+    border-left: none;
+    border-right: none;
+    height: 40px;
+}
+.page-tabs-content .text{
+    line-height: 18px;
+}
+.page-tabs-content .fa{
+    font-size: 18px;
+}
+.skin-1 .page-tabs a.active:hover, .skin-1 .page-tabs a.active i:hover{
+    color: red;
+}
+.nav>li>a i{
+    float: initial;
+}
+.ui-dialog-header, .layui-layer-title{
+    background: #605bff !important;
+    color: #fff !important;
+}
+.ui-dialog-header .ui-dialog-close{
+    color: #fff;
+    opacity: .6;
+}
+.ui-dialog-header .ui-dialog-close:hover{
+    color: #fff;
+    opacity: 1;
+}
+.pace .pace-progress{
+    background: #605bff;
+}
+.layui-layer-setwin .layui-layer-close1{
+    filter: invert(1);
+}
+.layui-layer-btn .layui-layer-btn0{
+    border-color: #605bff!important;
+    background-color: #605bff!important;
+}
+.project-tooltip{
+	min-width: 500px;
+}
+ul.tooltip-ul{
+	list-style:none;
+	margin-left:-20px;
+}
+ul.tooltip-ul li span{
+	font-weight: 600;
+	color: #369;
+}

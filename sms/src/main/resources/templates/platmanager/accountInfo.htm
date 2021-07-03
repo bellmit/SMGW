@@ -1,0 +1,42 @@
+<#include "../common/_header.htm">
+<div id="messageForm"  v-cloak>
+    <el-card>
+        <div class="account-info">
+            <div class="info-item">
+                <span class="label">昵称：</span>
+                <span class="value">${pm.nickName!}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">联系电话：</span>
+                <span class="value">${pm.phone!}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">费率：</span>
+                <span class="value">${pm.price!}元/条</span>
+            </div>
+            <div class="info-item">
+                <span class="label">余额：</span>
+                <span class="value">#{money!}元</span>
+            </div>
+            <div class="info-item">
+                <span class="label">剩余条数：</span>
+                <span class="value">${smsCount!}条</span>
+            </div>
+        </div>
+
+    </el-card>
+</div>
+<script>
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            }
+        },
+        created:function() {
+        },
+        methods:{
+        }
+    });
+</script>

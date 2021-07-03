@@ -1,0 +1,63 @@
+<#include "../common/_header.htm">
+<div id="messageForm">
+	<input style="display:none;" type="file" id='hiddenFile' accept=".txt,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" class="uploadInp" onchange="upload()">
+	<el-button style="display: block;margin: 20px auto;width: 150px;" type="info" size="small" icon="el-icon-upload2" @click="startUpload">本地上传</el-button>
+	<div style="margin-top: 30px">
+		<p>1.导入文件支持txt、csv、xlsx、xls</p>
+		<p>2.变量格式：第1列填手机号，2-5列填参数，无参数留空</p>
+		<p>3.文件大小不得超过100M，若导入失败，请尝试拆分导入</p>
+		<p>4.上传内容格式参考模板 <a href="${ctx}plugins/importTemplates.zip">模板下载</a></p>
+	</div>
+
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+        	taskId:'0'
+        },
+        created:function() {
+        	if(dialogData.taskId) this.taskId = dialogData.taskId;
+        },
+        methods:{
+        	startUpload:function(){
+        		$("#hiddenFile").click();
+        	}
+        }
+    });
+    function upload(){
+    	$(".loadingMask").show();
+		//开始上传附件
+		var formData = new FormData();
+        var img_file = document.getElementById("hiddenFile");
+        var fileObj = img_file.files[0];
+        formData.append("file",fileObj);
+        formData.append("taskId",messageForm.taskId);
+
+        $.ajax({
+            url:'${ctx}/smsTask/uploadPhone',
+            type:'post',
+            data:formData,
+            processData : false,
+            contentType : false,
+            success:function ({result,data}) {
+            	$("#hiddenFile").val('');
+            	if(result=='success'){
+            		$(".loadingMask").hide();
+	            	top.dialog({id:"showImportDialog"}).data.submit=1;
+	            	top.dialog({id:"showImportDialog"}).data.taskId=data;
+	                dialog.close().remove();
+            	}else{
+            		toastr.error(data);
+            	}
+            },
+			error:function(){
+				$(".loadingMask").hide();
+			}
+        });
+        
+        
+	}
+</script>

@@ -1,0 +1,121 @@
+<style>
+</style>
+<form id="addPlatRole">
+		<input type="hidden" name="roleId" id="roleId" value="${platRole.roleId!}" />
+		<div class="form-group form-inline row">
+			<div class="jsbm">
+				<span class="btStar">*</span><label>角色编码：</label>
+				<#if platRole?? && platRole.roleCode??>
+					<input class="form-control" type="text" name="roleCode" id="roleCode" value="${platRole.roleCode!}"  readonly />
+				<#else>
+					<input class="form-control" type="text" name="roleCode" id="roleCode" value=""  required />
+				</#if>
+			</div>
+			<div class="jsm">
+				<span class="btStar">*</span><label>角色名：</label>
+				<input class="form-control" type="text" name="roleName" id="roleName" value="${platRole.roleName!}"  required />
+			</div>
+		</div>
+</form>
+<script>
+	$("#addPlatRole").validate({
+        rules: {
+        	roleCode: {
+            	trimRequired : true,
+            	unContainSpace : true,
+            	validateRoleCode : true
+            },
+            roleName : {
+            	trimRequired : true,
+            	unContainSpace : true,
+            	validateRoleName : true
+            }
+        },
+        messages: {
+        }
+	});
+	
+	$.validator.addMethod("trimRequired", function(value, element) {
+		if (value == '') {
+			return false;
+		}
+		if ($.trim(value) == '') {
+			return false;
+		}
+		return true;
+	}, "该字段不能为空");
+	$.validator.addMethod("unContainSpace", function(value, element) {
+		if (value == '' || $.trim(value) == '') {
+			return true;
+		}
+		if ($.trim(value).search(/\s/) != -1) {
+			return false;
+		}
+		return true;
+	}, "该字段不能包含空格");
+	
+	// 返回true验证通过， 返回false验证不通过 
+	$.validator.addMethod("validateRoleCode", function(value, element) {
+		var roleId = $(":input[name='roleId']").val();
+		
+		var verificationPassed = false;
+		$.ajax({
+			url : "${ctx}/platrole/validateRoleCode",
+			type : 'post',
+			dataType : 'json',
+			async : false,
+			data : {"roleId" : roleId, "roleCode" : value},
+			success : function(data) {
+				if (data.result == 'success') {
+					verificationPassed = true;
+				}
+			}
+		});
+		
+		return verificationPassed;
+	}, "该字段不能为重复");
+	
+	// 返回true验证通过， 返回false验证不通过 
+	$.validator.addMethod("validateRoleName", function(value, element) {
+		var roleId = $(":input[name='roleId']").val();
+		
+		var verificationPassed = false;
+		$.ajax({
+			url : "${ctx}/platrole/validateRoleName",
+			type : 'post',
+			dataType : 'json',
+			async : false,
+			data : {"roleId" : roleId, "roleName" : value},
+			success : function(data) {
+				if (data.result == 'success') {
+					verificationPassed = true;
+				}
+			}
+		});
+		
+		return verificationPassed;
+	}, "该字段不能为重复");
+</script>
+<style>
+
+	div#roleCode-error,
+	div#roleName-error{
+		color: red;
+		background: none;
+		border: none;
+		margin-bottom: 0;
+		padding: 6px 0 0 80px;
+		line-height: 0px;
+	}
+	.modal-body {
+		padding: 20px 0 59px 48px!important;
+	}
+	.jsbm {
+		margin-bottom: 10px;
+	}
+	label {
+		font-weight: 400;
+		width: 70px;
+		text-align: right;
+	}
+</style>

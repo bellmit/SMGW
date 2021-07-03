@@ -1,0 +1,381 @@
+<#include "./common/_header.htm">
+<body class="login">
+    <div class="container">
+        <div class="form">
+            <h4 class="form-title"><#if isAdmin=='1'>管理员</#if>登录-COMET(彗星)</h4>
+            <p>Centralization Operation & Management of Enhanced Telecommunication</p>
+            <form action="${ctx}/login" method="post">
+                <input type="text" class="form-control uname" placeholder="用户名" id="loginname" name="loginname"/>
+                <input type="password" class="form-control pword" placeholder="密码" id="password" name="password"/>
+                <div class="form-row">
+                    <input name="code" type="text" id="code" class="form-control code" placeholder="验证码"/>
+                    <span id="sharePicPop" class="code-image"></span>
+                </div>
+                <label for="" class="passLabel">
+                    <input type="checkbox" class="passCheckbox">
+                    <span class="checkboxTit">记住密码</span>
+                </label>
+            </form>
+            <button class="submit-btn" id="loginButton">登录</button>
+            <p class="copyright">CopyRight@2021</p>
+        </div>
+    </div>
+<!-- 遮盖层 -->
+<div id="hidebg"></div>
+</body>
+<script type="text/javascript">
+    $(function() {
+        //返回当前 URL 的查询部分（问号 ? 之后的部分）。
+        var urlParameters = location.search;
+        //声明并初始化接收请求参数的对象
+        var requestParameters = new Object();
+        //如果该求青中有请求的参数，则获取请求的参数，否则打印提示此请求没有请求的参数
+        if (urlParameters.indexOf('?') != -1) {
+            //获取请求参数的字符串
+            var parameters = decodeURI(urlParameters.substr(1));
+            if("error" == parameters){
+                top.toastr.error("登录失败，请联系管理员");
+            }else if("badcredentials" == $.trim(parameters)){
+                top.toastr.error("用户名或者密码不正确，请重新输入");
+            }else if("disabled" == $.trim(parameters)){
+                top.toastr.error("此用户已被禁用，请联系管理员");
+			}else if("codeEmpty" == $.trim(parameters)){
+                top.toastr.error("请输入验证码");
+			}else if("codeError" == $.trim(parameters)){
+                top.toastr.error("验证码输入错误");
+			}else if("codeTimeout" == $.trim(parameters)){
+                top.toastr.error("验证码过期，请重新验证");
+			}
+        };
+        $('input').iCheck({
+            checkboxClass : 'icheckbox_square-blue',
+            radioClass : 'iradio_square-blue',
+            increaseArea : '20%' // optional
+        });
+        $("body").addClass("login-page");
+        $("body").removeClass("skin-blue");
+        /* 回车键时间监听 */
+        $(document).keyup(function(event){
+            if(event.keyCode ==13){
+                var loginName = $.trim($("#loginname").val());
+                var password = $.trim($("#password").val());
+                var code = $.trim($("#code").val());
+                if(null == loginName || loginName == undefined || loginName == "" ){
+                    top.toastr.warning("用户名不能为空");
+                    return;
+                }
+                if(null == password || password == undefined || password == "" ){
+                    top.toastr.warning("密码不能为空");
+                    return;
+                }
+                if(null == code || code == undefined || code == "" ){
+                    top.toastr.warning("验证码不能为空");
+                    return;
+                }
+                if ($("input[type=checkbox]").is(":checked")) {
+                    base.cookie.set("loginname", $("#loginname").val());
+                    base.cookie.set("password", $("#password").val());
+                    base.cookie.set("remember", true);
+                } else {
+                    base.cookie.set("loginname", null);
+                    base.cookie.set("password", null);
+                    base.cookie.set("remember", false);
+                }
+                $("form").submit();
+            }
+        });
+        /* 登录时间 */
+        $("#loginButton").click(function(e){
+            var loginName = $.trim($("#loginname").val());
+            var password = $.trim($("#password").val());
+            var code = $.trim($("#code").val());
+            if(null == loginName || loginName == undefined || loginName == "" ){
+                top.toastr.warning("用户名不能为空");
+                return;
+            }
+            if(null == password || password == undefined || password == "" ){
+                top.toastr.warning("密码不能为空");
+                return;
+            }
+            if(null == code || code == undefined || code == "" ){
+                top.toastr.warning("验证码不能为空");
+                return;
+            }
+            if ($("input[type=checkbox]").is(":checked")) {
+                base.cookie.set("loginname", $("#loginname").val());
+                base.cookie.set("password", $("#password").val());
+                base.cookie.set("remember", true);
+            } else {
+                base.cookie.set("loginname", null);
+                base.cookie.set("password", null);
+                base.cookie.set("remember", false);
+            }
+            $("form").submit();
+        });
+        
+    	loadCaptcha();
+    	$("#sharePicPop").click(function () {
+    		$("#sharePicPop").html("");
+    		loadCaptcha();
+    	});
+
+        (function() {
+            var checked = base.cookie.get("remember");
+            if (checked == "true") {
+                var loginname = base.cookie.get("loginname");
+                var password = base.cookie.get("password");
+                if (loginname && password) {
+                    $("#loginname").val(loginname);
+                    $("#password").val(password);
+                    $("input").iCheck("check");
+                }
+            } else {
+                $("input").iCheck("uncheck");
+            }
+        })();
+
+        $(".login-wrapper").height($(window).height());
+    })
+    var login=new Vue({
+		el:'.loginCon',
+		data:{
+            checked: true
+		}
+	})
+    function hide(){
+    	$("#hidebox,#hidebg").hide();
+    }
+
+    function loadCaptcha(){
+		$.ajax({
+			url: "${ctx}/login/captcha",
+			dataType: "json",
+			type: "post",
+			data: {},
+			async: false,
+			success: function ({result,data}) {
+				$("#sharePicPop").append("<img id='slin' width='136' height='42' src='"+data+"'/>");
+			},
+			error: function (data) {
+			}
+		});
+	};
+</script>
+
+<style type="text/css">
+	html{
+		height: 100%;
+		width: 100%;
+	}
+	.logoArea{
+		width: 100%;
+		height: 80px;
+		background-color: #103e88;
+		/*opacity: 0.4;*/
+		line-height: 80px;
+		background:rgba(44,93,176,0.4);
+		color:#fff;
+		white-space: nowrap;
+	}
+	.logoAreaTitle {
+		display: inline-block;
+		font-size: 26px;
+		color: #fff;
+		letter-spacing: 1px;
+		font-family: MicrosoftYaHei;
+		margin-left: 393px;
+	}
+	.logoAreaImg{
+		display: inline-block;
+		width: 27px;
+		height: 27px;
+		background:url(${ctx}imgs/login/logo_login.png) no-repeat;
+		position: absolute;
+		left: 347px;
+		top: 28px;
+	}
+	.loginCon{
+		background:url(${ctx}imgs/login/bg_shiyanshi.png) no-repeat;
+		background-size: 100% 100%;
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+	}
+	.loginContent {
+		width: 100%;
+		height: 100%;
+	}
+	.logo{
+		width: 550px;
+		height: 80px;
+		background: url(${ctx}imgs/logo.png) no-repeat center center;
+		margin: 32px auto 0;
+	}
+	.leftImgArea {
+		float: left;
+	}
+	.logoImg{
+		width: 571px;
+		height: 589px;
+		background: url(${ctx}imgs/login/left_shiyanshi.png) no-repeat;
+	}
+	.bottomImg{
+		width: 934px;
+		height: 159px;
+		background: url(${ctx}imgs/bottomImg.png) no-repeat;
+
+	}
+	.centerArea {
+		overflow: hidden;
+		margin: auto;
+		width: 1050px;
+		margin-top: 116px;
+	}
+	.rightArea{
+		z-index:2;
+		float: left;
+		position: relative;
+		margin-left: 34px;
+		width: 320px;
+		height: 380px;
+		background-color: #ffffff;
+		box-shadow: 0px 0px 13px 0px
+		rgba(0, 0, 0, 0.32);
+		border-radius: 4px;
+		margin-top: 84px;
+	}
+	.logoTitle {
+		font-size: 20px;
+		font-weight: normal;
+		font-stretch: normal;
+		line-height: 8px;
+		letter-spacing: 0px;
+		color: #333;
+		margin-top: 42px;
+	}
+	.loginZjkjRightZh,
+	.loginZjkjRightMa
+	{
+		width: 260px;
+		height: 40px;
+		background-color: #f1f4f7;
+		border-radius: 2px;
+		box-sizing: border-box;
+		border: 0;
+		outline: none;
+		padding-left: 40px;
+		font-size: 14px;
+		margin-top: 37px;
+	}
+	.m-t{
+		position: relative;
+		padding: 0 30px;
+	}
+	.blueLine {
+		width: 41px;
+		height: 3px;
+		background-color: #3267cc;
+		margin-top: 21px;
+	}
+	.loginZjkjRightZht,
+	.loginZjkjRightMat{
+		background: url("${ctx}imgs/login/user_login.png") no-repeat;
+		width: 17px;
+		height: 19px;
+		position: absolute;
+		left: 43px;
+		top: 80px;
+	}
+	.loginZjkjRightMat{
+		background: url("${ctx}imgs/login/pass_login.png") no-repeat;
+		top: 155px;
+		left: 45px;
+	}
+	.loginBtn{
+		width: 260px;
+		height: 40px;
+		background-color: #3267cc;
+		border-radius: 2px;
+		margin-top: 25px;
+		color: #fff;
+		text-align: center;
+		cursor: pointer;
+		font-size: 16px;
+		border: none;
+		outline: none;
+		letter-spacing: 5px;
+	}
+	#hidebg {
+		position:absolute;
+		left:0px;
+		top:0px;
+		background-color:#000;
+		width:100%;  /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
+		height: 100%;
+		filter:alpha(opacity=20);  /*设置透明度为60%*/
+		opacity:0.2;  /*非IE浏览器下设置透明度为60%*/
+		display:none;
+		z-Index:2;
+	}
+	#hidebox {
+		position:absolute;
+		width: 511px;
+		height: 275px;
+		background-color: #ffffff;
+		border-radius: 10px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		display:none;
+		z-Index:9;
+		padding: 10px;
+	}
+	input:-webkit-autofill {
+		transition: background-color 5000s ease-in-out 0s;
+	}
+	.banbimg{
+		width: 199px;
+		height: 164px;
+		background:url("${ctx}/imgs/Expiring.png") no-repeat;
+		margin: 20px auto;
+	}
+	.banbtext {
+		font-size: 22px;
+		color: #333333;
+		margin-top: 30px;
+		text-align: center;
+	}
+	span.banbjs {
+		font-size: 22px;
+		color: #fc5e5e;
+		margin-left: 8px;
+		margin-right: 8px;
+	}
+	label.passLabel {
+		margin-top: 18px;
+	}
+	span.checkboxTit {
+		margin-left: 5px;
+		font-size: 14px;
+		color: #999;
+	}
+	.bottomArea {
+		width: 100%;
+		position: absolute;
+		color: #fff;
+		left: 50%;
+		transform: translateX(-10%);
+		bottom: 33px;
+		font-size: 14px;
+	}
+	.addEntrust {
+		display: inline-block;
+		margin-left: 38%;
+		font-size: 24px;
+		color: #fff;
+	}
+	.addEntrust:hover,.addEntrust:focus{
+		color: #fff;
+	}
+</style>
+

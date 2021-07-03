@@ -1,0 +1,65 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="是否通过：" prop="approveStatus">
+	        <el-radio v-model="form.approveStatus" label="1">通过</el-radio>
+	  		<el-radio v-model="form.approveStatus" label="2">不通过</el-radio>
+        </el-form-item>
+        <el-form-item label="备注：" prop="memo" v-if="form.approveStatus==2">
+        	<el-input type="textarea" v-model="form.memo" placeholder="" maxlength="200"></el-input>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	id:'',
+            	memo:'',
+            	approveStatus:'1'
+            },
+            formrules:{
+            	approveStatus:[{required:true,message:"请选择审批结果",trigger:"blur"}],
+            	memo:[{required:true,message:"备注不能为空",trigger:"blur"}],
+            }
+        },
+        created:function() {
+			this.form.id = dialogData.id;
+        },
+        methods:{
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                    	 	let param = JSON.parse(JSON.stringify(this.form));
+                      		$.ajax({
+	         					url:"${ctx}/smsTemplate/approve",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"showApproveDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error(data);
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>

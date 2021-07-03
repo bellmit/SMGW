@@ -1,0 +1,197 @@
+<#include "../common/_header.htm">
+<body  onload="accountInfo.init();">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="form-group">
+					<div class="form-inline">
+						<label class="control-label">关键字：</label>
+						<input type="text" placeholder="账号/接入号" class="form-control fc-clear" style="width: 300px;" id="keyword">
+						<span class="btnCon">
+							<button type="button" class="btn btn-primary btn-sm" onclick="accountInfo.query();">查询</button>
+							<input type="button" id="newadd" class="btn btn-primary btn-sm newadd" onclick="accountInfo.form();" value="新增" />
+                            <input type="button" id="del" class="btn btn-primary btn-sm delBtn" onclick="accountInfo.del();" value="删除" />
+						</span>
+					</div>
+				</div>
+				<div class="example">
+					<table id="table"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	var accountInfo = {
+		init:function(){
+		    let height = jQuery(window).height()-135;
+			$('#table').bootstrapTable({
+			     url:"${ctx}/account/getAccountList",//请求数据url
+			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
+			         return {
+			        	 pageNumber: (params.offset / params.limit),  //页码
+			        	 pageSize: params.limit,  //页面大小
+			        	 keyword:keyword
+			         };
+			     },
+			     // striped: true,                      //是否显示行间隔色
+			     showHeader : true,
+			     height:height,
+			     pagination: true,                   //是否显示分页（*）
+			     sidePagination : 'server',//服务器端分页
+			     strictSearch: true,
+			     pageNumber : 1,
+			     resizable:true,
+			     //showColumns:true,
+			     pageSize: 20,                       //每页的记录行数（*）
+			     pageList: [20,100],//分页步进值
+			     //表格的列
+			     columns: [
+			    	 { 
+			             field:'checked', 
+			             halign: 'center',
+			             align: 'center',
+			             checkbox : true
+			         },
+			         {
+			             title: '序号',//标题
+			             halign: 'center',
+			             align: 'center',
+			             width:'50px',
+			             formatter: function (value, row, index) {
+ 							return index+1;
+ 						 }
+			         },
+			         {field: 'channelType',halign: 'center', align: 'center',title: '通道类型',formatter:function (value, row, index) {
+		                    if(value=='1'){
+		                    	return 'HTTP';
+		                    }else if(value=='2'){
+		                    	return 'SMPP';
+		                    }else if(value=='3'){
+		                    	return 'CMPP';
+		                    }else{
+		                        return '-';
+		                    }
+			             }},
+			         {field: 'ip',halign: 'center', align: 'center',title: '地址'},
+			         {field: 'account',halign: 'center', align: 'center',title: '账号'},
+			         {field: 'password',halign: 'center', align: 'center',title: '密码'},
+			         {field: 'extno',halign: 'center', align: 'center',title: '接入号'},
+			         {field: 'limiter',halign: 'center', align: 'center',title: '速率'},
+			         {field: 'balance',halign: 'center', align: 'center',title: '余额(元)',formatter:function (value, row, index) {
+			        	 return value/1000;
+		             }},
+			         {field: 'alertBalance',halign: 'center', align: 'center',title: '余额告警(元)'},
+			         {field: 'accountStatus',halign: 'center', align: 'center',title: '是否启用',formatter:function (value, row, index) {
+	                    if(value=='0'){
+	                    	return '<span style="color:red;">未启用</span>';
+	                    }else if(value=='1'){
+	                    	return '<span style="color:green;">启用</span>';
+	                    }else{
+	                        return '-';
+	                    }
+		             }},
+			         {field: 'createTime',halign: 'center',align: 'center',title: '创建时间', width:'150px',formatter:function (value, row, index) {
+		                    if(value){
+		                        var date = new Date(value);
+		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+		                    }else{
+		                        return '-';
+		                    }
+		                }},
+			         {
+			             field: 'id',//域值
+			             halign: 'center',
+			             align: 'center',
+			             title: '操作',//内容
+			             width:'80px',
+			             formatter: function(value, row, index){
+			            	 let html='<a href="javascript:void(0)" onclick="accountInfo.form(\''+value+'\')">修改</a>';
+		            		 return html;
+			             }
+			         }
+			     ],
+			     onLoadSuccess: function () {
+			    	 setFixedTableBorder($('#table'),$("div.fixed-table-border"));
+			     }
+			 });
+		},
+		query: function () {
+			$("#table").bootstrapTable('refresh',{
+				 pageNumber : 1
+			 });
+		},
+		form : function (id) {
+			id = id?id:"0";
+			var title ="修改账号信息";
+			if(id=='0'){
+				 title = "新增账号信息";
+			}
+			let param={
+					id:id
+			}
+			var accountFormDialog = top.dialog({
+            	id:"accountFormDialog",
+                title: title,
+                modal: true,
+                url: "${ctx}account/accountForm?_t"+Math.random(),
+                height: 500,
+                width: 700,
+                data:param,
+                onclose:function(){
+                	if (accountFormDialog.data.submit) {
+						toastr.success("操作成功!");
+						accountInfo.query();
+                	}
+                }
+            });
+            accountFormDialog.show();
+            return false;
+		},
+		del:function(){
+			let arr = $('#table').bootstrapTable('getAllSelections');
+			if(arr.length<=0){
+				toastr.warning("请选择要删除的信息");
+				return false;
+			}
+            var d = top.dialog({
+                title: '提示',
+                width : 250,
+                height : 50,
+                padding:50,
+                content: '<div class="jyTit" style="margin-left: 65px;">您确定要删除么？</div>',
+                okValue: '确 定',
+                ok: function () {
+                    let ids = arr.map(item=>{
+                        return item.id;
+                    }).join(",");
+                    $.ajax({
+                        url:"${ctx}/account/delete",
+                        type:"post",
+                        dataType:"json",
+                        async:false,
+                        data:{
+                            ids:ids
+                        },
+                        success:function({result,data}){
+                            if(result=="success"){
+                                toastr.success("操作成功!");
+                                accountInfo.query();
+                            }else{
+                                toastr.error("操作失败！");
+                            }
+                            d.close()
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () {
+                }
+            });
+            d.showModal();
+		}
+	}
+</script>
+</body>
+</html>

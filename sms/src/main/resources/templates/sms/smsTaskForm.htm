@@ -1,0 +1,423 @@
+<#include "../common/_header.htm">
+<div class="taskbox" id="messageForm">
+	<div class="taskbox-review">
+		<div class="review-box">
+			<div class="text-area">
+				<div class="text-box">
+					<div class="top-txt">
+						<p class="title">短信／彩信</p>
+						<p class="memo"></p>
+					</div>
+					<div class="sms-txt">
+						<div class="sms-txtinfo" v-show="form.content">
+							<span class="sms">{{form.content}} </span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="taskbox-form">
+		<div style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+		   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+		        <el-form-item v-show="false" size="small" label="发送方式：">
+		        	<el-radio-group v-model="smsType" @change="smsTypeChange">
+				      <el-radio-button label="1">模板发送</el-radio-button>
+				      <el-radio-button label="2">自定义发送</el-radio-button>
+				    </el-radio-group>
+		        </el-form-item>
+		        <el-form-item v-if="smsType=='1'" label="模板选择：" prop="title">
+		        	<el-input type="text" v-model="form.title" disabled="disabled" placeholder="" maxlength="200"></el-input>
+		        	<el-button size="small" @click="chooseTemplate">选择模板</el-button>
+		        </el-form-item>
+		        <el-form-item label="短信内容：" prop="content">
+		        	<el-input v-if="smsType=='1'" type="textarea" :rows="8" disabled="disabled" v-model="form.content" placeholder="" maxlength="500"></el-input>
+		        	<el-input v-if="smsType=='2'" type="textarea" id="textarea" :rows="8" v-model="form.content" placeholder="" maxlength="500"></el-input>
+		        	<div class="blue">当前字数{{form.content.length}}个字，计费{{form.content.length|getSmsSize}}条</div>
+		        </el-form-item>
+		        <el-form-item  v-if="smsType=='2'" label="插入变量：" >
+		        	<el-select v-model="cell" placeholder="请选择" style="width:200px;">
+					    <el-option
+					      v-for="item in options"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					  </el-select>
+		     		<el-button size="small" @click="insertCell" >插入</el-button>
+		        </el-form-item>
+		        <el-form-item label="手机号码：">
+		        	<el-button size="small" @click="showImport">文件导入</el-button>
+		        	<el-button size="small" @click="showGroup">通讯录</el-button>
+		        	<el-button size="small" @click="showHandle">手动添加</el-button>
+		        	
+		        	<div class="mobile-count-show flex-between mb15">
+			        	<div>
+				        	<div class="gray">所有号码</div> 
+				        	<div class="num blue">{{totalPhone}}</div> 
+				        	<el-button size="small" v-if="totalPhone>0"  @click="clearAll">一键清空</el-button>
+				        	<el-button size="small" v-if="totalPhone==0" disabled="disabled">一键清空</el-button>
+			        	</div> 
+		        		<div>
+		        			<div class="gray">无效号码</div> 
+		        			<div class="num blue">{{failPhone}}</div> 
+		        			<el-button size="small" v-if="failPhone>0" @click="clearFail">清除无效</el-button>
+		        			<el-button size="small" v-if="failPhone==0" disabled="disabled">清除无效</el-button>
+		        		</div> 
+		        		<div>
+		        			<div class="gray">重复号码</div> 
+		        			<div class="num blue">{{repeatPhone}}</div> 
+		        			<el-button size="small" v-if="repeatPhone>0" @click="clearRepeat">清除重复</el-button>
+		        			<el-button size="small" v-if="repeatPhone==0" disabled="disabled">清除重复</el-button>
+		        		</div>
+		        	</div>
+		        </el-form-item>
+		        <el-form-item label="发送类型：" prop="sendTimeStr">
+		        	<el-radio-group size="small" v-model="sendTime" @change="sendTimeChange">
+				      <el-radio-button label="1">立即</el-radio-button>
+				      <el-radio-button label="2">定时</el-radio-button>
+				    </el-radio-group>
+				    <el-date-picker v-show="sendTime=='2'" v-model="form.sendTimeStr" type="datetime"
+			            format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" placeholder="">
+			        </el-date-picker>
+		        </el-form-item>
+		        <el-form-item label="通道类型：" prop="channelType">
+		        	<el-radio-group size="small" v-model="form.channelType">
+				      <el-radio-button label="1">HTTP</el-radio-button>
+				      <el-radio-button label="2">SMPP</el-radio-button>
+				    </el-radio-group>
+		        </el-form-item>
+		        <el-form-item label="  ">
+		        	<el-button size="small" @click="resetAll">重置</el-button>
+		        	<el-button size="small" type="primary" @click="createTask" >发送</el-button>
+		        </el-form-item>
+		    </el-form>
+		</div>
+	</div>
+</div>
+<script>
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            smsType:"1",
+            sendTime:"1",
+            form:{
+            	taskId:'0',
+            	title:'',
+            	content:'',
+            	channelType:'1',
+            	sendTimeStr:''
+            },
+            cell:'B',
+            options:[
+            	{label:'B',value:'B'},
+            	{label:'C',value:'C'},
+            	{label:'D',value:'D'},
+            	{label:'E',value:'E'},
+            	{label:'F',value:'F'},
+            	{label:'G',value:'G'},
+            	{label:'H',value:'H'},
+            	{label:'I',value:'I'},
+            	{label:'J',value:'J'},
+            	{label:'K',value:'K'},
+            	{label:'L',value:'L'},
+            	{label:'M',value:'M'},
+            	{label:'N',value:'N'},
+            	{label:'O',value:'O'},
+            	{label:'P',value:'P'},
+            	{label:'Q',value:'Q'},
+            	{label:'R',value:'R'},
+            	{label:'S',value:'S'},
+            	{label:'T',value:'T'},
+            	{label:'U',value:'U'},
+            	{label:'V',value:'V'},
+            	{label:'W',value:'W'},
+            	{label:'X',value:'X'},
+            	{label:'Y',value:'Y'},
+            	{label:'Z',value:'Z'}
+            ],
+            totalPhone:0,
+            failPhone:0,
+            repeatPhone:0,
+            formrules:{
+            	title:[{required:true,message:"模板名称不能为空",trigger:"blur"}],
+            	content:[{required:true,message:"短信内容不能为空",trigger:"blur"}],
+            	channelType:[{required:true,message:"请选择通道类型"}],
+            	sendTimeStr:[{required:true,message:"请选择发送时间"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	this.form.sendTimeStr=new Date().format("yyyy-MM-dd hh:mm:ss");
+        	
+        	let warning='${warning!}';
+        	if(warning=='1'){
+        		toastr.warning("当前未完成任务数量已达上限！");
+        	}
+        },
+        filters:{
+            getSmsSize(value) {
+            	let size = Math.ceil(value/70);
+	        	 return size;
+            }
+        },
+        methods:{
+        	async insertCell(){
+        		const myField=document.querySelector("#textarea");
+        		if(myField.selectionStart||myField.selectionStart==0){
+        			console.log(this.cell)
+        			let startPos = myField.selectionStart;
+        			let endPos = myField.selectionEnd;
+        			this.form.content=myField.value.substring(0,startPos)+'$'+'{'+this.cell+'}'+myField.value.substring(endPos,myField.value.length);
+        			await this.$nextTick();
+        			myField.focus();
+        			myField.setSelectionRange(endPos+4,endPos+4);
+        		}else{
+        			console.log(this.cell)
+        			this.form.content='$'+'{'+this.cell+'}';
+        		}
+        	},
+        	smsTypeChange:function(){
+        		this.form.content='';
+        		this.form.title='';
+        	},
+        	sendTimeChange:function(){
+        		if(this.sendTime=='1'){
+                	this.form.sendTimeStr=new Date().format("yyyy-MM-dd hh:mm:ss");
+        		}
+        	},
+        	resetAll:function(){
+        		this.smsType='1';
+        		this.sendTime='1';
+        		this.form.taskId='0';
+        		this.form.title='';
+        		this.form.content='';
+        		this.form.sendTimeStr='';
+        		this.totalPhone=0;
+        		this.failPhone=0;
+        		this.repeatPhone=0;
+               	this.form.sendTimeStr=new Date().format("yyyy-MM-dd hh:mm:ss");
+        	},
+        	createTask:function(){
+        		this.$refs['form'].validate((valid) => {
+                    if (valid) {
+                    	if(this.form.totalPhone<=0){
+                    		toastr.warning("请选择要发送的对象");
+                    		return false;
+                    	}
+                    	
+                    	$(".loadingMask").show();
+                    	let param = {
+                    			taskId:this.form.taskId,
+                    			content:this.form.content,
+                    			channelType:this.form.channelType,
+                    			sendTimeStr:new Date(this.form.sendTimeStr).format("yyyy-MM-dd hh:mm:ss")
+                    	}
+                     	$.ajax({
+         					url:"${ctx}/smsTask/createTask",
+         					type:"post",
+         					dataType:"json",
+         					data:param,
+         					success:function({result,data}){
+                            	$(".loadingMask").hide();
+         						if(result=="success"){
+         							toastr.success("操作成功！");
+         							messageForm.resetAll();
+         						}else{
+         							toastr.error(data);
+         						}
+         					},
+         					error:function(){
+                            	$(".loadingMask").hide();
+         					}
+         				});
+                    }
+        		});
+        	},
+        	getTaskInfo:function(){
+        		let that=this;
+        		//获取任务信息，主要是所有号码数量、无效号码数量、重复号码数量
+        		$(".loadingMask").show();
+        		$.ajax({
+					url:"${ctx}/smsTask/findTaskPhone",
+					type:"post",
+					dataType:"json",
+					data:{taskId:that.form.taskId},
+					success:function({result,data}){
+						$(".loadingMask").hide();
+						if(result=="success"){
+							that.totalPhone = data.totalPhone;
+							that.failPhone = data.failPhone;
+							that.repeatPhone = data.repeatPhone;
+						}else{
+							toastr.error("加载失败！");
+						}
+					},
+					error:function(){
+						$(".loadingMask").hide();
+					}
+				});
+        	},
+        	clearAll:function(){
+        		let that=this;
+        		//清除全部手机号码
+				$(".loadingMask").show();
+        		$.ajax({
+					url:"${ctx}/smsTask/clearAll",
+					type:"post",
+					dataType:"json",
+					data:{taskId:that.form.taskId},
+					success:function({result,data}){
+						$(".loadingMask").hide();
+						if(result=="success"){
+    						toastr.success("操作成功!");
+       						messageForm.getTaskInfo();
+						}else{
+							toastr.error("操作失败");
+						}
+					},
+					error:function(){
+						$(".loadingMask").hide();
+					}
+				});
+        	},
+        	clearRepeat:function(){
+        		let that=this;
+        		//清除重复手机号码
+				$(".loadingMask").show();
+        		$.ajax({
+					url:"${ctx}/smsTask/clearRepeat",
+					type:"post",
+					dataType:"json",
+					data:{taskId:that.form.taskId},
+					success:function({result,data}){
+						$(".loadingMask").hide();
+						if(result=="success"){
+    						toastr.success("操作成功!");
+       						messageForm.getTaskInfo();
+						}else{
+							toastr.error("操作失败");
+						}
+					},
+					error:function(){
+						$(".loadingMask").hide();
+					}
+				});
+        	},
+        	clearFail:function(){
+        		let that=this;
+        		//清除无效手机号码
+				$(".loadingMask").show();
+        		$.ajax({
+					url:"${ctx}/smsTask/clearFail",
+					type:"post",
+					dataType:"json",
+					data:{taskId:that.form.taskId},
+					success:function({result,data}){
+						$(".loadingMask").hide();
+						if(result=="success"){
+    						toastr.success("操作成功!");
+       						messageForm.getTaskInfo();
+						}else{
+							toastr.error("操作失败");
+						}
+					},
+					error:function(){
+						$(".loadingMask").hide();
+					}
+				});
+        	},
+        	showImport:function(){
+        		let that=this;
+        		var showImportDialog = top.dialog({
+                	id:"showImportDialog",
+                    title: '文件导入',
+                    modal: true,
+                    url: "${ctx}smsTask/smsTaskImportForm?_t"+Math.random(),
+                    height: 300,
+                    width: 350,
+                    data:{taskId:that.form.taskId},
+                    onclose:function(){
+                    	if (showImportDialog.data.submit) {
+                    		that.form.taskId=showImportDialog.data.taskId;
+    						toastr.success("操作成功!");
+                    	}
+   						messageForm.getTaskInfo();
+                    }
+                });
+        		showImportDialog.show();
+                return false;
+        	},
+        	showHandle:function(){
+        		let that=this;
+        		var showHandleDialog = top.dialog({
+                	id:"showHandleDialog",
+                    title: '手动添加',
+                    modal: true,
+                    url: "${ctx}smsTask/smsTaskHandleForm?_t"+Math.random(),
+                    height: 300,
+                    width: 600,
+                    data:{taskId:that.form.taskId},
+                    onclose:function(){
+                    	if (showHandleDialog.data.submit) {
+                    		that.form.taskId=showHandleDialog.data.taskId;
+    						toastr.success("操作成功!");
+                    	}
+   						messageForm.getTaskInfo();
+                    }
+                });
+        		showHandleDialog.show();
+                return false;
+        	},
+        	showGroup:function(){
+        		let that=this;
+        		var showGroupDialog = top.dialog({
+                	id:"showGroupDialog",
+                    title: '通讯录',
+                    modal: true,
+                    url: "${ctx}smsTask/smsTaskGroupForm?_t"+Math.random(),
+                    height: 300,
+                    width: 350,
+                    data:{taskId:that.form.taskId},
+                    onclose:function(){
+                    	if (showGroupDialog.data.submit) {
+                    		that.form.taskId=showGroupDialog.data.taskId;
+    						toastr.success("操作成功!");
+                    	}
+   						messageForm.getTaskInfo();
+                    }
+                });
+        		showGroupDialog.show();
+                return false;
+        	},
+        	chooseTemplate:function(){
+        		let that=this;
+        		var chooseTemplateDialog = top.dialog({
+                	id:"chooseTemplateDialog",
+                    title: '选择模板',
+                    modal: true,
+                    url: "${ctx}smsTask/chooseTemplateForm?_t"+Math.random(),
+                    height: 600,
+                    width: 1000,
+                    data:{},
+                    onclose:function(){
+                    	if (chooseTemplateDialog.data.submit) {
+                    		that.form.title=chooseTemplateDialog.data.title;
+                    		that.form.content=chooseTemplateDialog.data.content;
+                    		that.$refs['form'].validate();
+                    	}
+   						messageForm.getTaskInfo();
+                    }
+                });
+        		chooseTemplateDialog.show();
+                return false;
+        	}
+        }
+    });
+</script>
+<style>
+	.el-select .el-input{width:200px;}
+	.el-button--mini, .el-button--small{font-size:13px;}
+	.el-radio-button--small .el-radio-button__inner{font-size:13px;}
+</style>

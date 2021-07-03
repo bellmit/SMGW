@@ -1,0 +1,433 @@
+<#include "./common/_header.htm">
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+<div id="indexPage" v-cloak>
+        <!--头部开始-->
+        <nav class="navbar navbar-static-top tophome" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header" style="width:100%;height: 50px;">
+                <div class="systemName fl">
+                    <img id="loginLogo" src="${ctx}/img/favicon.ico" alt="">
+                    <span class="systemTit">COMET(彗星)</span>
+                </div>
+                <div class="navbar-header-right">
+                    <div class="header-notice">
+                        <img class="icon" src="${ctx}/img/notice.png">
+                        <p>这是通知消息位置</p>
+                    </div>
+                    <el-dropdown trigger="click" class="elDropdown fr ">
+                      <span class="el-dropdown-link">
+                          <i class="fa fa-user"></i>
+                        ${loginUser.nickName!}
+                          <i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                        <el-dropdown-menu slot="dropdown" class="elDropdownMenu">
+                            <el-dropdown-item icon="el-icon-setting" onclick="setPwd()">修改密码</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-switch-button" divided class="aqtcBtn" onclick="loginOut()">安全退出</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+
+		</div>
+	</nav>
+</div>
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close"><i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <#list Session.firstLevelMenuList as menu>
+                    	<li>
+	                        <a <#if menu.menuUrl??&&menu.menuUrl?length gt 1>class="J_menuItem" href="${ctx}${menu.menuUrl!}"<#else>href="javascript:void(0);"</#if>>
+		                        <i class="fa ${menu.menuIcon!}"></i>
+			                    <#if secondLevelMenuMap["${menu.menuId}"]?? && (secondLevelMenuMap["${menu.menuId}"]?size > 0)>
+                           			<span class="fa arrow"></span>
+	                        	</#if>
+		                        <span class="nav-label">${menu.menuName!}</span>
+	                        </a>
+	                        <#if secondLevelMenuMap["${menu.menuId}"]?? && (secondLevelMenuMap["${menu.menuId}"]?size > 0)>
+		                        <ul class="nav nav-second-level">
+		                        	<#list secondLevelMenuMap["${menu.menuId}"] as secondMenu>
+		                        		<li>
+		                        			<a <#if secondMenu.menuUrl??>class="J_menuItem" href="${ctx}${secondMenu.menuUrl!}"<#else>href="javascript:void(0);"</#if>>
+		                        			${secondMenu.menuName!}</a>
+		                            	</li>
+		                        	</#list>
+		                        </ul>
+                        	</#if>
+	                    </li>
+                    </#list>
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="dashbard-1">
+            <div class="row content-tabs">
+                <button class="roll-nav "><i class="fa fa-backward"></i>
+                </button>
+                <nav class="page-tabs J_menuTabs">
+                    <div class="page-tabs-content">
+                        <a id="firstTilte" href="javascript:void(0);" class="active J_menuTab" data-id="${ctx}main">首页</a>
+                    </div>
+                </nav>
+                <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i></button>
+                <div class="btn-group roll-nav roll-right">
+                    <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                        <li class="J_tabShowActive"><a>定位当前选项卡</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+                        </li>
+                        <li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row J_mainContent" id="content-main">
+                <iframe id="defaultPage" class="J_iframe" name="iframe0" width="100%" height="100%" src="${ctx}main" frameborder="0" data-id="${ctx}main" seamless></iframe>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("body").attr("class","fixed-sidebar full-height-layout gray-bg");
+		//默认页面值
+		getFirstPage();
+	});
+	function getFirstPage(){
+	  var defaultHref= $("a[data-index='0']").attr("href");	 
+	  if(defaultHref){
+	    var defaultPage=document.getElementById("defaultPage");	   
+	     defaultPage.src=defaultHref;	
+	     $("#defaultPage").attr("data-id",defaultHref);	     
+	   }
+	    $("#firstTilte").attr("data-id",defaultHref);
+	    $("#firstTilte").html($("a[data-index='0']").html());
+	    $("a[data-index='0']").parent().addClass("active");
+	}
+	let indexPage=new Vue({
+	    el:'#indexPage',
+	    data:{
+	    	
+	    },
+	    methods:{
+	    },
+	    created(){
+	    }
+	})
+	
+	function addTabs(name,url){
+		let m = Math.random();
+		var p = '<a href="javascript:;" class="active J_menuTab" data-id="'
+                + url + '">' + name + ' <i class="fa fa-times-circle"></i></a>';
+			$(".J_menuTab").removeClass("active");
+        var n = '<iframe class="J_iframe" name="iframe' + m
+                + '" width="100%" height="100%" src="' + url
+                + '" frameborder="0" data-id="' + url
+                + '" seamless></iframe>';
+        $(".J_mainContent").find("iframe.J_iframe").hide().parents(
+            ".J_mainContent").append(n);
+        $(".J_menuTabs .page-tabs-content").append(p);
+       /* if(name !='首页'){
+
+        }*/
+	}
+	
+    function setPwd(){
+    	var pwdDialog = top.dialog({
+        	id:"pwdDialog",
+            title: '修改密码',
+            modal: true,
+            url: "${ctx}platManager/pwdDialog?_t"+Math.random(),
+            height: 200,
+            width: 600,
+            data:{},
+            onclose:function(){
+            	if(pwdDialog.data.submit==1){
+            		toastr.success("修改成功");
+            	}
+            }
+        });
+    	pwdDialog.show();
+        return false;
+    }
+    function loginOut() {
+	    window.location.href="${ctx}logout";
+    }
+</script>
+<style>
+	.J_mainContent{display:flex}
+    .J_iframe{
+        flex:1;
+    }
+    .m-t-xs{line-height:0;font-size:14px;margin:5px;float:left;}
+    .text-xs{float:left;line-height:34px;}
+    .roll-right.J_tabRight{right:80px;}
+    .roll-right.btn-group{right:0;}
+    .indexbtn{float:right;font-family: 微软雅黑;font-size: 14px;line-height: 50px;font-weight: bold;cursor:pointer;}
+    .rq:before{content: "*";display: inline-block;margin-right: 4px;line-height: 1;font-family: SimSun;font-size: 12px;color: #ed3f14;}
+    .ui-dialog{border:none;}
+    li#version-up {
+        height: 30px;
+    }
+    .dropdown-menu > li > a{
+        text-align: left;
+    }
+    .fl{float:left;}
+    .fr{float:right;}
+    img#loginLogo{height:35px;}
+    .roll-right.J_tabRight {
+        right: 80px;
+    }
+    .roll-right.btn-group{
+        right: 0px;
+    }
+	.fl{float:left;}
+	.fr{float:right;}
+    .dataCenter{
+        font-size: 16px;cursor: pointer;
+    }
+	.elDropdown.fr.el-dropdown {
+        font-size: 16px;
+        margin-right: 30px;
+        margin-left: 80px;
+        color: #fff;
+    }
+    .elDropdownMenu {
+        width: 140px;
+        top: 43px!important;
+        text-align: center;
+    }
+    .aqtcBtn a {
+        color: #606266;
+    }
+    .aqtcBtn:hover a {
+        color: #66b1ff;
+    }
+    .el-icon--right {
+        margin-left: 0px;
+    }
+    .key_searchTop{position: relative;margin-right: 120px;}
+    #key_searchTxt{width: 227px;height: 30px;background-color: #ffffff;border-radius: 15px;padding: 0 20px;outline: none;color: #000;border: none;}
+    .oneSearchImg{position: absolute;width: 16px;height: 16px;background:url("${ctx}/imgs/login-imgs/yjscx_img.png") no-repeat;top: 17px;right: 13px;}
+    .row.border-bottom {
+        overflow: hidden;
+        height: 50px;
+        border-bottom: none!important;
+    }
+    .keySearchForm{
+        width: 227px;
+    }
+    img#loginLogo {
+        margin-top: -5px;
+        margin-right: 7px;
+    }
+    .importPage {
+        display: inline-block;
+        margin-top: 14px;
+        font-size: 18px;
+        margin-left: 78px;
+    }
+    .robot-content {
+        width: 110px;
+        height: 143px;
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+    }
+    .robot-right{
+        background:url("${ctx}/plugins/robot/imgs/robot-body.png") no-repeat;
+        width: 51px;
+        height: 92px;
+        float: right;
+        margin-top: 40px;
+    }
+    .indeximport{
+        width: auto;
+        padding: 0 15px;
+    }
+    span.zdfxFont {
+        font-size: 16px;
+        vertical-align: middle;
+        cursor: pointer;
+        /*opacity: 0.8;*/
+    }
+    .zdfxSwitchCon {
+        float: right;
+        margin-right: 37px;
+        height: 50px;
+        line-height: 46px;
+    }
+    .zdfxFont:hover{
+        opacity: 1;
+    }
+    .sidebar-navbar-flex{
+        display: flex;
+    }
+    #fullscreen{
+        z-index: 10;
+        height: calc(100% - 90px);
+        position: fixed;
+        width: 100%;
+        opacity: 0;
+        display: none;
+    }
+    .systemsjbg{
+        background:url("${ctx}/imgs/xtsjbg.png") no-repeat;
+        width: 550px;
+        height: 596px;
+    }
+    .newbbcon {
+        padding-top: 62px;
+        padding-left: 25px;
+    }
+    .findnew {
+        font-size: 30px;
+        font-weight: 550;
+        font-stretch: normal;
+        letter-spacing: 2px;
+        color: #ffffff;
+    }
+    .newh {
+        font-size: 20px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 1px;
+        color: #ffffff;
+    }
+    .UpdateContent {
+        margin-top: 160px;
+        margin-left: 22px;
+    }
+    p.UpdateContentt {
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #666666;
+    }
+    .nowUpdateBtn{
+        width: 440px;
+        height: 60px;
+        background-color: #4288ea;
+        border-radius: 33px;
+        text-align: center;
+        line-height: 60px;
+        font-size: 20px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 1px;
+        color: #ffffff;
+        margin: 0 auto;
+        margin-top: 70px;
+        cursor: pointer;
+    }
+    .nowUpdateBtn:hover{
+        background-color: #3296f1;
+    }
+    .nowUpdateBtn:active{
+        background-color: #0c76d7;
+    }
+    .lateUpdate{
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 1px;
+        color: #000000;
+        opacity: 0.6;
+        margin: 0 auto;
+        text-align: center;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    #content {
+        text-align: center;
+        cursor:pointer;
+        z-Index:1;
+    }
+    span.user-nickfont{
+        display: inline-block;
+        float: right;
+        margin-top: -9px;
+        margin-right: 20px;
+        font-weight: normal;
+        font-size: 15px;
+    }
+    span.glyphicon.glyphicon-menu-down{
+        font-size: 10px;
+        top: -7px;
+        left: 70px;
+    }
+    .glyphicon.glyphicon-menu-up{
+        font-size: 10px;
+        top: -8px;
+        left: 70px;
+    }
+    dropdown home-setting{
+        opacity: 0.8!important;
+    }
+    dropdown home-setting:hover{
+        opacity:1!important;
+    }
+    .m-t-xs{
+        line-height: 26px;
+    }
+    .navbar .dropdown-menu {
+        margin-left: -25px;
+        margin-top: -10px;
+    }
+    strong {
+        display: inline-block;
+        overflow: hidden;
+    }
+    .indexbtncon{
+        opacity: 0.8;
+    }
+    .indexbtncon:hover{
+        opacity: 1;
+    }
+    .glyphicon.glyphicon-menu-up{
+        font-size: 10px;
+    }
+    .indexbtn{
+        font-size: 15px;
+        font-weight: normal;
+    }
+    .forindex-img{
+        margin-top: 10px;
+    }
+    .comdafont{
+        display: inline-block;
+        padding-left: 40px;
+    }
+    li.nav-header {
+        height: 50px;
+        line-height: 50px;
+        font-size: 17px;
+    }
+    .nav-header{
+        padding: 0px 10px;
+    }
+    a {
+        color: #98A7C6;
+    }
+    a:focus, a:hover {
+        color: #fff;
+    }
+    .systemUp:after{
+        content: "";
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        background: red;
+        border-radius: 5px;
+        position: relative;
+        top: -32px;
+        left: 87px;
+    }
+</style>
+</body>
+</html>

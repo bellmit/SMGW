@@ -1,0 +1,127 @@
+<#include "../common/_header.htm">
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="通道类型：" prop="channelType">
+        	<el-radio-group size="small" v-model="form.channelType">
+		      <el-radio-button label="1">HTTP</el-radio-button>
+		      <el-radio-button label="2">SMPP</el-radio-button>
+		    </el-radio-group>
+        </el-form-item>
+   		<el-form-item v-show="form.channelType=='1'" label="地址：" prop="ip">
+        	<el-input type="text" v-model="form.ip" placeholder="地址" maxlength="100"></el-input>
+        </el-form-item>
+   		<el-form-item v-show="form.channelType=='2'" label="地址端口：" prop="ip">
+        	<el-input type="text" v-model="form.ip" placeholder="IP:PORT" maxlength="100"></el-input>
+        </el-form-item>
+        <el-form-item label="账号：" prop="account">
+        	<el-input type="text" v-model="form.account" placeholder="账号" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="密码：" prop="password">
+        	<el-input type="text" v-model="form.password" placeholder="密码" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="接入号：" prop="extno">
+        	<el-input type="text" v-model="form.extno" placeholder="接入号" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="余额告警：" >
+        	<el-input type="text" v-model="form.alertBalance" placeholder="余额告警" maxlength="200"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
+        </el-form-item>
+         <el-form-item label="线路速率："  prop="limiter">
+        	<el-input type="text" v-model.number="form.limiter" placeholder="线路速率" maxlength="200"></el-input>
+        </el-form-item>
+        <el-form-item label="通知手机号：" prop="alertPhone">
+        	<el-input type="text" v-model="form.alertPhone" placeholder="通知手机号" maxlength="11"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
+        </el-form-item>
+        <el-form-item label="是否启用：">
+	        <el-radio v-model="form.accountStatus" label="1">是</el-radio>
+	  		<el-radio v-model="form.accountStatus" label="0">否</el-radio>
+        </el-form-item>
+    </el-form>
+    <div class="qxcenter">
+        <el-button type="primary" @click="onSubmit">确定</el-button>
+        <el-button type="info" @click="onCancel">取消</el-button>
+    </div>
+</div>
+<script>
+var dialog = top.dialog.get(window);
+var dialogData = dialog.data; // 获取对话框传递过来的数据
+    var messageForm=new Vue({
+        el:"#messageForm",
+        data:{
+            labelPosition: 'right',
+            form:{
+            	channelType:'1',
+            	ip:'',
+            	account:'',
+            	password:'',
+            	extno:'',
+            	alertBalance:'',
+            	alertPhone:'',
+            	accountStatus:'1',
+            	limiter:'10'
+            },
+            formrules:{
+            	channelType:[{required:true,message:"请选择通道类型",trigger:"blur"}],
+            	ip:[{required:true,message:"地址不能为空",trigger:"blur"}],
+            	account:[{required:true,message:"账号不能为空",trigger:"blur"}],
+            	password:[{required:true,message:"密码不能为空",trigger:"blur"}],
+            	limiter:[{required:true,message:"线路速率不能为空",trigger:"blur"},{ type: 'number', message: '线路速率只能为数字', trigger: ['blur', 'change']}],
+            	extno:[{required:true,message:"接入号不能为空",trigger:"blur"}]
+            }
+        },
+        created:function() {
+        	let that = this;
+        	if(dialogData.id!="0"){
+	        	$.ajax({
+					url:"${ctx}/account/findById",
+					type:"post",
+					dataType:"json",
+					async:false,
+					data:{id:dialogData.id},
+					success:function({result,data}){
+						if(result=="success"){
+							that.form.id = data.id;
+							that.form.channelType = data.channelType;
+							that.form.ip = data.ip;
+							that.form.account = data.account;
+							that.form.password = data.password;
+							that.form.extno = data.extno;
+							that.form.alertBalance = data.alertBalance;
+							that.form.alertPhone = data.alertPhone;
+							that.form.accountStatus = data.accountStatus+'';
+							that.form.limiter = data.limiter;
+						}else{
+							toastr.error("加载失败！");
+						}
+					}
+				});
+        	}
+        },
+        methods:{
+            onSubmit(){
+            	this.$refs['form'].validate((valid) => {
+                     if (valid) {
+                    	 	let param = JSON.parse(JSON.stringify(this.form));
+                      		$.ajax({
+	         					url:"${ctx}/account/saveOrUpdate",
+	         					type:"post",
+	         					dataType:"json",
+	         					async:false,
+	         					data:param,
+	         					success:function({result,data}){
+	         						if(result=="success"){
+	         			            	top.dialog({id:"accountFormDialog"}).data.submit=1;
+	         			                dialog.close().remove();
+	         						}else{
+	         							toastr.error(data);
+	         						}
+	         					}
+	         				});
+                     }
+            	});
+            },
+            onCancel(){
+            	dialog.close().remove();
+            }
+        }
+    });
+</script>

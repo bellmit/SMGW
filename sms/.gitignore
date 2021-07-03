@@ -1,0 +1,10 @@
+/target
+/log.log
+log
+/log/
+/log
+/*.project
+/.project
+*.project
+.project
+/upload/

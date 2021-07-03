@@ -1,0 +1,138 @@
+<#include "./common/_header.htm">
+<body>
+<div class="wrapper wrapper-content">
+    <div class="row home">
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins ibox-blue" >
+                <div class="ibox-title">
+                    <h5>今日发送</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">${dayCount!'0'}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins ibox-orange" >
+                <div class="ibox-title">
+                    <h5>月发送</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">${monthCount!'0'}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 ">
+        	<#if (loginUser.roleCode!)=="ADMIN">
+	            <div class="ibox float-e-margins ibox-green">
+	                <div class="ibox-title">
+	                    <h5>活跃用户数</h5>
+	                </div>
+	                <div class="ibox-content">
+	                    <h1 class="no-margins">${userCount!'0'}</h1>
+	                </div>
+	            </div>
+        	<#else>
+	            <div class="ibox float-e-margins ibox-green">
+	                <div class="ibox-title">
+	                    <h5>剩余条数</h5>
+	                </div>
+	                <div class="ibox-content">
+	                    <h1 class="no-margins">${surplusCount!'0'}</h1>
+	                </div>
+	            </div>
+        	</#if>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>每日发送量统计</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                           
+                        </a>
+                        <a class="close-link">
+                            
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12" id="kmcsqst" style="height:350px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+       //填充数据
+       var chartDataRequest= $.ajax({
+	        type: "POST",
+	        url: "${ctx}/mainChart"
+	   });
+        init_kmcsqst(chartDataRequest);//每日发送量统计
+    });
+    function init_kmcsqst(chartDataRequest){
+        let option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                left: 'center',
+                data: ['提交量', '成功率']
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            yAxis: {
+                type: 'value'
+            }
+        };
+
+	
+       chartDataRequest.done(function(responseData){
+	       if(responseData) {
+	       		option.xAxis.data=responseData.dateList;
+	       		var chartData=[];
+	       		chartData.push(
+		       		{
+		       		   	name: '提交量',
+	                    type: 'line',
+	                    data: responseData.countList
+		       		}
+	       		);
+	       		chartData.push(
+		       		{
+		       		   	name: '成功率',
+	                    type: 'line',
+	                    data: responseData.percentList
+		       		}
+	       		);
+	       		
+	       		option.series=chartData ;
+	       }
+	       //显示图表
+	       var myChart = echarts.init(document.getElementById("kmcsqst"));
+       	   myChart.setOption(option, true);
+       }); 
+    }
+
+</script>
+</body>
+</html>
+
