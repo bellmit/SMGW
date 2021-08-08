@@ -21,6 +21,7 @@ import star.sms.account.domain.AccountInfo;
 import star.sms.config.SystemConfig;
 import star.sms.smpp.handler.SMPPMessageReceiveHandler;
 import star.sms.sms.service.SmsService;
+import star.smscore.BaseMessage;
 import star.smscore.codec.smpp.msg.SubmitSm;
 import star.smscore.codec.smpp.msg.SubmitSmResp;
 import star.smscore.common.util.ChannelUtil;
@@ -49,9 +50,9 @@ public class SmppService {
 		request.setSmsMsg(new SmsTextMessage(smsContent, SmppSmsDcs.getGeneralDataCodingDcs(SmsAlphabet.UCS2, SmsMsgClass.CLASS_UNKNOWN)));
 		request.setRegisteredDelivery((byte)1);
 		
-		List<Promise<SubmitSm>> futures = ChannelUtil.syncWriteLongMsgToEntity(id,request);
+		List<Promise<BaseMessage>> futures = ChannelUtil.syncWriteLongMsgToEntity(id,request);
 		if(futures!=null) {
-			for(Promise<SubmitSm>  promise: futures){
+			for(Promise<BaseMessage>  promise: futures){
 				//接收到response后回调Listener方法
 				promise.addListener(new GenericFutureListener() {
 					@Override
@@ -63,12 +64,16 @@ public class SmppService {
 							SubmitSmResp response = (SubmitSmResp) future.get();
 							log.info("smpp消息发送成功，messageId:{}",response.getMessageId());
 							//修改短信状态，并计费
-							smsService.updateSmsForSmpp(smsId,response,true);
+							if(response.getCommandStatus()==0) {
+								smsService.updateSmsForSmpp(id,smsId,response,true);
+							}else {
+								smsService.updateSmsForSmpp(id,smsId,response,false);
+							}
 						}else{
 							//打印错误原因
 							log.error("smpp消息发送失败，response:{}",future.cause());
 							SubmitSmResp response = (SubmitSmResp) future.get();
-							smsService.updateSmsForSmpp(smsId,response,false);
+							smsService.updateSmsForSmpp(id,smsId,response,false);
 						}
 					}
 				});
@@ -78,7 +83,8 @@ public class SmppService {
 			SubmitSmResp response = new SubmitSmResp();
 			response.setMessageId("");
 			response.setResultMessage("通道尚未注册成功");
-			smsService.updateSmsForSmpp(smsId,response,false);
+			response.setCommandStatus(-1);
+			smsService.updateSmsForSmpp(id,smsId,response,false);
 		}
 	}
 	

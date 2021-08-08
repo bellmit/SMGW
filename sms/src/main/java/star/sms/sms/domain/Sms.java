@@ -35,16 +35,18 @@ public class Sms extends BaseModel {
 	@Column(name = "statTime") private Timestamp statTime;//通道回执时间
     @Column(name = "sendTime") private Timestamp sendTime;//发送时间
     @Column(name = "phone") private String phone;//手机号码
-    @Column(name = "accountId") private String accountId;//账号id
+    @Column(name = "accountId") private Integer accountId;//账号id
     @Column(name = "account") private String account;//账号
     @Column(name = "password") private String password;//密码
     @Column(name = "extno") private String extno;//接入号
+    @Column(name = "ip") private String ip;//IP地址
     @Column(name = "mid") private String mid;//mid
     @Column(name = "memo") private String memo;//注释
     @Column(name = "createTime") private Timestamp createTime;//创建时间
     @Column(name = "createUserId") private Integer createUserId;//创建人
     @Column(name = "updateTime") private Timestamp updateTime;//修改时间
     @Column(name = "updateUserId") private Integer updateUserId;//修改人
+    @Column(name = "nickName") private String nickName;//用户昵称
     
     @Transient
     private Integer contentType;//内容类型

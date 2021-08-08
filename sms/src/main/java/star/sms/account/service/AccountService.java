@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
-import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.google.common.util.concurrent.RateLimiter;
 import star.sms._frame.base.BaseRepository;
 import star.sms._frame.base.BaseServiceProxy;
 import star.sms.account.dao.AccountDao;
 import star.sms.account.domain.AccountInfo;
+import star.sms.smpp.service.SmppService;
 
 /**
  * 大四喜账号
@@ -39,6 +40,8 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
     private AccountDao accountDao;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private SmppService smppService;
     
 	@Override
 	protected BaseRepository<AccountInfo> getBaseRepository() {
@@ -63,7 +66,7 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 		StringBuffer fromWhereSql = new StringBuffer();
 		fromWhereSql.append(" FROM tb_account a where isDelete=0 ");
 		if(StringUtils.isNotEmpty(keyword)) {
-			fromWhereSql.append("  and (account like '%"+keyword+"%' or extno like '%"+keyword+"%') ");
+			fromWhereSql.append("  and (title like '%"+keyword+"%' or account like '%"+keyword+"%' or extno like '%"+keyword+"%') ");
 		}
 		Page<AccountInfo> page = super.findPageBySql(AccountInfo.class, "select * ", fromWhereSql.toString(), " order by createTime desc", null, pageable);
 		return page;
@@ -84,6 +87,9 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 		for (AccountInfo accountInfo : accountList) {
 			getAccountMap().remove(accountInfo.getAccount());
 			logger.info("删除账号："+accountInfo.getAccount());
+			if(accountInfo.getChannelType()==2) {
+				smppService.disableChannel(accountInfo.getId()+"");
+			}
 		}
 	}
 	/**
@@ -95,6 +101,17 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 		sb.append(" select * from tb_account where accountStatus =1  and isDelete = 0 ");
 		List<AccountInfo> accountInfoList =  jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<AccountInfo>(AccountInfo.class));
 		return accountInfoList;
+	}
+	/**
+	 * 得到账号数量
+	 * @param channelType
+	 * @return
+	 */
+	public int getAccountInfoCount(int channelType) {
+		StringBuilder sb= new StringBuilder("");
+		sb.append(" select count(*) from tb_account where accountStatus =1  and isDelete = 0 and channelType=" + channelType);
+		int account = jdbcTemplate.queryForObject(sb.toString(), Integer.class);
+		return account;
 	}
 	
 	/**
@@ -146,9 +163,10 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 		return s;
 	}
 	/**
-	 * 账号缓存
+	 * 账号缓存,每30秒同步一次
 	 */
 	@PostConstruct
+	@Scheduled(cron = "0/30 * * * * ?")
 	public void accountCache(){
 		//查询未删除和启用的账号
 		StringBuilder sbLimit= new StringBuilder("");

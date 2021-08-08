@@ -39,11 +39,11 @@ import star.sms._frame.base.BaseServiceProxy;
 import star.sms._frame.utils.StringUtils;
 import star.sms._frame.utils.UUIDUtils;
 import star.sms.account.domain.AccountInfo;
-import star.sms.account.service.AccountService;
 import star.sms.config.SystemConfig;
 import star.sms.phonearea.domain.PhoneArea;
 import star.sms.platmanager.domain.PlatManager;
 import star.sms.platmanager.service.PlatManagerService;
+import star.sms.smpp.service.SmppService;
 import star.sms.sms.dao.SmsDao;
 import star.sms.sms.domain.Sms;
 import star.sms.sms.domain.SmsBatch;
@@ -105,9 +105,8 @@ public class SmsService extends BaseServiceProxy<Sms>{
     
     @Autowired
     private ReportTask reportTask;
-    
     @Autowired
-    private AccountService accountService;
+    private SmppService smppService;
     
 	@Override
 	protected BaseRepository<Sms> getBaseRepository() {
@@ -120,7 +119,7 @@ public class SmsService extends BaseServiceProxy<Sms>{
 	/**
 	 * http发送短信开始
 	 */
-	public void sendStart(SendRequest sendRequest,String batchId,AccountInfo accountInfo) {
+	public void sendStart(SendRequest sendRequest,String batchId ) {
 		Timestamp now=new Timestamp(System.currentTimeMillis());
 		//插入批次表
 		SmsBatch smsBatch = new SmsBatch();
@@ -134,8 +133,6 @@ public class SmsService extends BaseServiceProxy<Sms>{
 		smsBatch.setSendStatus(0);
 		smsBatch.setSendTime(now);
 		smsBatchService.insertSmsBatch(smsBatch);
-		// 更新账号，统计使用
-		updateSmsAccount(sendRequest.getMobileIdList(), accountInfo);
 	}
 
 	/**
@@ -194,38 +191,26 @@ public class SmsService extends BaseServiceProxy<Sms>{
 	public void readNotSentSmsToMqHttp(){
 		if(systemConfig.getIsAdmin()) return;
 		String serialNumber=UUIDUtils.random();
+		// 短信列表
 		List<Sms> smsList =new ArrayList<Sms>();
+		// 短信任务分组
 		Map<Integer, List<Sms>> smsMap = new HashMap<Integer, List<Sms>>();
-		//选择http账号
-		List<AccountInfo> accountHttpList = new ArrayList<AccountInfo>();
-		Map<String, AccountInfo> accountMap = accountService.getAccountMap();
-		if (accountMap != null) {
-			for (Map.Entry<String, AccountInfo> entry : accountMap.entrySet()) {
-				AccountInfo account = entry.getValue();
-				if(account.getChannelType()==1) {
-					accountHttpList.add(account);
-				}
-			}
-		}
-		if(accountHttpList.size() == 0) {
-			log.info(" 开始读取短信 serialNumber: "+serialNumber+" , 未找到可用http账号！ ");
-			return;
-		}
+		
 		lock.lock();
 		try {
 			log.info(" 开始读取短信 serialNumber: "+serialNumber+" , 读取内容: " + smsList);
-			//读取待发送
+			// 读取待发送
 			StringBuilder sb= new StringBuilder("");
 			sb.append(" select a.*,b.contentType,b.content as taskContent from tb_sms a left join tb_sms_task b on a.taskId=b.id where b.channelType=1 and a.sendStatus=0 and b.sendStatus in (0,4) and b.sendTime<=now() order by b.priority desc limit 3000 ");
 			smsList =  jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<Sms>(Sms.class));
 			if(smsList.size()==0) {
 				return;
 			}
-			//按任务分组
+			// 按任务分组
 			if(smsList!=null) {
 				smsMap = smsList.stream().filter(sms -> sms.getTaskId()!= null).collect(Collectors.groupingBy(Sms::getTaskId));
 			}
-			//更新短信为发送中
+			// 更新短信为发送中
 			StringBuilder sbUpdate= new StringBuilder("");
 			sbUpdate.append("update tb_sms set sendStatus=4 where id=? ");
 			List<Object[]> argsList= new ArrayList<Object[]>();
@@ -241,7 +226,7 @@ public class SmsService extends BaseServiceProxy<Sms>{
         }
 		if(smsMap!=null&&smsMap.size()>0) {
 			for(Map.Entry<Integer, List<Sms>>  entry : smsMap.entrySet()) {
-				//按分组分发短信
+				// 按分组分发短信
 				List<Sms> smsGroupList = entry.getValue();
 				if(smsGroupList!=null && smsGroupList.size()>0) {
 					//构造短信请求参数
@@ -254,6 +239,10 @@ public class SmsService extends BaseServiceProxy<Sms>{
 					String taskContent = "";
 					int contentType = 1;
 					int createUserId=0;
+					String account ="";
+					String password ="";
+					String extno ="";
+					String ip ="";
 					int i=0;
 					for (Sms sms : smsGroupList) {
 						contentType=sms.getContentType();
@@ -261,6 +250,12 @@ public class SmsService extends BaseServiceProxy<Sms>{
 							taskId = sms.getTaskId();
 							taskContent=sms.getTaskContent();
 							createUserId=sms.getCreateUserId();
+							//设置账号
+							account =sms.getAccount();
+							password =sms.getPassword();
+							extno =sms.getExtno();
+							ip =sms.getIp();
+							
 						}
 						mobileIdList.add(sms.getId());
 						mobileList.add(sms.getPhone());
@@ -277,6 +272,11 @@ public class SmsService extends BaseServiceProxy<Sms>{
 					sendRequest.setMobileList(mobileList);
 					sendRequest.setMobileIdList(mobileIdList);
 					sendRequest.setCreateUserId(createUserId);
+					
+					sendRequest.setAccount(account);
+					sendRequest.setPassword(password);
+					sendRequest.setExtno(extno);
+					sendRequest.setIp(ip);
 
 					log.info(" 开始发送短信 serialNumber: "+serialNumber);
 
@@ -293,23 +293,11 @@ public class SmsService extends BaseServiceProxy<Sms>{
 	public void readNotSentSmsToMqSmpp(){
 		if(systemConfig.getIsAdmin()) return;
 		String serialNumber=UUIDUtils.random();
+		// 短信列表
 		List<Sms> smsList =new ArrayList<Sms>();
+		// 短信任务分组
 		Map<Integer, List<Sms>> smsMap = new HashMap<Integer, List<Sms>>();
-		//选择http账号
-		List<AccountInfo> accountHttpList = new ArrayList<AccountInfo>();
-		Map<String, AccountInfo> accountMap = accountService.getAccountMap();
-		if (accountMap != null) {
-			for (Map.Entry<String, AccountInfo> entry : accountMap.entrySet()) {
-				AccountInfo account = entry.getValue();
-				if(account.getChannelType()==1) {
-					accountHttpList.add(account);
-				}
-			}
-		}
-		if(accountHttpList.size() == 0) {
-			log.info(" 开始读取短信 serialNumber: "+serialNumber+" , 未找到可用smpp账号！ ");
-			return;
-		}
+
 		lock.lock();
 		try {
 			log.info(" 开始读取短信 serialNumber: "+serialNumber+" , 读取内容: " + smsList);
@@ -349,6 +337,8 @@ public class SmsService extends BaseServiceProxy<Sms>{
 							sendRequestSmpp.setSmsId(sms.getId());
 							sendRequestSmpp.setMobile(sms.getPhone());
 							sendRequestSmpp.setContent(sms.getContent());
+							sendRequestSmpp.setAccount(sms.getAccount());
+							
 							sendTask.hanlderSmpp(sendRequestSmpp);
 						}
 					}
@@ -565,7 +555,10 @@ public class SmsService extends BaseServiceProxy<Sms>{
 	 */
 	public Page getTaskDetailList(SmsLogParam smsLogParam, Pageable pageable) {
 		StringBuffer fromWhereSql = new StringBuffer();
-		fromWhereSql.append(" FROM tb_sms a where createUserId='"+getLoginUser().getId()+"' ");
+		fromWhereSql.append(" FROM tb_sms a where 1=1 ");
+		if(!getLoginUser().getRoleCode().equals("ADMIN")) {
+			fromWhereSql.append(" and createUserId='"+getLoginUser().getId()+"' ");
+		}
 		if(StringUtils.isNotEmpty(smsLogParam.getKeyword())) {
 			fromWhereSql.append("  and (phone like '%"+smsLogParam.getKeyword()+"%' or content like '%"+smsLogParam.getKeyword()+"%') ");
 		}
@@ -856,19 +849,35 @@ public class SmsService extends BaseServiceProxy<Sms>{
 	 * 更新smpp返回值
 	 * @param smsId
 	 * @param response
+	 * @throws Exception 
 	 */
-	public void updateSmsForSmpp(Integer smsId,SubmitSmResp response,Boolean isSuccess) {
+	public void updateSmsForSmpp(String id,Integer smsId,SubmitSmResp response,Boolean isSuccess) throws Exception {
 		if(smsId!=null && smsId!=0) {
 			if(isSuccess) {
-				jdbcTemplate.update("update tb_sms set mid='"+response.getMessageId()+"',sendStatus=1,statTime=now() where id="+smsId);
+				jdbcTemplate.update("update tb_sms set mid='"+response.getMessageId()+"',sendStatus=1 where id="+smsId);
 			}else {
-				jdbcTemplate.update("update tb_sms set mid='"+response.getMessageId()+"',sendStatus=2,sendStat='"+response.getResultMessage()+"',statTime=now() where id="+smsId);
+				jdbcTemplate.update("update tb_sms set mid='"+response.getMessageId()+"',sendStatus=2,memo='"+response.getResultMessage()+"' where id="+smsId);
+			}
+		}
+	}
+	
+	/**
+	 * 更新smpp返回值
+	 * @param smsId
+	 * @param response
+	 */
+	public void updateSmsForSmpp2(String messageId,String sendStat) {
+		if(StringUtils.isNotEmpty(messageId)) {
+			if(StringUtils.isNotEmpty(sendStat) && sendStat.equals("DELIVRD")) {
+				jdbcTemplate.update("update tb_sms set sendStatus=1,statTime=now(),sendStat=0 where mid='"+messageId+"'");
+			}else {
+				jdbcTemplate.update("update tb_sms set sendStatus=2,sendStat='"+sendStat+"',statTime=now() where mid='"+messageId+"'");
 			}
 			//计费,发送一条
-			if(isSuccess) {
+			if(StringUtils.isNotEmpty(sendStat) && sendStat.equals("DELIVRD")) {
 				//得到用户短信费用
 				PlatManager platManager =null;
-				List<PlatManager> list = jdbcTemplate.query("select * from tb_plat_manager where id in (select createUserId from tb_sms where id = "+smsId+")", new BeanPropertyRowMapper<PlatManager>(PlatManager.class));
+				List<PlatManager> list = jdbcTemplate.query("select * from tb_plat_manager where id in (select createUserId from tb_sms where mid='"+messageId+"')", new BeanPropertyRowMapper<PlatManager>(PlatManager.class));
 				if(list!=null&&list.size()>0) {
 					platManager = list.get(0);
 				}
@@ -893,5 +902,27 @@ public class SmsService extends BaseServiceProxy<Sms>{
 		        }
 			}
 		}
+	}
+
+	/**
+	 * 分页查
+	 * @param keyword 手机号码、短信内容
+	 * @param loginUser
+	 * @param pageable
+	 * @return
+	 */
+	public Page getSmsTaskList(String keyword, Pageable pageable) {
+		StringBuffer fromWhereSql = new StringBuffer();
+		fromWhereSql.append(" from ( ");
+		fromWhereSql.append("select a.taskId,b.nickName,b.title,count(1) totalCount,sum(case when a.sendStatus=1 then 1 else 0 end) successCount,sum(case when a.sendStatus=2 then 1 else 0 end) failCount,sum(case when a.sendStatus=4 then 1 else 0 end) sendingCount,sum(case when a.sendStatus=3 then 1 else 0 end) unknowCount,max(b.createTime) createTime FROM tb_sms a,tb_sms_task b where a.taskId=b.id and b.sendStatus>0 ");
+		if(!getLoginUser().getRoleCode().equalsIgnoreCase("ADMIN")) {
+			fromWhereSql.append(" and b.createUserId='"+getLoginUser().getId()+"' ");
+		}
+		if(StringUtils.isNotEmpty(keyword)) {
+			fromWhereSql.append(" and (b.id like '%"+keyword+"%' or b.title like '%"+keyword+"%') ");
+		}
+		fromWhereSql.append(" group by a.taskId,b.nickName,b.title ) xx");
+		Page<SmsDateParam> page = super.findPageBySql(SmsDateParam.class, "select * ", fromWhereSql.toString(), " order by createTime desc", null, pageable);
+		return page;
 	}
 }

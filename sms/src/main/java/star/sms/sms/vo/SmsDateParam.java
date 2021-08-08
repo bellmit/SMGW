@@ -10,4 +10,7 @@ public class SmsDateParam {
 	private Integer failCount;//失败条数
 	private Integer sendingCount;//发送中
 	private Integer unknowCount;//未知条数
+	private Integer taskId;
+	private String title;
+	private String nickName;
 }

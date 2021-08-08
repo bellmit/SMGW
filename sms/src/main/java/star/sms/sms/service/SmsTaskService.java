@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +36,14 @@ import star.sms._frame.utils.ExcelData;
 import star.sms._frame.utils.FileUtils;
 import star.sms._frame.utils.StringUtils;
 import star.sms._frame.utils.UUIDUtils;
+import star.sms.account.domain.AccountInfo;
 import star.sms.config.SystemConfig;
 import star.sms.group.domain.GroupMember;
 import star.sms.group.service.GroupMemberService;
 import star.sms.phonearea.domain.PhoneArea;
 import star.sms.phonefilter.domain.PhoneFilter;
+import star.sms.platmanager.domain.PlatManager;
+import star.sms.platmanager.service.PlatManagerService;
 import star.sms.sms.dao.SmsTaskDao;
 import star.sms.sms.domain.Sms;
 import star.sms.sms.domain.SmsTask;
@@ -72,6 +76,8 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
     private SysConfigService sysConfigService;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private PlatManagerService platManagerService;
 	@Override
 	protected BaseRepository<SmsTask> getBaseRepository() {
 		return smsTaskDao;
@@ -289,40 +295,58 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 		jdbcTemplate.update("delete from tb_sms where taskId='"+taskId+"' ");
 	}
 	
-	public void updatePhones(SmsTask task) {
+	public BigDecimal getToUseCount(Integer taskId,String content) {
+		Integer c = jdbcTemplate.queryForObject("select count(1) from tb_sms where taskId='"+taskId+"' ",Integer.class);
+		BigDecimal l = new BigDecimal(1);
+		if(content.length()>70) {
+			l = new BigDecimal(content.length()/65+1);
+		}
+		return l.multiply(new BigDecimal(c));
+	}
+	
+	public void updatePhones(SmsTask task,AccountInfo  accountInfo) {
 		List<Sms> list = findPhoneByTaskId(task.getId());
 		Pattern pattern = Pattern.compile("(\\$\\{.*\\})");
 		Matcher matcher = pattern.matcher(task.getContent());
 		boolean needReplace=matcher.find();
 		for(Sms sms:list) {
+			sms.setAccount(accountInfo.getAccount());
+			sms.setPassword(accountInfo.getPassword());
+			sms.setExtno(accountInfo.getExtno());
+			sms.setIp(accountInfo.getIp());
+			sms.setAccountId(accountInfo.getId());
+			
 			sms.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 			sms.setUpdateUserId(getLoginUser().getId());
+			sms.setNickName(getLoginUser().getNickName());
+			
 			sms.setSendTime(task.getSendTime());
 			sms.setContent(task.getContent());
 			sms.setChannelType(task.getChannelType());
+			
 			if(StringUtils.isNotEmpty(sms.getMemo()) && needReplace) {
 				String content = task.getContent();
-				 Map<String, String> extMap = json.fromJson(sms.getMemo(), new TypeToken<Map<String, String>>() {}.getType());
-				 if(extMap.containsKey("1")) content = content.replace("${B}", extMap.get("1"));
-				 if(extMap.containsKey("2")) content = content.replace("${C}", extMap.get("2"));
-				 if(extMap.containsKey("3")) content = content.replace("${D}", extMap.get("3"));
-				 if(extMap.containsKey("4")) content = content.replace("${E}", extMap.get("4"));
-				 if(extMap.containsKey("5")) content = content.replace("${F}", extMap.get("5"));
-				 if(extMap.containsKey("6")) content = content.replace("${G}", extMap.get("6"));
-				 if(extMap.containsKey("7")) content = content.replace("${H}", extMap.get("7"));
-				 if(extMap.containsKey("8")) content = content.replace("${I}", extMap.get("8"));
-				 if(extMap.containsKey("9")) content = content.replace("${J}", extMap.get("9"));
-				 if(extMap.containsKey("10")) content = content.replace("${K}", extMap.get("10"));
-				 if(extMap.containsKey("11")) content = content.replace("${L}", extMap.get("11"));
-				 if(extMap.containsKey("12")) content = content.replace("${M}", extMap.get("12"));
-				 if(extMap.containsKey("13")) content = content.replace("${N}", extMap.get("13"));
-				 if(extMap.containsKey("14")) content = content.replace("${O}", extMap.get("14"));
-				 if(extMap.containsKey("15")) content = content.replace("${P}", extMap.get("15"));
-				 if(extMap.containsKey("16")) content = content.replace("${Q}", extMap.get("16"));
-				 if(extMap.containsKey("17")) content = content.replace("${R}", extMap.get("17"));
-				 if(extMap.containsKey("18")) content = content.replace("${S}", extMap.get("18"));
-				 if(extMap.containsKey("19")) content = content.replace("${T}", extMap.get("19"));
-				 if(extMap.containsKey("20")) content = content.replace("${U}", extMap.get("20"));
+				Map<String, String> extMap = json.fromJson(sms.getMemo(), new TypeToken<Map<String, String>>() {}.getType());
+				if(extMap.containsKey("1")) content = content.replace("${B}", extMap.get("1"));
+				if(extMap.containsKey("2")) content = content.replace("${C}", extMap.get("2"));
+				if(extMap.containsKey("3")) content = content.replace("${D}", extMap.get("3"));
+				if(extMap.containsKey("4")) content = content.replace("${E}", extMap.get("4"));
+				if(extMap.containsKey("5")) content = content.replace("${F}", extMap.get("5"));
+				if(extMap.containsKey("6")) content = content.replace("${G}", extMap.get("6"));
+				if(extMap.containsKey("7")) content = content.replace("${H}", extMap.get("7"));
+				if(extMap.containsKey("8")) content = content.replace("${I}", extMap.get("8"));
+				if(extMap.containsKey("9")) content = content.replace("${J}", extMap.get("9"));
+				if(extMap.containsKey("10")) content = content.replace("${K}", extMap.get("10"));
+				if(extMap.containsKey("11")) content = content.replace("${L}", extMap.get("11"));
+				if(extMap.containsKey("12")) content = content.replace("${M}", extMap.get("12"));
+				if(extMap.containsKey("13")) content = content.replace("${N}", extMap.get("13"));
+				if(extMap.containsKey("14")) content = content.replace("${O}", extMap.get("14"));
+				if(extMap.containsKey("15")) content = content.replace("${P}", extMap.get("15"));
+				if(extMap.containsKey("16")) content = content.replace("${Q}", extMap.get("16"));
+				if(extMap.containsKey("17")) content = content.replace("${R}", extMap.get("17"));
+				if(extMap.containsKey("18")) content = content.replace("${S}", extMap.get("18"));
+				if(extMap.containsKey("19")) content = content.replace("${T}", extMap.get("19"));
+				if(extMap.containsKey("20")) content = content.replace("${U}", extMap.get("20"));
 				sms.setContent(content);
 			}
 		}
@@ -345,7 +369,7 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 					if(contentPatterns!=null) {
 						String[] contentPatternArray = contentPatterns.split(",|，|\n");
 						for (String contentPattern : contentPatternArray) {
-							if(contentPattern!=null) {
+							if(org.apache.commons.lang3.StringUtils.isNotBlank(contentPattern)) {
 								Pattern r = Pattern.compile(contentPattern);
 								Matcher m = r.matcher(sms.getContent());
 								if (m.find( )) {
@@ -362,7 +386,7 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 					if(phones!=null) {
 						String[] phoneArray = phones.split(",|，|\n");
 						for (String phonePattern : phoneArray) {
-							if(phonePattern!=null ) {
+							if(org.apache.commons.lang3.StringUtils.isNotBlank(phonePattern)) {
 								String smsPhone = sms.getPhone();
 								if(smsPhone!=null&&smsPhone.length()>=11) {
 									String smsPhone48 = smsPhone.substring(4,8);
@@ -403,7 +427,9 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 				}
 			}
 		}
+		//删除过滤模板短信
 		smsService.batchUpdate(removeSmsList);
+		//保存短信列表
 		smsService.save(list);
 	}
 	
@@ -425,7 +451,7 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 		}
 		fromWhereSql.append(" ) m left join ");
 		fromWhereSql.append(" (select taskId,count(1) totalCount,sum(case when sendStatus=1 then 1 else 0 end) successCount from tb_sms where createUserId='"+getLoginUser().getId()+"' group by taskId) n on m.id=n.taskId ");
-		Page<SendingListParam> page = super.findPageBySql(SendingListParam.class, "select m.id taskId,m.sendTime,m.sendStatus,m.createTime,n.totalCount,n.successCount ", fromWhereSql.toString(), " order by m.createTime desc", null, pageable);
+		Page<SendingListParam> page = super.findPageBySql(SendingListParam.class, "select m.title,m.id taskId,m.sendTime,m.sendStatus,m.createTime,n.totalCount,n.successCount ", fromWhereSql.toString(), " order by m.createTime desc", null, pageable);
 		return page;
 	}
 	
@@ -447,7 +473,7 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 		}
 		fromWhereSql.append(" ) m left join ");
 		fromWhereSql.append(" (select taskId,count(1) totalCount,sum(case when sendStatus=1 then 1 else 0 end) successCount from tb_sms where createUserId='"+getLoginUser().getId()+"' group by taskId) n on m.id=n.taskId ");
-		Page<SendingListParam> page = super.findPageBySql(SendingListParam.class, "select m.id taskId,m.sendTime,m.sendStatus,m.createTime,n.totalCount,n.successCount ", fromWhereSql.toString(), " order by m.createTime desc", null, pageable);
+		Page<SendingListParam> page = super.findPageBySql(SendingListParam.class, "select m.title,m.id taskId,m.sendTime,m.sendStatus,m.createTime,n.totalCount,n.successCount ", fromWhereSql.toString(), " order by m.createTime desc", null, pageable);
 		return page;
 	}
 	
@@ -469,7 +495,7 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 		}
 		fromWhereSql.append(" ) m left join ");
 		fromWhereSql.append(" (select taskId,count(1) totalCount,sum(case when sendStatus=1 then 1 else 0 end) successCount from tb_sms where createUserId='"+getLoginUser().getId()+"' group by taskId) n on m.id=n.taskId ");
-		Page<SendingListParam> page = super.findPageBySql(SendingListParam.class, "select m.id taskId,m.sendTime,m.sendStatus,m.createTime,n.totalCount,n.successCount ", fromWhereSql.toString(), " order by m.createTime desc", null, pageable);
+		Page<SendingListParam> page = super.findPageBySql(SendingListParam.class, "select m.title,m.id taskId,m.sendTime,m.sendStatus,m.createTime,n.totalCount,n.successCount ", fromWhereSql.toString(), " order by m.createTime desc", null, pageable);
 		return page;
 	}
 	
@@ -494,7 +520,7 @@ public class SmsTaskService extends BaseServiceProxy<SmsTask>{
 		}
 		//更改为发送成功
 		StringBuilder sbUpdate= new StringBuilder("");
-		sbUpdate.append(" update  tb_sms_task set sendStatus=1 where sendStatus in (0,4) and id=? and id in (select taskId from tb_sms where sendStatus != 0) ");
+		sbUpdate.append(" update  tb_sms_task set sendStatus=1 where sendStatus in (0,4) and id=? and id not in (select taskId from tb_sms where sendStatus = 0) ");
 		jdbcTemplate.batchUpdate(sbUpdate.toString(), argsList);
 	}
 	

@@ -2,14 +2,13 @@
 <body class="login">
     <div class="container">
         <div class="form">
-            <h4 class="form-title"><#if isAdmin=='1'>管理员</#if>登录-COMET(彗星)</h4>
+            <h4 class="form-title"><#if isAdmin=='1'>管理员</#if>登录-COMET(${(sysConfig.systemName)!''})</h4>
             <p>Centralization Operation & Management of Enhanced Telecommunication</p>
             <form action="${ctx}/login" method="post">
                 <input type="text" class="form-control uname" placeholder="用户名" id="loginname" name="loginname"/>
                 <input type="password" class="form-control pword" placeholder="密码" id="password" name="password"/>
                 <div class="form-row">
                     <input name="code" type="text" id="code" class="form-control code" placeholder="验证码"/>
-                    <span id="sharePicPop" class="code-image"></span>
                 </div>
                 <label for="" class="passLabel">
                     <input type="checkbox" class="passCheckbox">
@@ -113,7 +112,7 @@
             $("form").submit();
         });
         
-    	loadCaptcha();
+    	//loadCaptcha();
     	$("#sharePicPop").click(function () {
     		$("#sharePicPop").html("");
     		loadCaptcha();

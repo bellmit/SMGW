@@ -21,16 +21,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.PageSupport;
 import star.sms._frame.utils.DateUtils;
 import star.sms._frame.utils.ExcelUtils;
 import star.sms._frame.utils.StringUtils;
+import star.sms.account.domain.AccountInfo;
+import star.sms.account.service.AccountService;
 import star.sms.logs.service.LogsService;
+import star.sms.platmanager.domain.PlatManager;
+import star.sms.platmanager.service.PlatManagerService;
 import star.sms.sms.domain.Sms;
 import star.sms.sms.domain.SmsTask;
 import star.sms.sms.service.SmsService;
 import star.sms.sms.service.SmsTaskService;
+import star.sms.smsmq.config.SmsCode;
 import star.sms.wallet.domain.Wallet;
 import star.sms.wallet.service.WalletService;
 
@@ -50,6 +57,12 @@ public class SmsTaskController extends BaseController {
 	private WalletService walletService;
 	@Autowired
 	private LogsService logsService;
+	@Autowired
+	private AccountService accountService;
+	@Autowired
+	private PlatManagerService platManagerService;
+	@Autowired
+	Gson json;
 	
 	/**
 	 * 待发送任务
@@ -75,6 +88,8 @@ public class SmsTaskController extends BaseController {
 	 */
 	@RequestMapping(value = "/sendingDetail", method = RequestMethod.GET)
 	public String sendingDetail(ModelMap model) {
+		model.addAttribute("statMap",json.toJson(SmsCode.statMap));
+		model.addAttribute("smppMap",json.toJson(SmsCode.smppMap));
 		return "/sms/sendingDetail";
 	}
 	
@@ -97,6 +112,19 @@ public class SmsTaskController extends BaseController {
 		if(!smsTaskService.checkCount()) {
 			model.addAttribute("warning","1");
 		}
+		//得到当前用户账户信息
+		AccountInfo  accountInfo = null;
+		PlatManager loginUser = getLoginUser();
+		Integer accountId = loginUser.getAccountId();
+		if(accountId!=null) {
+			accountInfo = accountService.findOne(accountId);
+		}
+		String accountName = "";
+		if(accountInfo!=null) {
+			accountName= accountInfo.getTitle();
+		}
+		model.addAttribute("accountName",accountName);
+		
 		return "/sms/smsTaskForm";
 	}
 	
@@ -305,29 +333,49 @@ public class SmsTaskController extends BaseController {
 	 */
 	@RequestMapping(value = "/createTask")
 	@ResponseBody
-	public Object createTask(Integer taskId,String content,String sendTimeStr,Integer channelType ) {
+	public Object createTask(Integer taskId,String content,String sendTimeStr,String title ) {
 		Wallet wallet = walletService.findIfExist();
-		if(wallet.getMoney().compareTo(BigDecimal.ZERO)<=0) return ERROR("提交失败，当前余额不足！");
 		if(!smsTaskService.checkCount()) return ERROR("提交失败，当前未完成任务数量已达上限！");
+		if(wallet.getMoney().compareTo(BigDecimal.ZERO)<=0) return ERROR("当前余额不足，所剩余额："+wallet.getMoney()+"元！");
+		//如果余额大于0.则需要计算一下本任务所需要的的费用，然后比较一下剩余余额是否够
+		PlatManager pm = platManagerService.findByLoginName(getLoginUser().getLoginName());
+		BigDecimal count = wallet.getMoney().divide(pm.getPrice(), 3, BigDecimal.ROUND_DOWN);
+		BigDecimal toUseCount = smsTaskService.getToUseCount(taskId,content);
+		if(count.compareTo(toUseCount)<0) return ERROR("当前余额不足，所剩余额："+wallet.getMoney()+"元！,所剩条数："+count.intValue()+"条");
+		
+		//得到当前用户账户信息
+		AccountInfo  accountInfo = null;
+		PlatManager loginUser = getLoginUser();
+		Integer accountId = loginUser.getAccountId();
+		if(accountId!=null) {
+			accountInfo = accountService.findOne(accountId);
+		} 
+		if(accountInfo == null)  {
+			return ERROR("提交失败，该用户未绑定短信账号");
+		}
+		//创建任务
 		SmsTask task = smsTaskService.findOne(taskId);
 		if(task!=null) {
 			if(StringUtils.isNotEmpty(sendTimeStr)) {
 				task.setSendTime(new Timestamp(DateUtils.getDate(sendTimeStr).getTime()));
 			}
+			task.setTitle(title);
 			task.setSendStatus(0);
 			task.setPriority(getLoginUser().getPriority());
 			task.setContent(content);
-			task.setChannelType(channelType);
+			task.setChannelType(accountInfo.getChannelType());
 			task.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 			task.setUpdateUserId(getLoginUser().getId());
+			task.setNickName(getLoginUser().getNickName());
 
 			Pattern pattern = Pattern.compile("(\\$\\{.*\\})");
 			Matcher matcher = pattern.matcher(task.getContent());
 			if(matcher.find()) task.setContentType(2);
 			
-			//循环任务下面的手机号码。将字段动态赋值到指定的占位符
-			smsTaskService.updatePhones(task);
 			smsTaskService.save(task);
+			//循环任务下面的手机号码。将字段动态赋值到指定的占位符
+			smsTaskService.updatePhones(task,accountInfo);
+			
 			return SUCCESS();
 		}else {
 			return ERROR("提交失败，请刷新页面重新创建任务");

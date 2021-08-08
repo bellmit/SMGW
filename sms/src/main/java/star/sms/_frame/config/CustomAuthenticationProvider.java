@@ -3,6 +3,7 @@ package star.sms._frame.config;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.exception.CodeEmptyException;
 import star.sms._frame.exception.CodeErrorException;
 import star.sms._frame.exception.CodeTimeoutException;
+import star.sms._frame.utils.GoogleAuthenticator;
 
 /**
  * 描述：自定义SpringSecurity的认证器
@@ -51,17 +53,34 @@ public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticat
             throw new CodeEmptyException("请输入验证码");
         }
         //校验验证码
+        /*
         if(!validateVerifyCode(verifyCode)){
             log.warn("验证码输入错误");
             throw new CodeErrorException("验证码输入错误");
         }
-      //通过自定义的CustomUserDetailsService，以用户输入的用户名查询用户信息
+        */
+        //通过自定义的CustomUserDetailsService，以用户输入的用户名查询用户信息
         UserDetails userDetails = (UserDetails) userDetailsService.loadUserByUsername(username);
+
         //校验用户密码
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         if(!userDetails.getPassword().equals(encoder.encodePassword(password, null))){
-             log.warn("密码错误");
+            log.warn("密码错误");
             throw new BadCredentialsException("密码错误");
+        }
+        //二次验证
+        LoginUser loginUser = (LoginUser)userDetails;
+        
+        String secret = loginUser.getPlatManager().getSecret();
+        if(StringUtils.isBlank(secret)) {
+        	  log.warn("秘钥错误");
+        	  throw new CodeErrorException("验证码验证错误");
+        } else {
+        	 boolean  verifyResult = GoogleAuthenticator.authcode(verifyCode,secret);
+        	 if(!verifyResult) {
+        		 log.warn("验证码输入错误");
+                 throw new CodeErrorException("验证码输入错误");
+        	 }
         }
         Object principalToReturn = userDetails;
         //将用户信息塞到SecurityContext中，方便获取当前用户信息

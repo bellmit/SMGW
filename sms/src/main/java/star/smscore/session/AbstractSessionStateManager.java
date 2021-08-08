@@ -525,11 +525,13 @@ public abstract class AbstractSessionStateManager<K, T extends BaseMessage> exte
 
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {
-
+//					errlogger.info("to here1");
 					if (future.isSuccess()) {
+//						errlogger.info("to here10");
 						// 注册重试任务
 						scheduleRetryMsg(ctx, message);
 					}else {
+						errlogger.info("to here11");
 						//发送失败,必须清除msgRetryMap里的对象，否则上层业务
 						//可能提交相同seq的消息，造成死循环
 						logger.error("remove fail message Sequense {}", seq);

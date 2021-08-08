@@ -1,8 +1,5 @@
 package star.sms.smsmq.domain.smpp;
 
-import java.util.Map;
-import com.google.common.util.concurrent.RateLimiter;
-
 /**
  * 发送短信请求
  * @author star
@@ -13,13 +10,13 @@ public class SendRequestSmpp {
 	private String mobile;
 	//内容
 	private String content;
-	//账号
+	//account
 	private String account;
 	//账号id
 	private String accountId;
 	//短信id
 	private Integer smsId;
-
+	
 	public String getMobile() {
 		return mobile;
 	}

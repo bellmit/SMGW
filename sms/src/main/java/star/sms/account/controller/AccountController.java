@@ -86,6 +86,7 @@ public class AccountController extends BaseController {
 			AccountInfo old = accountService.findOne(obj.getId());
 			if (old != null) {
 				old.setIp(obj.getIp());
+				old.setTitle(obj.getTitle());
 				old.setAccount(obj.getAccount());
 				old.setPassword(obj.getPassword());
 				old.setAlertBalance(obj.getAlertBalance());

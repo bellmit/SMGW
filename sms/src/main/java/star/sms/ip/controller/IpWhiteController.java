@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.PageSupport;
+import star.sms._frame.config.CusAccessObjectUtil;
+import star.sms._frame.utils.StringUtils;
 import star.sms._frame.utils.excel.ExcelExportUtil2;
 import star.sms.ip.domain.IpWhite;
 import star.sms.ip.service.IpWhiteService;
@@ -38,6 +41,26 @@ public class IpWhiteController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(ModelMap model) {
 		return "/ip/ipList";
+	}
+
+	@RequestMapping(value = "/init", method = RequestMethod.GET)
+	@ResponseBody
+	public Object init(String ip) {
+		String resourceip = CusAccessObjectUtil.getClientIpAddress(request);
+		if("0:0:0:0:0:0:0:1".equals(resourceip)||"127.0.0.1".equals(resourceip)) {
+			if(StringUtils.isIP(ip)) {
+				IpWhite m = new IpWhite();
+				m.setIp(ip);
+				m.setVisitCount(0);
+				ipWhiteService.save(m);
+				logsService.addData("运维人员创建IP白名单："+m.getIp());
+				return SUCCESS();
+			}else {
+				return ERROR("IP格式不正确");
+			}
+		}else {
+			return ERROR("无访问权限");
+		}
 	}
 	
 	/**
@@ -108,9 +131,13 @@ public class IpWhiteController extends BaseController {
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
 	@ResponseBody
 	public Object saveOrUpdate(ModelMap model, IpWhite m) throws Exception {
-		m.setVisitCount(0);
-		ipWhiteService.save(m);
-		logsService.addData("创建IP白名单："+m.getIp());
-		return SUCCESS();
+		if(StringUtils.isIP(m.getIp())) {
+			m.setVisitCount(0);
+			ipWhiteService.save(m);
+			logsService.addData("创建IP白名单："+m.getIp());
+			return SUCCESS();
+		}else {
+			return ERROR("IP格式不正确");
+		}
 	}
 }

@@ -21,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.PageSupport;
 import star.sms._frame.utils.excel.ExcelExportUtil2;
 import star.sms.logs.service.LogsService;
 import star.sms.sms.service.SmsService;
 import star.sms.sms.vo.SmsLogParam;
+import star.sms.smsmq.config.SmsCode;
 
 /**
  * 短信统计和日志
@@ -44,6 +47,8 @@ public class SmsController extends BaseController {
 	
 	@Autowired
 	private DefaultMQProducer defaultMQProducer;
+	@Autowired
+	Gson json;
 
 	/**
 	 * 短信日志-明细查询
@@ -51,6 +56,8 @@ public class SmsController extends BaseController {
 	 */
 	@RequestMapping(value = "/smsLogList", method = RequestMethod.GET)
 	public String smsTemplateList(ModelMap model) {
+		model.addAttribute("statMap",json.toJson(SmsCode.statMap));
+		model.addAttribute("smppMap",json.toJson(SmsCode.smppMap));
 		return "/sms/smsLogList";
 	}
 	
@@ -61,6 +68,15 @@ public class SmsController extends BaseController {
 	@RequestMapping(value = "/smsDateList", method = RequestMethod.GET)
 	public String smsDateList(ModelMap model) {
 		return "/sms/smsDateList";
+	}
+	
+	/**
+	 * 短信日志-任务统计
+	 * @return
+	 */
+	@RequestMapping(value = "/smsTaskList", method = RequestMethod.GET)
+	public String smsTaskList(ModelMap model) {
+		return "/sms/smsTaskList";
 	}
 	
 	/**
@@ -85,6 +101,23 @@ public class SmsController extends BaseController {
 	@ResponseBody
 	public Object getTaskDetailList(SmsLogParam smsLogParam, PageSupport pagesupport) {
 		Page page = smsService.getTaskDetailList(smsLogParam, pagesupport.getPage());
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("total", page.getTotalElements());
+		result.put("rows", page.getContent());
+		return result;
+	}
+	
+	/**
+	 * 分页查询
+	 * 
+	 * @param keyword
+	 * @param pagesupport
+	 * @return
+	 */
+	@RequestMapping(value = "/getSmsTaskList")
+	@ResponseBody
+	public Object getSmsTaskList(String keyword, PageSupport pagesupport) {
+		Page page = smsService.getSmsTaskList(keyword, pagesupport.getPage());
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("total", page.getTotalElements());
 		result.put("rows", page.getContent());

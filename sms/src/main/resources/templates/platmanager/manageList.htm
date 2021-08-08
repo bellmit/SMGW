@@ -96,13 +96,26 @@
 			         },
 			         {
 			             field: 'priority',//域值
+			             align: 'center',
 			             title: '优先级',//内容
 			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'title',//账号名称
+			             align: 'center',
+			             title: '网关账号',//内容
+			             visible: true
 			         },
 			         {
 			             field: 'phone',//域值
 			             align: 'center',
 			             title: '联系电话',//内容
+			             visible: true//false表示不显示
+			         },
+			         {
+			             field: 'secret',//秘钥
+			             align: 'center',
+			             title: '秘钥',//内容
 			             visible: true//false表示不显示
 			         },
 			         {
@@ -123,6 +136,7 @@
 			             halign: 'center',
 			             align: 'center',
 			             title: '操作',//内容
+			             width : 300,
 			             visible: true,//false表示不显示
 			             formatter: function(value, row, index){
 			            	 var html='';

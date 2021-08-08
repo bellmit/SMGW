@@ -28,6 +28,7 @@ public class AccountInfo extends BaseModel  {
     @Column(name="ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+	@Column(name = "title") private String title;//名称
 	@Column(name = "account") private String account;//账号
     @Column(name = "password") private String password;//密码
     @Column(name = "extno") private String extno;//接入号

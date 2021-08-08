@@ -43,7 +43,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
 	         			            	top.dialog({id:"ipFormDialog"}).data.submit=1;
 	         			                dialog.close().remove();
 	         						}else{
-	         							toastr.error("操作失败！");
+	         							toastr.error(data);
 	         						}
 	         					}
 	         				});

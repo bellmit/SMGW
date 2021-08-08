@@ -6,13 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.wf.captcha.SpecCaptcha;
-
 import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.ModuleCode;
@@ -35,6 +30,8 @@ import star.sms.platrole.domain.PlatRole;
 import star.sms.platrole.domain.PlatRoleUser;
 import star.sms.platrole.service.PlatRoleService;
 import star.sms.platrole.service.PlatRoleUserService;
+import star.sms.sysconfig.domain.SysConfig;
+import star.sms.sysconfig.service.SysConfigService;
 
 /**
  * @author star
@@ -52,11 +49,17 @@ public class LoginController extends BaseController {
 
 	@Resource
 	private MenuInfoService menuInfoService;
+	
 	@Autowired
 	private SystemConfig systemConifg;
+	
+	@Resource
+	private SysConfigService sysConfigService;
+	
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(ModelMap model) {
+		/*
 		String ip = CusAccessObjectUtil.getClientIpAddress(request);
 		if(ipWhiteService.isCanaccess(ip)) {
 			model.addAttribute("isAdmin","0");
@@ -65,6 +68,13 @@ public class LoginController extends BaseController {
 		}else {
 			return "notvisit";
 		}
+		*/
+		model.addAttribute("isAdmin","0");
+		if(systemConifg.getIsAdmin()) model.addAttribute("isAdmin","1");
+		//设置图标名称
+		SysConfig sysConfig=sysConfigService.getConfig();
+		model.addAttribute("sysConfig", sysConfig);
+		return "login";
 	}
 
 	/**
@@ -82,6 +92,9 @@ public class LoginController extends BaseController {
 		request.getSession().setAttribute("loginUser", loginUser.getPlatManager());
 		// 设置登录用户的菜单权限
 		setLoginUserSessionMenu(loginUser);
+		//设置图标名称
+		SysConfig sysConfig=sysConfigService.getConfig();
+		model.addAttribute("sysConfig", sysConfig);
 		return "home";
 	}
 	

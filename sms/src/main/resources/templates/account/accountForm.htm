@@ -1,6 +1,9 @@
 <#include "../common/_header.htm">
 <div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
    	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
+        <el-form-item label="名称：" prop="title">
+        	<el-input type="text" v-model="form.title" placeholder="名称" maxlength="200"></el-input>
+        </el-form-item>
         <el-form-item label="通道类型：" prop="channelType">
         	<el-radio-group size="small" v-model="form.channelType">
 		      <el-radio-button label="1">HTTP</el-radio-button>
@@ -49,6 +52,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
         data:{
             labelPosition: 'right',
             form:{
+            	title:'',
             	channelType:'1',
             	ip:'',
             	account:'',
@@ -60,6 +64,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
             	limiter:'10'
             },
             formrules:{
+            	title:[{required:true,message:"名称不能为空",trigger:"blur"}],
             	channelType:[{required:true,message:"请选择通道类型",trigger:"blur"}],
             	ip:[{required:true,message:"地址不能为空",trigger:"blur"}],
             	account:[{required:true,message:"账号不能为空",trigger:"blur"}],
@@ -82,6 +87,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
 							that.form.id = data.id;
 							that.form.channelType = data.channelType;
 							that.form.ip = data.ip;
+							that.form.title = data.title;
 							that.form.account = data.account;
 							that.form.password = data.password;
 							that.form.extno = data.extno;

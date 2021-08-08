@@ -1,19 +1,12 @@
 package star.sms.smsmq.smstask;
 
 import java.util.List;
-
 import javax.annotation.Resource;
-
-import org.redisson.api.RSet;
-import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import star.sms._frame.utils.UUIDUtils;
-import star.sms.account.domain.AccountInfo;
-import star.sms.sms.service.SmsService;
 import star.sms.smsmq.domain.http.SendRequest;
 import star.sms.smsmq.domain.smpp.SendRequestSmpp;
 import star.sms.smsmq.httputils.HttpConnectionUtil;
@@ -31,9 +24,6 @@ public class SendTask {
 	
 	@Resource
 	private HttpConnectionUtil httpConnectionUtil;
-	
-    @Autowired
-    private RedissonClient redissonClient;
     
     @Autowired
     private SmsProducerHanlder smsProducerHanlder;
@@ -75,6 +65,12 @@ public class SendTask {
 				sendRequestBatch.setTaskContent(sendRequest.getTaskContent());
 				sendRequestBatch.setContentType(sendRequest.getContentType());
 				sendRequestBatch.setRt(sendRequest.getRt());
+				
+				sendRequestBatch.setAccount(sendRequest.getAccount());
+				sendRequestBatch.setPassword(sendRequest.getPassword());
+				sendRequestBatch.setExtno(sendRequest.getExtno());
+				sendRequestBatch.setIp(sendRequest.getIp());
+				
 				// 存放mq
 				smsProducerHanlder.smsSendHttp(sendRequestBatch);
 			}

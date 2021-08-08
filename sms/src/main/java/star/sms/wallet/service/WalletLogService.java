@@ -98,7 +98,7 @@ public class WalletLogService extends BaseServiceProxy<WalletLog>{
 		if(StringUtils.isNotEmpty(keyword)) {
 			fromWhereSql.append("  and memo like '%"+keyword+"%' ");
 		}
-		Page<WalletLog> page = super.findPageBySql(WalletLog.class, "select * ", fromWhereSql.toString(), " order by createTime desc", null, pageable);
+		Page<WalletLog> page = super.findPageBySql(WalletLog.class, "select * ", fromWhereSql.toString(), " order by id desc", null, pageable);
 		return page;
 	}
 	

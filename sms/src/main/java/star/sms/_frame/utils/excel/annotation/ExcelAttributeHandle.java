@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import star.sms._frame.utils.RegUtil;
+import star.sms.smsmq.config.SmsCode;
 
 /**
  * @Description
@@ -20,6 +23,7 @@ public class ExcelAttributeHandle {
     public static final String ISPUBLIC="isPublic";
     public static final String BASICSTATE="basicState";
     public static final String SENDSTATUS="sendStatus";
+    public static final String SENDSTAT="sendStat";
 
     public static String handle(String type, Object val){
         String format= null;
@@ -75,6 +79,13 @@ public class ExcelAttributeHandle {
             		format="发送中";
             	} 
                 break;
+            }
+            case "sendStat": {
+            	String state=val.toString();
+            	if(SmsCode.statMap.containsKey(state)) format = state+"-"+SmsCode.statMap.get(state);
+            	if(SmsCode.smppMap.containsKey(state)) format = state+"-"+SmsCode.smppMap.get(state);
+            	if(StringUtils.isEmpty(format) && StringUtils.isNotEmpty(state)) format=state+"-提交线路失败";
+            	break;
             }
             case "basicState": {
             	int state=Integer.valueOf(val.toString());

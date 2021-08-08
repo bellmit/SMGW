@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.Constant;
 import star.sms._frame.base.PageSupport;
+import star.sms.account.domain.AccountInfo;
+import star.sms.account.service.AccountService;
 import star.sms.logs.service.LogsService;
 import star.sms.menuinfo.service.MenuInfoService;
 import star.sms.operation_log.service.DataOperationLogService;
@@ -62,10 +64,15 @@ public class PlatManagerController extends BaseController  {
 	
 	@Resource
 	private DataOperationLogService dataOperationLogService;
+	
 	@Autowired
 	private WalletService walletService;
+	
 	@Resource
 	private LogsService logsService;
+	
+	@Autowired
+	private AccountService accountService;
 	
 
 	/**
@@ -157,10 +164,14 @@ public class PlatManagerController extends BaseController  {
 			myPlatRoleIdSet = platRoleUserList.stream().map(r->r.getRoleId()).collect(Collectors.toSet());
 		}
 		
-		//物业列表
+		// 线路列表
+		List<AccountInfo> accountInfoList = accountService.findAccountInfoList();
+		
+		// 列表
 		model.addAttribute("platManager", bean);
 		model.addAttribute("platRoleList", platRoleList);
 		model.addAttribute("myPlatRoleIdSet", myPlatRoleIdSet);
+		model.addAttribute("accountInfoList", accountInfoList);
 		
 		return "/platmanager/manageSaveForm";
 	}

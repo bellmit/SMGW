@@ -16,4 +16,5 @@ public class SendingListParam {
 	private Timestamp createTime;
 	private Integer totalCount;
 	private Integer successCount;
+	private String title;
 }

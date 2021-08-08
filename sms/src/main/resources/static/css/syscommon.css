@@ -267,7 +267,7 @@ label.el-form-item__label {
 /*vue-form表格文本域样式结束*/
 /*vue-form表格输入框样式开始*/
 input.el-input__inner {
-    height: 30px;
+    /* height: 30px; */
     border-radius: 0;
 }
 textarea.el-textarea__inner {
@@ -349,11 +349,6 @@ table.dataTable tbody tr td {
 label.el-form-item__label {
 	width: 120px;
 	font-weight: 400;
-}
-input.el-input__inner {
-	/*width: 300px;*/
-	height: 30px;
-	border-radius: 0;
 }
 .el-form-item {
 	width: 700px;

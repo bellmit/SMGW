@@ -7,7 +7,7 @@
 
 html,body{height: 100%;}
 body.login{
-    background:url("../img/login_bg.png") no-repeat;
+    /*background:url("../img/login_bg.png") no-repeat;*/
     background-color: blue;
     -webkit-background-size: cover;
     -moz-background-size: cover;

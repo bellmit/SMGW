@@ -1,10 +1,8 @@
 package star.sms.smsmq.smstask;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,31 +49,23 @@ public class SendSms {
 		SendResponse sendResponse = null;
 		try {
 			if (sendRequest != null) {
-				//选择http账号
-				List<AccountInfo> accountHttpList = new ArrayList<AccountInfo>();
+				//得到http账号
+				AccountInfo accountInfo = null;
 				Map<String, AccountInfo> accountMap = accountService.getAccountMap();
 				if (accountMap != null) {
-					for (Map.Entry<String, AccountInfo> entry : accountMap.entrySet()) {
-						AccountInfo account = entry.getValue();
-						if(account.getChannelType()==1) {
-							accountHttpList.add(account);
-						}
-					}
+					accountInfo = accountMap.get(sendRequest.getAccount());
 				}
 				//找不到账号
-				if(accountHttpList.size() == 0) {
+				if(accountInfo == null) {
 					logger.info("未找到线路账号！");
 					return;
 				}
-				int randomIndex = new Random().nextInt(accountHttpList.size());
-				AccountInfo accountInfo = accountHttpList.get(randomIndex);
-
 				//构造发送参数
 				Map<String, String> paramsMap = new HashMap<String, String>();
 				
-				paramsMap.put("account", accountInfo.getAccount());
-				paramsMap.put("password", accountInfo.getPassword());
-				paramsMap.put("extno", accountInfo.getExtno());
+				paramsMap.put("account", sendRequest.getAccount());
+				paramsMap.put("password", sendRequest.getPassword());
+				paramsMap.put("extno", sendRequest.getExtno());
 				paramsMap.put("rt", sendRequest.getRt());
 
 				if(sendRequest.getContentType()==1) {
@@ -115,14 +105,14 @@ public class SendSms {
 				}
 
 				// 发送短信开始
-				smsService.sendStart(sendRequest,sendRequest.getBatchId(),accountInfo);
+				smsService.sendStart(sendRequest,sendRequest.getBatchId());
 				// 账号限流，改为针对每个号码
 				RateLimiter rateLimiter = accountInfo.getAccountLimiter();
 				if(rateLimiter!=null) {
 					rateLimiter.acquire(1);
 				}
 
-				String json = httpConnectionUtil.postSync(accountInfo.getIp(), paramsMap);
+				String json = httpConnectionUtil.postSync(sendRequest.getIp(), paramsMap);
 				if (json != null) {
 					sendResponse = JsonUtil.string2Obj(json, SendResponse.class);
 					// 处理返回结果
@@ -139,32 +129,22 @@ public class SendSms {
      */
 	public void hanlderSmpp(SendRequestSmpp sendRequestSmpp) {
 		try {
-			//选择smpp账号
-			List<AccountInfo> accountHttpList = new ArrayList<AccountInfo>();
+			//得到http账号
+			AccountInfo accountInfo = null;
 			Map<String, AccountInfo> accountMap = accountService.getAccountMap();
 			if (accountMap != null) {
-				for (Map.Entry<String, AccountInfo> entry : accountMap.entrySet()) {
-					AccountInfo account = entry.getValue();
-					if(account.getChannelType()==2) {
-						accountHttpList.add(account);
-					}
-				}
+				accountInfo = accountMap.get(sendRequestSmpp.getAccount());
 			}
 			//找不到账号
-			if(accountHttpList.size() == 0) {
+			if(accountInfo == null) {
 				logger.info("未找到线路账号！");
 				return;
 			}
-			int randomIndex = new Random().nextInt(accountHttpList.size());
-			AccountInfo accountInfo = accountHttpList.get(randomIndex);
-			
 			// 账号限流，改为针对每个号码
 			RateLimiter rateLimiter = accountInfo.getAccountLimiter();
 			if(rateLimiter!=null) {
 				rateLimiter.acquire(1);
 			}
-			// 更新短信账号表
-			smsService.updateSmsAccountForSmpp(sendRequestSmpp.getSmsId(),accountInfo);
 			// 发送短信
 			smppService.sendSms(accountInfo.getId()+"", sendRequestSmpp.getSmsId(),sendRequestSmpp.getMobile(), sendRequestSmpp.getContent());
 		} catch (Exception e) {

@@ -62,7 +62,7 @@ body.login-page {
 .login .code, .login .code-image{
     display: inline-block;
     float: left;
-    width: 50%;
+    width: 100%;
 }
 .login .code-image{
     height: 40px;

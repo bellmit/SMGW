@@ -26,6 +26,8 @@
 	<script type="text/javascript">
 	var dialog = top.dialog.get(window);
 	var dialogData = dialog.data; // 获取对话框传递过来的数据
+	var statMap=${statMap};
+	var smppMap=${smppMap};
 	var chooseTemplateForm = {
 		init:function(){
 		    let height = jQuery(window).height()-120;
@@ -61,7 +63,7 @@
 			         {field: 'mid',title: 'mid'},
 			         {field: 'phone',title: '手机号码'},
 			         {field: 'content',title: '短信内容'},
-			         {field: 'sendTime',title: '发送时间',formatter:function (value, row, index) {
+			         {field: 'statTime',title: '发送时间',formatter:function (value, row, index) {
 		                    if(value){
 		                        var date = new Date(value);
 		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
@@ -83,6 +85,15 @@
 		                    }else{
 		                        return '-';
 		                    }
+		                }},
+			         {field: 'sendStat',halign: 'center', align: 'left',title: '发送结果',width:'150px',formatter:function (value, row, index) {
+				        	 let val='';	
+				        	 if(value){
+					        	 if(statMap.hasOwnProperty(value)) val=value+'-'+statMap[value];
+					        	 if(smppMap.hasOwnProperty(value)) val=value+'-'+smppMap[value];
+					        	 if(!val) val=value+'-提交线路失败';
+				        	 }
+				        	 return val;
 		                }}
 			     ],
 			     onLoadSuccess: function () {

@@ -1,9 +1,8 @@
 <form id="addPlatManager">
 	<input type="hidden" name="id" value="${platManager.id!}" />
 	<div class="form-group form-inline">
-			<span class="btStar">*</span>
-			<label class="labelWid">角色：</label>
-			<select class="form-control" name="roleIds" id="roleIds" style="width: 148px;" required <#if platManager.id??>disabled</#if>  onchange="selectRole();" >
+			<label class="labelWid">角色：</label><span class="btStar">*</span>&nbsp;&nbsp;
+			<select class="form-control" name="roleIds" id="roleIds" style="width: 148px;" required <#if platManager.id??>disabled</#if> >
 				<option value="">--请选择--</option>
 				<#list platRoleList as pr>
                       	<option value="${pr.roleId}" <#if myPlatRoleIdSet?? && myPlatRoleIdSet?seq_contains(pr.roleId)>selected</#if> >${pr.roleName}</option>
@@ -11,29 +10,33 @@
 			</select>
 	</div>
 	<div class="form-group form-inline">
-		<span class="btStar">*</span>
-			<label class="labelWid">名称：</label>
+			<label class="labelWid">名称：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="nickName" id="nickName" value="${platManager.nickName!}" maxlength="25" />
 	</div>
 	<div class="form-group form-inline">
-		<span class="btStar">*</span>
-			<label class="labelWid">登录名：</label>
+			<label class="labelWid">登录名：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="loginName" id="loginName" value="${platManager.loginName!}" placeholder="建议使用手机号码" maxlength="25" />
 	</div>
 	<div class="form-group form-inline">
-		<span class="btStar">*</span>
-			<label class="labelWid">联系电话：</label>
+			<label class="labelWid">联系电话：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="phone" id="phone" value="${platManager.phone!}" maxlength="12" />
 	</div>
 	<div class="form-group form-inline">
-		<span class="btStar">*</span>
-			<label class="labelWid">费率：</label>
-			<input class="form-control" type="text" name="price" id="price" value="${platManager.price!}" maxlength="12" />元/条
+			<label class="labelWid">费率(元/条)：</label><span class="btStar">*</span>&nbsp;&nbsp;
+			<input class="form-control" type="text" name="price" id="price" value="${platManager.price!}" maxlength="12" />
 	</div>
 	<div class="form-group form-inline">
-		<span class="btStar">*</span>
-			<label class="labelWid">优先级：</label>
+			<label class="labelWid">优先级：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="priority" id="priority" value="${platManager.priority!}" maxlength="12" />
+	</div>
+	<div class="form-group form-inline">
+			<label class="labelWid">网关线路：</label><span class="btStar">*</span>&nbsp;&nbsp;
+			<select class="form-control" name="accountId" id="accountId" style="width: 148px;" required >
+				<option value="">--请选择--</option>
+				<#list accountInfoList as aiList>
+                	<option value="${aiList.id}" <#if (aiList.id)?? && (platManager.accountId)?? && (aiList.id)==(platManager.accountId)>selected</#if>>${(aiList.title)!''}(${aiList.account})</option>
+                </#list>
+			</select>
 	</div>
 	<div class="form-group form-inline">
 			<label class="qyzt">启用状态：</label>
@@ -66,12 +69,12 @@
         		trimRequired: true,
         		unContainSpace: true
             },
-            companyId: {
-        		verifyIsAgent: true
+            priority: {
+            	trimRequired: true
             }
         },
         messages: {
-        	loginName: {
+        	nickName: {
                 required: "该字段不能为空"
             }
         }
@@ -119,25 +122,6 @@
 		
 		return verificationPassed;
 	}, "登录名不能为重复");
-	
-	$.validator.addMethod("verifyIsAgent", function(value, element) {
-		var verificationPassed = true;
-		var roleIds = $("#roleIds").val();
-		var companyId = $("#companyId").val();
-		if(roleIds=='2' && !companyId){
-			verificationPassed = false;
-		}
-		return verificationPassed;
-	}, "请选择物业公司");
-	
-	function selectRole(){
-		var roleIds = $("#roleIds").val();
-		if(roleIds=='2'){
-			$("#companyDiv").show();
-		}else{
-			$("#companyDiv").hide();
-		}
-	}
 </script>
 <style>
 	.form-group.form-inline {

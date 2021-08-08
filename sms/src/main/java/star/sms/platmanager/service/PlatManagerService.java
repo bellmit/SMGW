@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import star.sms._frame.base.BaseRepository;
 import star.sms._frame.base.BaseServiceProxy;
 import star.sms._frame.base.Constant;
+import star.sms._frame.utils.GoogleAuthenticator;
 import star.sms._frame.utils.StringUtils;
 import star.sms._frame.utils.Testtrans;
 import star.sms._frame.utils.Tools;
@@ -189,6 +190,7 @@ public class PlatManagerService extends BaseServiceProxy<PlatManager> {
 		String password = md5.encodePassword(Constant.PLATMANAGER_DEFAULT_PASSWORD, null);
 		subAccount.setPassword(password);
 		subAccount.setIsSubAccount(0);
+		subAccount.setSecret(GoogleAuthenticator.generateSecretKey());
 		subAccount = platManagerRepository.save(subAccount);
 		
 		//创建钱包
@@ -280,10 +282,11 @@ public class PlatManagerService extends BaseServiceProxy<PlatManager> {
 		fromWhereSql.append(" select * FROM tb_plat_manager pm ");
 		fromWhereSql.append(appendWhere(keyword, params));
 		fromWhereSql.append(" ) m left join tb_wallet n on m.id=n.userId ");
+		fromWhereSql.append(" left join tb_account a on m.account_id=a.id ");
 		
 		StringBuffer selectSql = new StringBuffer();
 		selectSql.append("SELECT m.id AS id, m.login_name AS loginName, m.nick_name AS nickName ");
-		selectSql.append(", m.phone AS phone, m.state AS state,m.price,n.money,m.priority ");
+		selectSql.append(", m.phone AS phone, m.state AS state,m.price,n.money,m.priority,a.title,m.secret ");
 		
 		String orderBySql = "ORDER BY m.id DESC ";
 		// 封装并返回

@@ -100,6 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and().authorizeRequests()
 			.antMatchers("/login**").permitAll()
 			.antMatchers("/login/captcha**").permitAll()
+			.antMatchers("/ip/white/init**").permitAll()
 			.antMatchers("/logout**").permitAll()
 			.antMatchers("/entrust/**").permitAll()
 			.antMatchers("/sample/**").permitAll()

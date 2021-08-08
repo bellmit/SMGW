@@ -11,7 +11,7 @@ import lombok.Data;
 import star.sms._frame.base.BaseModel;
 
 /**
- * 号码归属地
+ * 系统配置
  * @author star
  *
  */
@@ -24,4 +24,7 @@ public class SysConfig extends BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;//主键
 	@Column(name="taskCount") private Integer taskCount; //每个用户最大任务个数
+	@Column(name="logo") private String logo; //logo
+	@Column(name="systemName") private String systemName; //名称
+	@Column(name="logoHome") private String logoHome; //homelogo
 }

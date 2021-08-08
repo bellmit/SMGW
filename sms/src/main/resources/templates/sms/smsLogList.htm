@@ -42,6 +42,8 @@
 	    language:'zh-CN',
 	    pickerPosition:"bottom-left"
 	});
+	var statMap=${statMap};
+	var smppMap=${smppMap};
 	var sms = {
 		init:function(){
 		    let height = jQuery(window).height()-185;
@@ -79,6 +81,7 @@
  							return index+1;
  						 }
 			         },
+			         {field: 'nickName',halign: 'center', align: 'center',title: '用户',width:'80px'},
 			         {field: 'mid',halign: 'center', align: 'center',title: 'mid',width:'100px'},
 			         {field: 'account',halign: 'center', align: 'center',title: '账号',width:'80px'},
 			         {field: 'phone',halign: 'center',align: 'center',title: '手机号码',width:'100px'},
@@ -114,6 +117,15 @@
 		                    }else{
 		                        return '-';
 		                    }
+		                }},
+			         {field: 'sendStat',halign: 'center', align: 'left',title: '发送结果',width:'150px',formatter:function (value, row, index) {
+				        	 let val='';	
+				        	 if(value) {
+					        	 if(statMap.hasOwnProperty(value)) val=value+'-'+statMap[value];
+					        	 if(smppMap.hasOwnProperty(value)) val=value+'-'+smppMap[value];
+					        	 if(!val) val=value+'-提交线路失败';
+				        	 }
+				        	 return val;
 		                }}
 			     ],
 			     onLoadSuccess: function () {

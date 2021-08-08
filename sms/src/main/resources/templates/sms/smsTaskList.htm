@@ -3,25 +3,15 @@
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
-                <h5>发送中任务</h5>
+                <h5>任务统计</h5>
                 <div class="ibox-tools"></div>
             </div>
 			<div class="ibox-content">
 				<div class="form-group">
 					<div class="form-inline">
 						<div class="form-group">
-							<label class="control-label">时间范围：</label>
-							<div class="input-group">
-								<div class="input-icon-group">
-									<input type="text" class="form-control fc-clear form_datetime" id="beginTime" placeholder="" /> <span id="scan" class="glyphicon glyphicon-calendar"> </span>
-								</div>
-							</div>
-							<span>至</span>
-							<div class="input-group">
-								<div class="input-icon-group">
-									<input type="text" class="form-control fc-clear form_datetime" id="endTime" placeholder="" /> <span id="scan" class="glyphicon glyphicon-calendar"> </span>
-								</div>
-							</div>
+							<label class="control-label">关键字：</label>
+						<input type="text" placeholder="任务名称" class="form-control fc-clear" style="width: 300px;" id="keyword">
 						</div>
 						<span class="btnCon">
 							<button type="button" class="btn btn-primary btn-sm" onclick="sms.query();">查询</button>
@@ -45,13 +35,13 @@
 		init:function(){
 		    let height = jQuery(window).height()-185;
 			$('#table').bootstrapTable({
-			     url:"${ctx}/smsTask/getSendingList",//请求数据url
+			     url:"${ctx}/sms/getSmsTaskList",//请求数据url
 			     queryParams: function (params) {
+			    	 let keyword = $.trim($("#keyword").val());
 			         return {
 			        	 pageNumber: (params.offset / params.limit),  //页码
 			        	 pageSize: params.limit,  //页面大小
-			        	 beginTime:$("#beginTime").val(),
-			        	 endTime:$("#endTime").val()
+			        	 keyword:keyword
 			         };
 			     },
 			     // striped: true,                      //是否显示行间隔色
@@ -69,49 +59,22 @@
 			     columns: [
 			         {
 			             title: '序号',//标题
-			             align: 'center',
 			             halign: 'center',
+			             align: 'center',
 			             width:'50px',
 			             formatter: function (value, row, index) {
  							return index+1;
  						 }
 			         },
-			         {field: 'title',halign: 'center',align: 'left',title: '任务名称',width:'100px'},
-			         {field: 'taskId', halign: 'center',align: 'center',title: '任务ID',width:'100px'},
-			         {field: 'createTime', halign: 'center',align: 'center',title: '创建时间',width:'160px',formatter:function (value, row, index) {
-		                    if(value){
-		                        var date = new Date(value);
-		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
-		                    }else{
-		                        return '-';
-		                    }
-		                }},
-			         {field: 'sendingTime', halign: 'center',align: 'center',title: '规定发送时间',width:'160px',formatter:function (value, row, index) {
-		                    if(value){
-		                        var date = new Date(value);
-		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
-		                    }else{
-		                        return '-';
-		                    }
-		                }},
-			         {field: 'totalCount', halign: 'center',align: 'center',title: '消息总条数'},
-			         {field: 'successCount', halign: 'center',align: 'center',title: '已发送条数'},
-			         {field: 'sendStatus', halign: 'center',align: 'center',title: '状态',formatter:function (value, row, index) {
-		                    if(value=='0'){
-		                    	return '待发送';
-		                    }else if(value=='1'){
-		                    	return '提交完成';
-		                    }else if(value=='2'){
-		                    	return '发送失败';
-		                    }else if(value=='3'){
-		                    	return '已终止';
-		                    }else if(value=='4'){
-		                    	return '发送中';
-		                    }else{
-		                        return '-';
-		                    }
-		                }},
-	                {
+			         {field: 'nickName',halign: 'center', align: 'center',title: '用户'},
+			         {field: 'title', halign: 'center', align: 'center',title: '任务名称'},
+			         {field: 'taskId', halign: 'center', align: 'center',title: '任务ID'},
+			         {field: 'totalCount', halign: 'center',align: 'center',title: '发送数量'},
+			         {field: 'successCount', halign: 'center',align: 'center',title: '成功条数'},
+			         {field: 'failCount', halign: 'center',align: 'center',title: '失败条数'},
+			         {field: 'sendingCount', halign: 'center',align: 'center',title: '发送中'},
+			         {field: 'unknowCount', halign: 'center',align: 'center',title: '未知条数'},
+			         {
 			             field: 'taskId',//域值
 			             halign: 'center',
 			             align: 'center',

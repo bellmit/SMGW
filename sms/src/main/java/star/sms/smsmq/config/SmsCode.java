@@ -19,6 +19,9 @@ public class SmsCode {
 	// STAT状态代码表
 	public static Map<String, String> statMap = new HashMap<String, String>();
 	
+	// SMPP状态代码表
+	public static Map<String, String> smppMap = new HashMap<String, String>();
+	
 	static {
 		// STATUS错误代码表
 		statusMap.put(0, "成功");
@@ -72,5 +75,64 @@ public class SmsCode {
 		statMap.put("MO:200", "不支持分条短信");
 		statMap.put("MO:0254", "转发提交超时");
 		statMap.put("MO:0255", "转发提交过程中，连接断开");
+		
+		//所有map中未注明的状态都是Reserved状态 提交线路失败
+		smppMap.put("-1", "通道尚未注册成功");
+		smppMap.put("0", "发送成功");//No Error
+		smppMap.put("1", "消息长度错误");//Message Length is invalid
+		smppMap.put("2", "指令长度错误");//Command Length is invalid
+		smppMap.put("3", "无效的指令id");//Invalid Command ID
+		smppMap.put("4", "无效BIND");//Incorrect BIND Status for given command
+		smppMap.put("5", "ESME已存在");//ESME Already in Bound State
+		smppMap.put("6", "无效的私有标记");//Invalid Priority Flag
+		smppMap.put("7", "无效的发送标记");//Invalid Registered Delivery Flag
+		smppMap.put("8", "已发送，无返回结果");//System Error
+		smppMap.put("9", "提交线路失败");//Reserved
+		smppMap.put("10", "无效的源地址");//Invalid Source Address
+		smppMap.put("11", "无效的目标地址");//Invalid Dest Addr
+		smppMap.put("12", "Message ID无效");//Message ID is invalid
+		smppMap.put("13", "绑定错误");//Bind Failed
+		smppMap.put("14", "密码错误");//Invalid Password
+		smppMap.put("15", "System ID错误");//Invalid System ID
+		smppMap.put("16", "提交线路失败");//Reserved
+		smppMap.put("17", "取消SM失败");//Cancel SM Failed
+		smppMap.put("18", "提交线路失败");//Reserved
+		smppMap.put("19", "替换SM失败");//Replace SM Failed
+		smppMap.put("20", "消息队列已满");//Message Queue Full
+		smppMap.put("21", "无效的消息类型");//Invalid Service Type
+		smppMap.put("22", "提交线路失败");//Reserved
+		smppMap.put("51", "目标号码数量错误");//Invalid number of destinations
+		smppMap.put("52", "目标号码错误");//Invalid Distribution List name
+		smppMap.put("64", "Destination flag is invalid(submit_multi)");
+		smppMap.put("66", "Invalid ‘submit with replace’ request(i.e. submit_sm with replace_if_present_flag set)");
+		smppMap.put("67", "Invalid esm_class field data");
+		smppMap.put("68", "Cannot Submit to Distribution List");
+		smppMap.put("69", "消息体格式错误");//submit_sm or submit_multi failed
+		smppMap.put("72", "源地址TON错误");//Invalid Source address TON
+		smppMap.put("73", "源地址NPI错误");//Invalid Source address NPI
+		smppMap.put("80", "目标地址TON错误");//Invalid Destination address TON
+		smppMap.put("81", "目标地址NPI错误");//Invalid Destination address NPI
+		smppMap.put("83", "Invalid system_type field");
+		smppMap.put("84", "Invalid replace_if_present flag");
+		smppMap.put("85", "Invalid number of messages");
+		smppMap.put("88", "Throttling error (ESME has exceeded allowed message limits)");
+		smppMap.put("97", "Invalid Scheduled Delivery Time");
+		smppMap.put("98", "Invalid message validity period(Expiry time)");
+		smppMap.put("99", "Predefined Message Invalid or Not Found");
+		smppMap.put("100", "ESME Receiver Temporary App Error Code");
+		smppMap.put("101", "ESME Receiver Permanent App Error Code");
+		smppMap.put("102", "ESME Receiver Reject Message Error Code");
+		smppMap.put("103", "query_sm request failed");
+		smppMap.put("192", "Error in the optional part of the PDU Body.");
+		smppMap.put("193", "Optional Parameter not allowed");
+		smppMap.put("194", "Invalid Parameter Length.");
+		smppMap.put("195", "Expected Optional Parameter missing");
+		smppMap.put("196", "Invalid Optional Parameter Value");
+		smppMap.put("254", " Delivery Failure (used for data_sm_resp)");
+		smppMap.put("255", "Unknown Error");
+		smppMap.put("DELIVRD", "短信投递成功");
+		smppMap.put("EXPIRED", "短信过期");
+		smppMap.put("DELETED", "已被删除");
+		smppMap.put("REJECTED", "已被拒绝");
 	}
 }

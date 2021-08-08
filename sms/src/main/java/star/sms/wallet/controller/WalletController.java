@@ -2,17 +2,15 @@ package star.sms.wallet.controller;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.base.BaseController;
-import star.sms.logs.service.LogsService;
 import star.sms.platmanager.domain.PlatManager;
 import star.sms.platmanager.service.PlatManagerService;
 import star.sms.wallet.domain.Wallet;
@@ -24,13 +22,12 @@ import star.sms.wallet.service.WalletService;
  * 钱包管理
  * @author star
  */
-@Slf4j
 @Controller
 @RequestMapping("/wallet")
 public class WalletController extends BaseController {
 	
-	@Autowired
-	private LogsService logsService;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private WalletService walletService;
 	@Autowired
@@ -78,7 +75,7 @@ public class WalletController extends BaseController {
 		walletLog.setMoney(money);
 		walletLog.setOldMoney(oldMoney);
 		walletLogService.save(walletLog);
-		log.info(getLoginUser().getNickName()+"充值了"+money+"元");
+		logger.info(getLoginUser().getNickName()+"充值了"+money+"元");
 		return SUCCESS();
 	}
 	
@@ -105,8 +102,18 @@ public class WalletController extends BaseController {
 		walletLog.setMoney(money);
 		walletLog.setOldMoney(oldMoney);
 		walletLogService.save(walletLog);
-		log.info(pm.getNickName()+"充值了"+money+"元");
+		logger.info(pm.getNickName()+"充值了"+money+"元");
 		return SUCCESS();
+	}
+	
+	/**
+	 * 根据id查询
+	 */
+	@RequestMapping(value = "/findById", method = RequestMethod.POST)
+	@ResponseBody
+	public Object findById(ModelMap model, Integer id) throws Exception {
+		Wallet wallet = walletService.findIfExist(id);
+		return SUCCESS(wallet);
 	}
 	
 }

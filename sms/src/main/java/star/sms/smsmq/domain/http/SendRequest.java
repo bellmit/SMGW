@@ -1,9 +1,6 @@
 package star.sms.smsmq.domain.http;
 
 import java.util.List;
-import java.util.Map;
-
-import com.google.common.util.concurrent.RateLimiter;
 
 /**
  * 发送短信请求

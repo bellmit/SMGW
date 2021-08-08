@@ -2962,4 +2962,30 @@ public class StringUtils extends org.springframework.util.StringUtils {
             return false;
         }
     }
+    public static boolean isIP(String str)  
+    {  
+        if(StringUtils.isEmpty(str))  
+        {  
+            return false;  
+        }
+     // 如果长度不符合条件 返回false
+        if(str.length()<7 || str.length() >15) return false;
+        String[] arr = str.split("\\.");
+        //如果拆分结果不是4个字串 返回false
+        if( arr.length != 4 )    return false;
+        for(int i = 0 ; i <4 ; i++ ){
+            for(int j = 0; j<arr[i].length();j++){
+                char temp = arr[i].charAt(j);
+                //如果某个字符不是数字就返回false
+                if(!( temp>='0' && temp<= '9' ) ) return false;
+            }
+        }
+        for(int i = 0 ; i<4;i++){
+            int temp = Integer.parseInt( arr[i] );
+            //如果某个数字不是0到255之间的数 就返回false
+            if( temp<0 || temp >255)    return false;
+        }
+        return true;
+    } 
+	
 }
