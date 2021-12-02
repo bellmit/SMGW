@@ -1,5 +1,9 @@
 package star.sms.phonefilter.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -14,6 +18,8 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.base.BaseRepository;
 import star.sms._frame.base.BaseServiceProxy;
+import star.sms.account.domain.AccountInfo;
+import star.sms.account.service.AccountService;
 import star.sms.phonefilter.dao.PhoneFilterRepository;
 import star.sms.phonefilter.domain.PhoneFilter;
 
@@ -33,6 +39,9 @@ public class PhoneFilterService extends BaseServiceProxy<PhoneFilter> {
 	
 	@Resource
 	private EntityManager entityManager;
+	
+	@Autowired
+	private AccountService accountService;
 	
 	@Override
 	protected BaseRepository<PhoneFilter> getBaseRepository() {
@@ -58,6 +67,12 @@ public class PhoneFilterService extends BaseServiceProxy<PhoneFilter> {
 			fromWhereSql.append("  and title like '%"+keyword+"%' ");
 		}
 		Page<PhoneFilter> page = super.findPageBySql(PhoneFilter.class, "select * ", fromWhereSql.toString(), " order by id asc", null, pageable);
+
+		List<AccountInfo> accountList = accountService.findAccountInfoList();
+		Map<Integer, String> accountMap = accountList.stream().collect(Collectors.toMap(AccountInfo::getId, AccountInfo::getTitle));
+		for (PhoneFilter info : page.getContent()) {
+			info.setChannelName(accountMap.get(info.getAccountId())==null?"":accountMap.get(info.getAccountId()));
+		}
 		return page;
 	}
 	

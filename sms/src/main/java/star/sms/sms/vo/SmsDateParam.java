@@ -1,5 +1,7 @@
 package star.sms.sms.vo;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data
@@ -13,4 +15,8 @@ public class SmsDateParam {
 	private Integer taskId;
 	private String title;
 	private String nickName;
+	private Integer channelId;
+	private String channelName;
+	private Integer createUserId;
+	private Timestamp sendTime;
 }

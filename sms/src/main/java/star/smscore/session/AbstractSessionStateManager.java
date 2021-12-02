@@ -210,7 +210,8 @@ public abstract class AbstractSessionStateManager<K, T extends BaseMessage> exte
 				final T response =  (T) msg;
 				K key = getSequenceId(response);
 				errlogger.info("收到消息了"+key.toString());
-				errlogger.info("收到消息了，storeMap:{}",storeMap);
+				//注释，打印太多
+				//errlogger.info("收到消息了，storeMap:{}",storeMap);
 				VersionObject<T> vobj = storeMap.remove(key);
 				if (vobj != null) {
 					T request = vobj.getObj();

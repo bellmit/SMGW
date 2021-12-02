@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import star.sms._frame.utils.UUIDUtils;
 import star.sms.smsmq.domain.http.SendRequest;
+import star.sms.smsmq.domain.httpv2.HttpV2SendRequest;
+import star.sms.smsmq.domain.httpv3.HttpV3SendRequest;
 import star.sms.smsmq.domain.smpp.SendRequestSmpp;
 import star.sms.smsmq.httputils.HttpConnectionUtil;
 import star.sms.smsmq.smshander.SmsProducerHanlder;
 
 /**
- * 短信发送接口
+ * 短信发送接口，存放mq
  * 
  * @author star
  *
@@ -29,11 +31,12 @@ public class SendTask {
     private SmsProducerHanlder smsProducerHanlder;
 
 	/**
-	 * 短信发送
+	 * 短信发送http
 	 * 
 	 * @param sendRequest
 	 * @return
 	 */
+    @Deprecated
 	public void hanlderHttp(SendRequest sendRequest) {
 		try {
 			// 200为单位分割
@@ -79,7 +82,101 @@ public class SendTask {
 		}
 	}
 	/**
-	 * 短信发送
+	 * 短信发送httpv2
+	 * 
+	 * @param sendRequest
+	 * @return
+	 */
+	public void hanlderHttpV2(HttpV2SendRequest sendRequest) {
+		try {
+			// 单位分割
+			int batchNumber=sendRequest.getNumber();
+			List<String> mobileList = sendRequest.getMobileList();
+			List<Integer> mobileIdList = sendRequest.getMobileIdList();
+			int num = 0;
+			if (mobileList != null) {
+				num = mobileList.size() % batchNumber == 0 ? mobileList.size() / batchNumber : mobileList.size() / batchNumber + 1;
+			}
+			for (int i = 0; i < num; i++) {
+				//产生批次
+				String batchId=UUIDUtils.random();
+				//构造发送
+				HttpV2SendRequest sendRequestBatch = new HttpV2SendRequest();
+				sendRequestBatch.setTaskId(sendRequest.getTaskId());
+				sendRequestBatch.setBatchId(batchId);
+				
+				int start = i*batchNumber;
+				int end = start + batchNumber;
+				if (end >= mobileList.size()) {
+					end = mobileList.size();
+				}
+				sendRequestBatch.setMobileList(mobileList.subList(start, end));
+				sendRequestBatch.setMobileIdList(mobileIdList.subList(start, end));
+				sendRequestBatch.setContent(sendRequest.getTaskContent());
+				sendRequestBatch.setTaskContent(sendRequest.getTaskContent());
+				sendRequestBatch.setContentType(sendRequest.getContentType());
+				sendRequestBatch.setRt(sendRequest.getRt());
+				
+				sendRequestBatch.setAccountId(sendRequest.getAccountId());
+				sendRequestBatch.setAccount(sendRequest.getAccount());
+				sendRequestBatch.setCreateUserId(sendRequest.getCreateUserId());
+				
+				// 存放mq
+				smsProducerHanlder.smsSendHttpV2(sendRequestBatch);
+			}
+		} catch (Exception e) {
+			logger.error("发送httpv2短信错误",e);
+		}
+	}
+	/**
+	 * 短信发送httpv3
+	 * 
+	 * @param sendRequest
+	 * @return
+	 */
+	public void hanlderHttpV3(HttpV3SendRequest sendRequest) {
+		try {
+			// 单位分割
+			int batchNumber=sendRequest.getNumber();
+			List<String> mobileList = sendRequest.getMobileList();
+			List<Integer> mobileIdList = sendRequest.getMobileIdList();
+			int num = 0;
+			if (mobileList != null) {
+				num = mobileList.size() % batchNumber == 0 ? mobileList.size() / batchNumber : mobileList.size() / batchNumber + 1;
+			}
+			for (int i = 0; i < num; i++) {
+				//产生批次
+				String batchId=UUIDUtils.random();
+				//构造发送
+				HttpV3SendRequest sendRequestBatch = new HttpV3SendRequest();
+				sendRequestBatch.setTaskId(sendRequest.getTaskId());
+				sendRequestBatch.setBatchId(batchId);
+				
+				int start = i*batchNumber;
+				int end = start + batchNumber;
+				if (end >= mobileList.size()) {
+					end = mobileList.size();
+				}
+				sendRequestBatch.setMobileList(mobileList.subList(start, end));
+				sendRequestBatch.setMobileIdList(mobileIdList.subList(start, end));
+				sendRequestBatch.setContent(sendRequest.getTaskContent());
+				sendRequestBatch.setTaskContent(sendRequest.getTaskContent());
+				sendRequestBatch.setContentType(sendRequest.getContentType());
+				sendRequestBatch.setRt(sendRequest.getRt());
+				
+				sendRequestBatch.setAccountId(sendRequest.getAccountId());
+				sendRequestBatch.setAccount(sendRequest.getAccount());
+				sendRequestBatch.setCreateUserId(sendRequest.getCreateUserId());
+				
+				// 存放mq
+				smsProducerHanlder.smsSendHttpV3(sendRequestBatch);
+			}
+		} catch (Exception e) {
+			logger.error("发送httpv3短信错误",e);
+		}
+	}
+	/**
+	 * 短信发送smpp
 	 * 
 	 * @param sendRequest
 	 * @return

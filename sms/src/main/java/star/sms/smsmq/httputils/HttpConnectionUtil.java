@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import star.sms._frame.utils.JsonUtil;
 import star.sms._frame.utils.UUIDUtils;
 /**
@@ -119,8 +120,17 @@ public class HttpConnectionUtil {
 	                .build();
 	        
 			try {
-				result = okHttpClient.newCall(request).execute().body().string();
-			} catch (IOException e) {
+				Call call = okHttpClient.newCall(request);
+				if (call != null) {
+					Response response = call.execute();
+					if (response != null) {
+						ResponseBody responseBody = response.body();
+						if (responseBody != null) {
+							result = responseBody.string();
+						}
+					}
+				}
+			} catch (Exception e) {
 				logger.error(" ====> serialNumber: "+serialNumber+" , response(POST): "+result+"  "+ e.getMessage());
 				e.printStackTrace();
 			}
@@ -179,12 +189,17 @@ public class HttpConnectionUtil {
                 @Override
     			public void onResponse(Call call, Response response) {
     				try {
-    					String result = response.body().string();
-    					response.close();
+    					String result = "";
+    					if (response != null) {
+    						ResponseBody responseBody = response.body();
+    						if (responseBody != null) {
+    							result = responseBody.string();
+    						}
+    					}
     					logger.info(" <==== serialNumber: "+serialNumber+" , response(POST): "+result);
     					//返回数据
     					responseCallback.success(result);
-    				} catch (IOException e) {
+    				} catch (Exception e) {
     					logger.error(" ====> serialNumber: "+serialNumber+" , response(POST): "+api+"  "+ e.getMessage());
     					e.printStackTrace();
     				}

@@ -33,7 +33,7 @@ public abstract class AbstractSessionLoginManager extends ChannelDuplexHandler {
 	/**
 	 * 连接状态
 	 **/
-	protected SessionState state = SessionState.DisConnect;
+	protected volatile SessionState state = SessionState.DisConnect;
 
 	public AbstractSessionLoginManager(EndpointEntity entity) {
 		this.entity = entity;
@@ -54,6 +54,7 @@ public abstract class AbstractSessionLoginManager extends ChannelDuplexHandler {
 		if (state == SessionState.DisConnect) {
 			if (entity instanceof ClientEndpoint) {
 				// 客户端收到的第一个消息应该是ConnectResp消息
+				logger.info("{} 登录后收到的第一条消息 channel {}", entity.getId(), ctx.channel());
 				receiveConnectResponseMessage(ctx, msg);
 			} else {
 				receiveConnectMessage(ctx, msg);
@@ -83,6 +84,7 @@ public abstract class AbstractSessionLoginManager extends ChannelDuplexHandler {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		if (state == SessionState.DisConnect) {
+			logger.info("{} channelActive  {},判断是否需要重新登陆，这个日志主要是看active动作是否在登录成功前触发了", entity.getId(), ctx.channel());
 			// 客户端必须先发起Connect消息
 			if (entity instanceof ClientEndpoint) {
 
@@ -201,6 +203,7 @@ public abstract class AbstractSessionLoginManager extends ChannelDuplexHandler {
 				notifyChannelConnected(ctx);
 				logger.info("{} login success on channel {}", entity.getId(), ctx.channel());
 			} else {
+				logger.info("{} 登录成功了，但是线路添加失败了 {}", entity.getId(), ctx.channel());
 				ctx.close();
 				return;
 			}

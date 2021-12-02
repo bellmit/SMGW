@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +35,10 @@ import star.sms.logs.service.LogsService;
 import star.sms.platmanager.domain.PlatManager;
 import star.sms.platmanager.service.PlatManagerService;
 import star.sms.sms.domain.Sms;
+import star.sms.sms.domain.SmsSignature;
 import star.sms.sms.domain.SmsTask;
 import star.sms.sms.service.SmsService;
+import star.sms.sms.service.SmsSignatureService;
 import star.sms.sms.service.SmsTaskService;
 import star.sms.smsmq.config.SmsCode;
 import star.sms.wallet.domain.Wallet;
@@ -61,6 +64,8 @@ public class SmsTaskController extends BaseController {
 	private AccountService accountService;
 	@Autowired
 	private PlatManagerService platManagerService;
+	@Autowired
+	private SmsSignatureService smsSignatureService;
 	@Autowired
 	Gson json;
 	
@@ -114,16 +119,21 @@ public class SmsTaskController extends BaseController {
 		}
 		//得到当前用户账户信息
 		AccountInfo  accountInfo = null;
-		PlatManager loginUser = getLoginUser();
+		PlatManager loginUser = platManagerService.findByLoginName(getLoginUser().getLoginName());
 		Integer accountId = loginUser.getAccountId();
 		if(accountId!=null) {
 			accountInfo = accountService.findOne(accountId);
 		}
 		String accountName = "";
+		Integer channelType = 0;
 		if(accountInfo!=null) {
-			accountName= accountInfo.getTitle();
+			accountName = accountInfo.getTitle();
+			channelType = accountInfo.getChannelType();
 		}
+		List<SmsSignature> signatureList = smsSignatureService.findByPage(null, new PageRequest(0, 9999)).getContent();
 		model.addAttribute("accountName",accountName);
+		model.addAttribute("signatureList",json.toJson(signatureList));
+		model.addAttribute("channelType",channelType+"");
 		
 		return "/sms/smsTaskForm";
 	}
@@ -333,19 +343,18 @@ public class SmsTaskController extends BaseController {
 	 */
 	@RequestMapping(value = "/createTask")
 	@ResponseBody
-	public Object createTask(Integer taskId,String content,String sendTimeStr,String title ) {
+	public Object createTask(Integer taskId,String content,String sendTimeStr,String title,String signature ) {
 		Wallet wallet = walletService.findIfExist();
 		if(!smsTaskService.checkCount()) return ERROR("提交失败，当前未完成任务数量已达上限！");
 		if(wallet.getMoney().compareTo(BigDecimal.ZERO)<=0) return ERROR("当前余额不足，所剩余额："+wallet.getMoney()+"元！");
 		//如果余额大于0.则需要计算一下本任务所需要的的费用，然后比较一下剩余余额是否够
-		PlatManager pm = platManagerService.findByLoginName(getLoginUser().getLoginName());
-		BigDecimal count = wallet.getMoney().divide(pm.getPrice(), 3, BigDecimal.ROUND_DOWN);
+		PlatManager loginUser = platManagerService.findByLoginName(getLoginUser().getLoginName());
+		BigDecimal count = wallet.getMoney().divide(loginUser.getPrice(), 3, BigDecimal.ROUND_DOWN);
 		BigDecimal toUseCount = smsTaskService.getToUseCount(taskId,content);
 		if(count.compareTo(toUseCount)<0) return ERROR("当前余额不足，所剩余额："+wallet.getMoney()+"元！,所剩条数："+count.intValue()+"条");
 		
 		//得到当前用户账户信息
 		AccountInfo  accountInfo = null;
-		PlatManager loginUser = getLoginUser();
 		Integer accountId = loginUser.getAccountId();
 		if(accountId!=null) {
 			accountInfo = accountService.findOne(accountId);
@@ -359,23 +368,51 @@ public class SmsTaskController extends BaseController {
 			if(StringUtils.isNotEmpty(sendTimeStr)) {
 				task.setSendTime(new Timestamp(DateUtils.getDate(sendTimeStr).getTime()));
 			}
+			task.setChannelId(accountId);
 			task.setTitle(title);
+			task.setSignature(signature);
 			task.setSendStatus(0);
-			task.setPriority(getLoginUser().getPriority());
+			Integer priority = loginUser.getPriority();
+			if (priority == null) {
+				priority = 0;
+			}
+			task.setPriority(priority);
 			task.setContent(content);
 			task.setChannelType(accountInfo.getChannelType());
 			task.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-			task.setUpdateUserId(getLoginUser().getId());
-			task.setNickName(getLoginUser().getNickName());
-
+			task.setUpdateUserId(loginUser.getId());
+			task.setNickName(loginUser.getNickName());
 			Pattern pattern = Pattern.compile("(\\$\\{.*\\})");
 			Matcher matcher = pattern.matcher(task.getContent());
-			if(matcher.find()) task.setContentType(2);
+			if(matcher.find()) {
+				if(accountInfo.getChannelType()==4) {
+					return ERROR("提交失败，该通道不支持发送点对点模板。");
+				}else {
+					task.setContentType(2);
+				}
+			}
 			
-			smsTaskService.save(task);
+			List<Sms> smsList = smsTaskService.findPhoneByTaskId(taskId);
+			
+			List<Sms> remainList = new ArrayList<>();
+			List<String> existsPhoneList = new ArrayList<String>();
+			for(Sms sms:smsList) {
+				if(!existsPhoneList.contains(sms.getPhone())) {
+					existsPhoneList.add(sms.getPhone());
+				}else {
+					remainList.add(sms);
+				}
+			}
+			//删除重复数
+			smsService.batchUpdate(remainList);
 			//循环任务下面的手机号码。将字段动态赋值到指定的占位符
-			smsTaskService.updatePhones(task,accountInfo);
-			
+			int row = smsTaskService.updatePhones(task,accountInfo);
+			//保存任务
+			smsTaskService.save(task);
+			//创建任务成功,全部根据条数全部计费
+			if (row > 0) {
+				walletService.updateWalletMoneyBySmsNum(loginUser, row , task);
+			}
 			return SUCCESS();
 		}else {
 			return ERROR("提交失败，请刷新页面重新创建任务");

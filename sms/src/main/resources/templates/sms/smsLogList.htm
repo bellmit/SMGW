@@ -9,6 +9,17 @@
 			<div class="ibox-content">
 				<div class="form-group">
 					<div class="form-inline">
+						<label <#if (loginUser.roleCode!)!="ADMIN">style="display:none;"</#if> class="control-label">账号：</label>
+						<select <#if (loginUser.roleCode!)!="ADMIN">style="display:none;"</#if> id="createUserId" class="form-control" style="width: 160px;">
+							<option value="0" selected="selected">全部</option>
+							<#list users as user>
+								<option value="${user.id}">${user.nickName}</option>
+							</#list>
+						</select>
+						<label class="control-label">任务ID：</label>
+						<select id="taskId" class="form-control" style="width: 160px;">
+							<option value="0" selected="selected">全部</option>
+						</select>
 						<label class="control-label">关键字：</label>
 						<input type="text" placeholder="手机号码/短信内容" class="form-control fc-clear" style="width: 300px;" id="keyword">
 						<label class="control-label">范围：</label>
@@ -44,6 +55,21 @@
 	});
 	var statMap=${statMap};
 	var smppMap=${smppMap};
+	$(document).ready(function(){
+		let tasks = ${tasks!};
+		$.each(tasks,function(i,item){
+			$("#taskId").append('<option value="'+item.id+'">'+item.title+'</option>');
+		})
+		
+		$("#createUserId").change(function(){
+			$("#taskId").html('');
+			$("#taskId").append('<option value="0" selected="selected">全部</option>');
+			$.each(tasks,function(i,item){
+				if(item.createUserId==$("#createUserId").val()||$("#createUserId").val()=='0') 
+					$("#taskId").append('<option value="'+item.id+'">'+item.title+'</option>');
+			})
+		})
+	})
 	var sms = {
 		init:function(){
 		    let height = jQuery(window).height()-185;
@@ -56,7 +82,9 @@
 			        	 pageSize: params.limit,  //页面大小
 			        	 keyword:keyword,
 			        	 beginTime:$("#beginTime").val(),
-			        	 endTime:$("#endTime").val()
+			        	 endTime:$("#endTime").val(),
+			        	 createUserId:$("#createUserId").val(),
+			        	 taskId:$("#taskId").val()
 			         };
 			     },
 			     // striped: true,                      //是否显示行间隔色
@@ -81,9 +109,9 @@
  							return index+1;
  						 }
 			         },
-			         {field: 'nickName',halign: 'center', align: 'center',title: '用户',width:'80px'},
 			         {field: 'mid',halign: 'center', align: 'center',title: 'mid',width:'100px'},
-			         {field: 'account',halign: 'center', align: 'center',title: '账号',width:'80px'},
+			         {field: 'nickName',halign: 'center', align: 'center',title: '用户',width:'80px'},
+			         {field: 'channelName',halign: 'center', align: 'center',title: '线路名称',width:'80px'},
 			         {field: 'phone',halign: 'center',align: 'center',title: '手机号码',width:'100px'},
 			         {field: 'isp',halign: 'center', align: 'center',title: '归属地',width:'80px'},
 			         {field: 'content',halign: 'center', align: 'center',title: '短信内容'},
@@ -121,9 +149,21 @@
 			         {field: 'sendStat',halign: 'center', align: 'left',title: '发送结果',width:'150px',formatter:function (value, row, index) {
 				        	 let val='';	
 				        	 if(value) {
-					        	 if(statMap.hasOwnProperty(value)) val=value+'-'+statMap[value];
-					        	 if(smppMap.hasOwnProperty(value)) val=value+'-'+smppMap[value];
-					        	 if(!val) val=value+'-提交线路失败';
+					        	 if(statMap.hasOwnProperty(value)) {
+					        		 if(value==0) {
+					        			 val='DELIVRD-'+statMap[value];
+					        		 } else {
+					        			 val=value+'-'+statMap[value];
+					        		 }
+					        	 }
+					        	 if(smppMap.hasOwnProperty(value)) { 
+					        		 if(value==0) {
+					        			 val='DELIVRD-'+smppMap[value];
+					        		 } else {
+					        			 val=value+'-'+smppMap[value];
+					        		 }
+					        	 }
+					        	 if(!val) val=value+'-未投递成功';
 				        	 }
 				        	 return val;
 		                }}
@@ -134,17 +174,42 @@
 			 });
 		},
 		exportList:function(){
+			let taskId = $("#taskId").val();
+			if(!taskId || taskId=='0'){
+        		toastr.warning("请先选择任务ID再点击导出！");
+				return false;
+			}
 	    	let keyword = $.trim($("#keyword").val());
 	    	var data = {
 	    		keyword:keyword,
 	        	beginTime:$("#beginTime").val(),
-	        	endTime:$("#endTime").val()
+	        	endTime:$("#endTime").val(),
+	        	createUserId:$("#createUserId").val(),
+        	    taskId:taskId
 	    	};
-	 		var url="${ctx}/sms/downSmsLog";
-	         $(".loadingMask").show();
-	 		downExcel(url,data,function () {
-	             $(".loadingMask").hide();
-	 		});
+	    	
+	    	var sampleFormDialog = top.dialog({
+	        	id:"sampleFormDialog",
+	            title:"导出",
+	            modal: true,
+	            url: "${ctx}sms/exportBasic?_t"+Math.random(),
+	            height: 400,
+	            width: 600,
+	            data:{fileName:"短信明细"},
+	            onclose:function(){
+	            	if (sampleFormDialog.data.submit) {
+		       	        $(".loadingMask").show();
+		       	        data.fileName=sampleFormDialog.data.fileName;
+		       	        data.fileType=sampleFormDialog.data.fileType;
+		       	 		downExcel("${ctx}/sms/downSmsLog",data,function () {
+		       	             $(".loadingMask").hide();
+		       	 		});
+	            	}
+	            }
+	        });
+	        sampleFormDialog.show();
+	    	
+	 		
 		},
 		query: function () {
 			$("#table").bootstrapTable('refresh',{

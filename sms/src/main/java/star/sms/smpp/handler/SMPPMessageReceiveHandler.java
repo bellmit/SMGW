@@ -32,7 +32,7 @@ public class SMPPMessageReceiveHandler extends MessageReceiveHandler {
 			log.info("smpp发送成功结果类型1，response:{}",msg);
 			DeliverSmResp res = ((DeliverSm) msg).createResponse();
 			SmsService smsService = SpringUtil.getBean(star.sms.sms.service.SmsService.class);
-			smsService.updateSmsForSmpp2(message.getId(), message.getStat());
+			smsService.updateSmsForSmppResponse(message.getId(), message.getStat());
 			res.setMessageId(String.valueOf(System.currentTimeMillis()));
 			return ctx.writeAndFlush(res);
 		}else if (msg instanceof DeliverSm ) {

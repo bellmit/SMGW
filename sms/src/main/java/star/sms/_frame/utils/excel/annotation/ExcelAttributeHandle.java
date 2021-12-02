@@ -84,7 +84,7 @@ public class ExcelAttributeHandle {
             	String state=val.toString();
             	if(SmsCode.statMap.containsKey(state)) format = state+"-"+SmsCode.statMap.get(state);
             	if(SmsCode.smppMap.containsKey(state)) format = state+"-"+SmsCode.smppMap.get(state);
-            	if(StringUtils.isEmpty(format) && StringUtils.isNotEmpty(state)) format=state+"-提交线路失败";
+            	if(StringUtils.isEmpty(format) && StringUtils.isNotEmpty(state)) format=state+"-未投递成功";
             	break;
             }
             case "basicState": {

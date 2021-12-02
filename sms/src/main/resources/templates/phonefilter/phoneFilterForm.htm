@@ -1,19 +1,29 @@
 <#include "../common/_header.htm">
-<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
+<div id="messageForm" style="height:100%;width:100%;overflow:auto;padding:0px 20px 40px 20px;" v-cloak>
    	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
         <el-form-item label="策略名称：" prop="title">
         	<el-input type="text" v-model="form.title" placeholder="策略名称" maxlength="200"></el-input>
         </el-form-item>
+        <el-form-item label="选择线路：">
+           <el-select v-model="form.accountId" clearable placeholder="请选择">
+			    <el-option
+			      v-for="item in accountList"
+			      :key="item.id"
+			      :label="item.label"
+			      :value="item.id">
+			    </el-option>
+	       </el-select>
+        </el-form-item>
         <el-form-item label="关键词列表：">
         	<el-input type="textarea" v-model="form.keyword" placeholder="关键词一行一个不要出现有特殊符号的关键词" :rows="5"></el-input>
-        	<div class="blue inputtips">正则表达式模式：</div>
-        	<div class="blue inputtips">例：\d{6}:拦截内容包含连续6位数字；[A-Za-z]{10}:拦截内容包含连续10位字母；</div>
-        	<div class="red inputtips">注：表示此内容按正则表达式匹配，正则表达式匹配时间较长，若非特殊情况，不建议使用</div>
-        	<div class="blue inputtips">若不清楚具体怎么配置，可联系工作人员！</div>
+        	<div class="blue inputtips">正则表达式模式:</div>
+        	<div class="blue inputtips">例:\d{6}:拦截内容包含连续6位数字;[A-Za-z]{10}:拦截内容包含连续10位字母</div>
+        	<div class="red inputtips">注:表示此内容按正则表达式匹配:正则表达式匹配时间较长,若非特殊情况,不建议使用</div>
+        	<div class="blue inputtips">若不清楚具体怎么配置,可联系工作人员!</div>
         </el-form-item>
         <el-form-item label="号段拦截：">
         	<el-input type="textarea" v-model="form.phones" placeholder="号段一行一个" :rows="5"></el-input>
-        	<div class="blue inputtips">号段5-8位，（请注意：号段 小于5位不生效，超过8位不生效）</div>
+        	<div class="blue inputtips">输入号码前几位,不能大于11位</div>
         </el-form-item>
         <el-form-item label="地区号段拦截：">
         	<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
@@ -36,12 +46,14 @@ const cityOptions=['天津','内蒙古','西藏','湖南','广东','重庆','黑
         data:{
             labelPosition: 'right',
             form:{
+            	accountId:'',
             	title:'',
             	keyword:'',
             	phones:''
             },
             checkAll: false,
             checkedCities: [],
+            accountList:[],
             cities:cityOptions,
             isIndeterminate: true,
             formrules:{
@@ -50,6 +62,7 @@ const cityOptions=['天津','内蒙古','西藏','湖南','广东','重庆','黑
         },
         created:function() {
         	let that = this;
+        	this.accountList=${accountList!};
         	if(dialogData.id!="0"){
 	        	$.ajax({
 					url:"${ctx}/phoneFilter/findById",
@@ -63,6 +76,7 @@ const cityOptions=['天津','内蒙古','西藏','湖南','广东','重庆','黑
 							that.form.title = data.title;
 							that.form.keyword = data.keyword;
 							that.form.phones = data.phones;
+							that.form.accountId = data.accountId;
 							if(data.areas) that.checkedCities=data.areas.split(",");
 						}else{
 							toastr.error("加载失败！");
@@ -113,5 +127,4 @@ const cityOptions=['天津','内蒙古','西藏','湖南','广东','重庆','黑
 <style>
 	.el-checkbox-group{width:700px;}
 	.el-form-item{width:900px;}
-	.el-select .el-input{width:200px;}
 </style>

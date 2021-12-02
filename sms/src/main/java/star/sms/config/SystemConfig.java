@@ -17,6 +17,9 @@ public class SystemConfig {
 	
 	@Value("${isAdmin}")
     private Boolean isAdmin;
+	
+	@Value("${isTest}")
+    private Boolean isTest;
 
 	public String getTempdir() {
 		return tempdir;
@@ -42,4 +45,13 @@ public class SystemConfig {
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
+
+	public Boolean getIsTest() {
+		return isTest;
+	}
+
+	public void setIsTest(Boolean isTest) {
+		this.isTest = isTest;
+	}
+
 }

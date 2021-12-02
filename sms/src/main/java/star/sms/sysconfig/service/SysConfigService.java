@@ -36,6 +36,7 @@ public class SysConfigService extends BaseServiceProxy<SysConfig> {
 			sysConfig = new SysConfig();
 			sysConfig.setId(1);
 			sysConfig.setTaskCount(5);
+			sysConfig.setSaveDays(1);
 			this.save(sysConfig);
 		}
 		return sysConfig;

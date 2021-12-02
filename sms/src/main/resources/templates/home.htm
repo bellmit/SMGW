@@ -20,7 +20,7 @@
                           <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                         <el-dropdown-menu slot="dropdown" class="elDropdownMenu">
-                            <el-dropdown-item icon="el-icon-setting" onclick="setPwd()">修改密码</el-dropdown-item>
+                            <#if flag=='0'><el-dropdown-item icon="el-icon-setting" onclick="setPwd()">修改密码</el-dropdown-item></#if>
                             <el-dropdown-item icon="el-icon-switch-button" divided class="aqtcBtn" onclick="loginOut()">安全退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>

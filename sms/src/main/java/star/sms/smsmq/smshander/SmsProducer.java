@@ -55,7 +55,9 @@ public class SmsProducer {
      */
     @Bean(name = "defaultMQProducer")
     public  DefaultMQProducer producer() throws Exception {
-    	if(systemConfig.getIsAdmin()) return null;
+    	if(!systemConfig.getIsTest()) {
+    		if(systemConfig.getIsAdmin()) return null;
+    	}
     	
         if (this.producerGroupName.isEmpty()) {
             throw new Exception("组名为空！");

@@ -2,6 +2,7 @@ package star.sms.phonefilter.controller;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
 import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.PageSupport;
+import star.sms.account.domain.AccountInfo;
+import star.sms.account.service.AccountService;
 import star.sms.logs.service.LogsService;
 import star.sms.phonefilter.domain.PhoneFilter;
 import star.sms.phonefilter.service.PhoneFilterService;
@@ -31,6 +36,10 @@ public class PhoneFilterController extends BaseController {
 	private PhoneFilterService phoneFilterService;
 	@Autowired
 	private LogsService logsService;
+	@Autowired
+	private AccountService accountService;
+	@Autowired
+	Gson json;
 	
 	/**
 	 * 拦截策略配置
@@ -47,6 +56,12 @@ public class PhoneFilterController extends BaseController {
 	 */
 	@RequestMapping(value = "/phoneFilterForm", method = RequestMethod.GET)
 	public String phoneFilterForm(ModelMap model) {
+		// 线路列表
+		List<AccountInfo> accountList = accountService.findAccountInfoList();
+		for(AccountInfo info:accountList) {
+			info.setLabel(info.getTitle()+"("+info.getAccount()+")");
+		}
+		model.addAttribute("accountList", json.toJson(accountList));
 		return "/phonefilter/phoneFilterForm";
 	}
 	
@@ -105,6 +120,7 @@ public class PhoneFilterController extends BaseController {
 				old.setKeyword(obj.getKeyword());
 				old.setPhones(obj.getPhones());
 				old.setAreas(obj.getAreas());
+				old.setAccountId(obj.getAccountId());
 				obj.setUpdateUserId(getLoginUser().getId());
 				obj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 				phoneFilterService.save(old);

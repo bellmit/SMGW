@@ -31,7 +31,9 @@ public class SmppRunner implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		if(!systemConfig.getIsAdmin()) return;
+		if(!systemConfig.getIsTest()) {
+			if(!systemConfig.getIsAdmin()) return;
+		}
 		final EndpointManager manager = EndpointManager.INS;
 		log.info("进入到smpp协议发送功能");
 		List<AccountInfo> list = accountService.getSmppAccount();
@@ -46,7 +48,7 @@ public class SmppRunner implements CommandLineRunner {
 					client.setPassword(account.getPassword());
 					client.setChannelType(ChannelType.DUPLEX);
 					
-					client.setMaxChannels((short)5);
+					client.setMaxChannels((short)1);
 					client.setRetryWaitTimeSec((short)100);
 					client.setUseSSL(false);
 					client.setReSendFailMsg(true);

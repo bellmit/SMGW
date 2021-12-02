@@ -70,6 +70,10 @@
 		                    	return 'SMPP';
 		                    }else if(value=='3'){
 		                    	return 'CMPP';
+		                    }else if(value=='4'){
+		                    	return 'HTTPV2';
+		                    }else if(value=='5'){
+		                    	return 'HTTPV3';
 		                    }else{
 		                        return '-';
 		                    }
@@ -80,7 +84,7 @@
 			         {field: 'extno',halign: 'center', align: 'center',title: '接入号'},
 			         {field: 'limiter',halign: 'center', align: 'center',title: '速率'},
 			         {field: 'balance',halign: 'center', align: 'center',title: '余额(元)',formatter:function (value, row, index) {
-			        	 return value/1000;
+			        	 return value;
 		             }},
 			         {field: 'alertBalance',halign: 'center', align: 'center',title: '余额告警(元)'},
 			         {field: 'accountStatus',halign: 'center', align: 'center',title: '是否启用',formatter:function (value, row, index) {

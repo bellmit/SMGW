@@ -79,13 +79,16 @@ public class AccountController extends BaseController {
 			obj.setCreateUserId(getLoginUser().getId());
 			obj.setIsDelete(0);
 			accountService.save(obj);
-			logsService.addData("创建dsx账号信息:"+obj.getAccount());
+			logsService.addData("创建账号信息:{title:"+obj.getTitle()+",account:"+obj.getAccount()+",password:"+obj.getPassword()+",extno:"+obj.getExtno()+",price:"+obj.getPrice()+",balance:"+obj.getBalance()+"}");
 			//启动smpp线路
 			if(obj.getChannelType()==2) smppService.enableChannel(obj);
 		}else {
 			AccountInfo old = accountService.findOne(obj.getId());
+			String log = "修改账号信息，";
 			if (old != null) {
+				log=log+"修改前：{title:"+old.getTitle()+",account:"+old.getAccount()+",password:"+old.getPassword()+",extno:"+old.getExtno()+",price:"+old.getPrice()+",balance:"+old.getBalance()+"}";
 				old.setIp(obj.getIp());
+				old.setUserid(obj.getUserid());
 				old.setTitle(obj.getTitle());
 				old.setAccount(obj.getAccount());
 				old.setPassword(obj.getPassword());
@@ -98,6 +101,7 @@ public class AccountController extends BaseController {
 				old.setLimiter(obj.getLimiter());
 				//保存
 				accountService.save(old);
+				log=log+"修改后：{title:"+old.getTitle()+",account:"+old.getAccount()+",password:"+old.getPassword()+",extno:"+old.getExtno()+",price:"+old.getPrice()+",balance:"+old.getBalance()+"}";
 
 				//启动smpp线路
 				if(obj.getChannelType()==2) {
@@ -105,7 +109,7 @@ public class AccountController extends BaseController {
 					if(obj.getAccountStatus()==1) smppService.enableChannel(obj);
 				}
 			}
-			logsService.addData("修改dsx账号信息:"+obj.getAccount());
+			logsService.addData(log);
 		}
 		return SUCCESS();
 	}
@@ -121,7 +125,7 @@ public class AccountController extends BaseController {
 	@ResponseBody
 	public Object delete(String ids) {
 		accountService.deleteByIds(ids);
-		logsService.addData("批量删除绑定dsx账号信息");
+		logsService.addData("批量删除绑定账号信息,具体看删除明细记录");
 		return SUCCESS();
 	}
 	

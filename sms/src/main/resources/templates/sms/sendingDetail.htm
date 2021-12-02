@@ -16,6 +16,7 @@
 				<input type="text" placeholder="手机号码/短信内容" class="form-control fc-clear" style="width: 300px;" id="keyword">
 				<span class="btnCon">
 					<button type="button" class="btn btn-primary btn-sm" onclick="chooseTemplateForm.query();">查询</button>
+					<button type="button" id="exportList" class="btn btn-primary btn-sm" onclick="chooseTemplateForm.exportList();">导出</button>
 				</span>
 			</div>
 		</div>
@@ -89,9 +90,21 @@
 			         {field: 'sendStat',halign: 'center', align: 'left',title: '发送结果',width:'150px',formatter:function (value, row, index) {
 				        	 let val='';	
 				        	 if(value){
-					        	 if(statMap.hasOwnProperty(value)) val=value+'-'+statMap[value];
-					        	 if(smppMap.hasOwnProperty(value)) val=value+'-'+smppMap[value];
-					        	 if(!val) val=value+'-提交线路失败';
+					        	 if(statMap.hasOwnProperty(value)) {
+					        		 if(value==0) {
+					        			 val='DELIVRD-'+statMap[value];
+					        		 } else {
+					        			 val=value+'-'+statMap[value];
+					        		 }
+					        	 }
+					        	 if(smppMap.hasOwnProperty(value)) { 
+					        		 if(value==0) {
+					        			 val='DELIVRD-'+smppMap[value];
+					        		 } else {
+					        			 val=value+'-'+smppMap[value];
+					        		 }
+					        	 }
+					        	 if(!val) val=value+'-未投递成功';
 				        	 }
 				        	 return val;
 		                }}
@@ -100,6 +113,19 @@
 			    	 setFixedTableBorder($('#table'),$("div.fixed-table-border"));
 			     }
 			 });
+		},
+		exportList:function(){
+	    	let keyword = $.trim($("#keyword").val());
+	    	var data = {
+    			 sendStatus:$("#sendStatus").val(),
+	        	 taskId:dialogData.id,
+	        	 keyword:keyword
+	    	};
+	 		var url="${ctx}/sms/downTaskDetailList";
+	         $(".loadingMask").show();
+	 		downExcel(url,data,function () {
+	             $(".loadingMask").hide();
+	 		});
 		},
 		query: function () {
 			$("#table").bootstrapTable('refresh',{

@@ -6,15 +6,22 @@
         </el-form-item>
         <el-form-item label="通道类型：" prop="channelType">
         	<el-radio-group size="small" v-model="form.channelType">
-		      <el-radio-button label="1">HTTP</el-radio-button>
 		      <el-radio-button label="2">SMPP</el-radio-button>
+		      <el-radio-button label="4">HTTPV2</el-radio-button>
+		      <el-radio-button label="5">HTTPV3</el-radio-button>
 		    </el-radio-group>
-        </el-form-item>
-   		<el-form-item v-show="form.channelType=='1'" label="地址：" prop="ip">
-        	<el-input type="text" v-model="form.ip" placeholder="地址" maxlength="100"></el-input>
         </el-form-item>
    		<el-form-item v-show="form.channelType=='2'" label="地址端口：" prop="ip">
         	<el-input type="text" v-model="form.ip" placeholder="IP:PORT" maxlength="100"></el-input>
+        </el-form-item>
+        <el-form-item v-show="form.channelType=='4'" label="地址：" prop="ip">
+        	<el-input type="text" v-model="form.ip" placeholder="地址" maxlength="100"></el-input>
+        </el-form-item>
+        <el-form-item v-show="form.channelType=='5'" label="地址：" prop="ip">
+        	<el-input type="text" v-model="form.ip" placeholder="地址" maxlength="100"></el-input>
+        </el-form-item>
+        <el-form-item label="企业ID：" prop="userid">
+        	<el-input type="text" v-model="form.userid" placeholder="没有填写账号" maxlength="200"></el-input>
         </el-form-item>
         <el-form-item label="账号：" prop="account">
         	<el-input type="text" v-model="form.account" placeholder="账号" maxlength="200"></el-input>
@@ -23,7 +30,7 @@
         	<el-input type="text" v-model="form.password" placeholder="密码" maxlength="200"></el-input>
         </el-form-item>
         <el-form-item label="接入号：" prop="extno">
-        	<el-input type="text" v-model="form.extno" placeholder="接入号" maxlength="200"></el-input>
+        	<el-input type="text" v-model="form.extno" placeholder="没有填写账号" maxlength="200"></el-input>
         </el-form-item>
         <el-form-item label="余额告警：" >
         	<el-input type="text" v-model="form.alertBalance" placeholder="余额告警" maxlength="200"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
@@ -55,6 +62,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
             	title:'',
             	channelType:'1',
             	ip:'',
+            	userid:'',
             	account:'',
             	password:'',
             	extno:'',
@@ -67,6 +75,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
             	title:[{required:true,message:"名称不能为空",trigger:"blur"}],
             	channelType:[{required:true,message:"请选择通道类型",trigger:"blur"}],
             	ip:[{required:true,message:"地址不能为空",trigger:"blur"}],
+            	userid:[{required:true,message:"企业ID不能为空",trigger:"blur"}],
             	account:[{required:true,message:"账号不能为空",trigger:"blur"}],
             	password:[{required:true,message:"密码不能为空",trigger:"blur"}],
             	limiter:[{required:true,message:"线路速率不能为空",trigger:"blur"},{ type: 'number', message: '线路速率只能为数字', trigger: ['blur', 'change']}],
@@ -88,6 +97,7 @@ var dialogData = dialog.data; // 获取对话框传递过来的数据
 							that.form.channelType = data.channelType;
 							that.form.ip = data.ip;
 							that.form.title = data.title;
+							that.form.userid = data.userid;
 							that.form.account = data.account;
 							that.form.password = data.password;
 							that.form.extno = data.extno;

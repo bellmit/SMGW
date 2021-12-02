@@ -21,15 +21,15 @@
 			<label class="labelWid">联系电话：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="phone" id="phone" value="${platManager.phone!}" maxlength="12" />
 	</div>
-	<div class="form-group form-inline">
+	<div class="form-group form-inline admin">
 			<label class="labelWid">费率(元/条)：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="price" id="price" value="${platManager.price!}" maxlength="12" />
 	</div>
-	<div class="form-group form-inline">
+	<div class="form-group form-inline admin">
 			<label class="labelWid">优先级：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<input class="form-control" type="text" name="priority" id="priority" value="${platManager.priority!}" maxlength="12" />
 	</div>
-	<div class="form-group form-inline">
+	<div class="form-group form-inline admin">
 			<label class="labelWid">网关线路：</label><span class="btStar">*</span>&nbsp;&nbsp;
 			<select class="form-control" name="accountId" id="accountId" style="width: 148px;" required >
 				<option value="">--请选择--</option>
@@ -122,6 +122,22 @@
 		
 		return verificationPassed;
 	}, "登录名不能为重复");
+	
+	$("#roleIds").change(function(){
+		if($("#roleIds").val()=='1'){
+			$(".admin").hide();
+		}else{
+			$(".admin").show();
+		}
+	})
+	
+	$(document).ready(function(){
+		if($("#roleIds").val()=='1'){
+			$(".admin").hide();
+		}else{
+			$(".admin").show();
+		}
+	})
 </script>
 <style>
 	.form-group.form-inline {

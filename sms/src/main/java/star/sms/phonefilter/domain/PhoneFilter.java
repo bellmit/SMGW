@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import star.sms._frame.base.BaseModel;
@@ -33,4 +34,7 @@ public class PhoneFilter extends BaseModel {
 	@Column(name="createTime") private Timestamp createTime;
 	@Column(name="updateUserId") private Integer updateUserId;
 	@Column(name="updateTime") private Timestamp updateTime;
+	@Column(name="accountId") private Integer accountId;//线路Id 非必填，不填或者为0则代表适用于所有的用户
+	
+	@Transient private String channelName;
 }

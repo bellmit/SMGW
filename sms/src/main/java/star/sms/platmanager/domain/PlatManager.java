@@ -47,6 +47,7 @@ public class PlatManager extends BaseModel {
     @Column(name="priority") private Integer priority;//优先级 默认是0 越大发送短信的优先级别越高
     @Column(name="account_id") private Integer accountId;//短信账号id
     @Column(name="secret") private String secret;//秘钥 
+    @Column(name="percent") private BigDecimal percent;
     @Transient private String companyName;
     @Transient private BigDecimal money;
     @Transient private String title;

@@ -36,6 +36,8 @@
                 top.toastr.error("登录失败，请联系管理员");
             }else if("badcredentials" == $.trim(parameters)){
                 top.toastr.error("用户名或者密码不正确，请重新输入");
+            }else if("notfound" == $.trim(parameters)){
+                top.toastr.error("用户名或者密码不正确，请重新输入");
             }else if("disabled" == $.trim(parameters)){
                 top.toastr.error("此用户已被禁用，请联系管理员");
 			}else if("codeEmpty" == $.trim(parameters)){

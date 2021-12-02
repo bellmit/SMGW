@@ -57,33 +57,10 @@ public class WalletLogService extends BaseServiceProxy<WalletLog>{
 	 * 插入钱包日志
 	 * @param walletLogList
 	 */
-	public void insertWalletLog(List<WalletLog> walletLogList) {
-		
-		//得到用户对应钱包
-		Map<Integer,Wallet>  walletMap = new HashMap<Integer,Wallet>();
-		List<Integer> userIdList = new ArrayList<Integer>();
-		for (WalletLog walletLog : walletLogList) {
-			userIdList.add(walletLog.getUserId());
-		}
-		List<Wallet> walletList = walletService.findWalletListByUserId(userIdList);
-		for (Wallet wallet : walletList) {
-			walletMap.put(wallet.getUserId(), wallet);
-		}
-		//插入钱包变更日志
-		StringBuilder sbInsert= new StringBuilder("");
-		sbInsert.append(" insert into tb_wallet_log(userId,walletId,money,oldMoney,memo,createTime) values(?,?,?,?,?,?)");
-		Timestamp now=new Timestamp(System.currentTimeMillis());
-		List<Object[]> walletLogBatchArray=  new ArrayList<Object[]>();
-		for (WalletLog walletLog : walletLogList) {
-			Wallet wallet = walletMap.get(walletLog.getUserId());
-			if(wallet!=null) {
-				Object[] walletArray= {walletLog.getUserId(),wallet.getId(),walletLog.getMoney(),wallet.getMoney(),"",now};
-				walletLogBatchArray.add(walletArray);
-			}
-
-		}
-		jdbcTemplate.batchUpdate(sbInsert.toString(), walletLogBatchArray);
+	public void insertWalletLog(WalletLog walletLog) {	
+		walletLogDao.save(walletLog);
 	}
+	
 	
 	/**
 	 * 分页查

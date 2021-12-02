@@ -29,6 +29,7 @@ public class AccountInfo extends BaseModel  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 	@Column(name = "title") private String title;//名称
+	@Column(name = "userid") private String userid;//用户id,httpv2用到
 	@Column(name = "account") private String account;//账号
     @Column(name = "password") private String password;//密码
     @Column(name = "extno") private String extno;//接入号
@@ -45,10 +46,13 @@ public class AccountInfo extends BaseModel  {
     @Column(name = "sendTime") private Timestamp sendTime;//最近发送时间
     @Column(name = "limiter") private Integer limiter;//网关限流
     @Column(name = "ip") private String ip;//网关地址 IP:PORT
-    @Column(name = "channelType") private Integer channelType;//通道 1 http,2 smpp,3 cmpp
+    @Column(name = "channelType") private Integer channelType;//通道 1 http,2 smpp,3 cmpp 4 httpV2
+	//@Column(name = "add86") private Integer add86;//是否自动添加86 0否 1是
 
     @Transient
     private RateLimiter accountLimiter;
+    @Transient
+    private String label;
     
     @Override
 	public int hashCode() {

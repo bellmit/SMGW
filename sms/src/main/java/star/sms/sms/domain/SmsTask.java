@@ -30,10 +30,17 @@ public class SmsTask extends BaseModel {
 	@Column(name = "sendStatus") private Integer sendStatus;//-1是临时任务，不能发送的 0待发送 1发送成功 2发送失败3已终止 4发送中
 	@Column(name = "priority") private Integer priority;//优先级 默认0，优先级越大发送越靠前
 	@Column(name = "channelType") private Integer channelType;//通道 1 http,2 smpp,3 cmpp
+	@Column(name = "channelId") private Integer channelId;
     @Column(name = "sendTime") private Timestamp sendTime;//发送时间
     @Column(name = "createTime") private Timestamp createTime;//创建时间
     @Column(name = "createUserId") private Integer createUserId;//创建人
     @Column(name = "updateTime") private Timestamp updateTime;//修改时间
     @Column(name = "updateUserId") private Integer updateUserId;//修改人
     @Column(name = "nickName") private String nickName;//用户昵称
+    @Column(name = "signature") private String signature;//短信签名
+    @Column(name = "successCount") private Integer successCount;//成功数量
+    @Column(name = "failCount") private Integer failCount;//失败数量
+    @Column(name = "sendingCount") private Integer sendingCount;//发送中
+    @Column(name = "unknowCount") private Integer unknowCount;//未知错误或终止数量
+    @Column(name = "totalCount") private Integer totalCount;//总短信条数
 }

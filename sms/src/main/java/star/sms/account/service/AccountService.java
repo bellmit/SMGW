@@ -1,11 +1,14 @@
 package star.sms.account.service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +19,19 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 import com.google.common.util.concurrent.RateLimiter;
+
 import star.sms._frame.base.BaseRepository;
 import star.sms._frame.base.BaseServiceProxy;
 import star.sms.account.dao.AccountDao;
 import star.sms.account.domain.AccountInfo;
+import star.sms.config.SystemConfig;
+import star.sms.logs.service.LogsService;
 import star.sms.smpp.service.SmppService;
+import star.sms.smsmq.domain.httpv2.HttpV2OverageRequest;
+import star.sms.smsmq.domain.httpv3.HttpV3OverageRequest;
+import star.sms.smsmq.smstask.OverageSms;
 
 /**
  * 大四喜账号
@@ -42,6 +52,12 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
     private EntityManager entityManager;
     @Autowired
     private SmppService smppService;
+    @Autowired
+    private OverageSms overageSms;
+    @Autowired
+    private SystemConfig systemConfig;
+    @Autowired
+    private LogsService logsService;
     
 	@Override
 	protected BaseRepository<AccountInfo> getBaseRepository() {
@@ -85,8 +101,8 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 		List<AccountInfo> accountList = jdbcTemplate.query(sbLimit.toString(), new BeanPropertyRowMapper<AccountInfo>(AccountInfo.class));
 		//缓存存在账号则删除
 		for (AccountInfo accountInfo : accountList) {
+			logsService.addData("删除账号并关闭通道连接：{title:"+accountInfo.getTitle()+",account:"+accountInfo.getAccount()+",password:"+accountInfo.getPassword()+",extno:"+accountInfo.getExtno()+"}");
 			getAccountMap().remove(accountInfo.getAccount());
-			logger.info("删除账号："+accountInfo.getAccount());
 			if(accountInfo.getChannelType()==2) {
 				smppService.disableChannel(accountInfo.getId()+"");
 			}
@@ -100,6 +116,29 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 		StringBuilder sb= new StringBuilder("");
 		sb.append(" select * from tb_account where accountStatus =1  and isDelete = 0 ");
 		List<AccountInfo> accountInfoList =  jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<AccountInfo>(AccountInfo.class));
+		return accountInfoList;
+	}
+	/**
+	 * 得到所有账号信息
+	 * @return
+	 */
+	public List<AccountInfo> findAllAccountInfoList(){
+		StringBuilder sb= new StringBuilder("");
+		sb.append(" select * from tb_account ");
+		List<AccountInfo> accountInfoList = jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<AccountInfo>(AccountInfo.class));
+		if (accountInfoList != null) {
+			for (AccountInfo accountInfo : accountInfoList) {
+				if (accountInfo != null) {
+					String title = accountInfo.getTitle();
+					if (accountInfo.getAccountStatus() == 0) {
+						accountInfo.setTitle(title + "(禁用)");
+					}
+					if (accountInfo.getIsDelete() == 1) {
+						accountInfo.setTitle(title + "(已删除)");
+					}
+				}
+			}
+		}
 		return accountInfoList;
 	}
 	/**
@@ -191,5 +230,71 @@ public class AccountService extends BaseServiceProxy<AccountInfo>{
 			}
 		}
 	}
+	/**
+	 * 账号余额查询，自动更新账户余额httpV2
+	 */
+	@Scheduled(cron = "0/10 * * * * ?")
+	public void queryAccountOverageHttp2(){
+		if(!systemConfig.getIsTest()) {
+			//管理员执行
+			if(!systemConfig.getIsAdmin()) return;
+		}
+		StringBuilder sb= new StringBuilder("");
+		sb.append(" select * from tb_account where channelType = 4  and isDelete = 0 ");
+		List<AccountInfo> accountAllList = jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<AccountInfo>(AccountInfo.class));
+		if(accountAllList!=null) {
+			for (AccountInfo accountInfo : accountAllList) {
+				HttpV2OverageRequest overageRequest = new HttpV2OverageRequest();
+				overageRequest.setIp(accountInfo.getIp());
+				overageRequest.setUserid(accountInfo.getUserid());
+				overageRequest.setAccount(accountInfo.getAccount());
+				overageRequest.setPassword(accountInfo.getPassword());
+				overageSms.hanlderHttpV2(overageRequest);
+			}
+		}
+	}
+	/**
+	 * 更新账户余额
+	 * @param account
+	 * @param overage
+	 */
+	public void updateAccountOverageHttp2(String account,BigDecimal overage){
+		Object[] arg= {overage,account};
+		jdbcTemplate.update("update tb_account set balance=? where account=?",arg);
+		
+	}
 	
+	/**
+	 * 账号余额查询，自动更新账户余额httpV3
+	 */
+	@Scheduled(cron = "0/10 * * * * ?")
+	public void queryAccountOverageHttp3(){
+		if(!systemConfig.getIsTest()) {
+			//管理员执行
+			if(!systemConfig.getIsAdmin()) return;
+		}
+		StringBuilder sb= new StringBuilder("");
+		sb.append(" select * from tb_account where channelType = 5  and isDelete = 0 ");
+		List<AccountInfo> accountAllList = jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<AccountInfo>(AccountInfo.class));
+		if(accountAllList!=null) {
+			for (AccountInfo accountInfo : accountAllList) {
+				HttpV3OverageRequest overageRequest = new HttpV3OverageRequest();
+				overageRequest.setIp(accountInfo.getIp());
+				overageRequest.setUserid(accountInfo.getUserid());
+				overageRequest.setAccount(accountInfo.getAccount());
+				overageRequest.setPassword(accountInfo.getPassword());
+				overageSms.hanlderHttpV3(overageRequest);
+			}
+		}
+	}
+	/**
+	 * 更新账户余额
+	 * @param account
+	 * @param overage
+	 */
+	public void updateAccountOverageHttp3(String account,BigDecimal overage){
+		Object[] arg= {overage,account};
+		jdbcTemplate.update("update tb_account set balance=? where account=?",arg);
+		
+	}
 }

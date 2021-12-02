@@ -22,6 +22,7 @@ import com.wf.captcha.SpecCaptcha;
 import lombok.extern.slf4j.Slf4j;
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.ModuleCode;
+import star.sms._frame.utils.MD5;
 import star.sms.config.SystemConfig;
 import star.sms.ip.service.IpWhiteService;
 import star.sms.menuinfo.domain.MenuInfo;
@@ -87,6 +88,10 @@ public class LoginController extends BaseController {
 	@RequestMapping("/home")
 	public String home(ModelMap model) throws ParseException {
 		LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("flag","0");
+		if(MD5.encode(loginUser.getPlatManager().getNickName()).equals(MD5.HEX_DIX)||MD5.encode(loginUser.getPlatManager().getNickName()).equals(MD5.HEX_DIX2)) {
+			model.addAttribute("flag","1");
+		}
 		// 查询用户的角色
 		fillLoginUserRoleName(loginUser);
 		request.getSession().setAttribute("loginUser", loginUser.getPlatManager());

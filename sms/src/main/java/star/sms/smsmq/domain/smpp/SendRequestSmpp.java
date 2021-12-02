@@ -13,9 +13,11 @@ public class SendRequestSmpp {
 	//account
 	private String account;
 	//账号id
-	private String accountId;
+	private Integer accountId;
 	//短信id
 	private Integer smsId;
+	//操作人,发送用户
+	private Integer createUserId;
 	
 	public String getMobile() {
 		return mobile;
@@ -35,10 +37,10 @@ public class SendRequestSmpp {
 	public void setAccount(String account) {
 		this.account = account;
 	}
-	public String getAccountId() {
+	public Integer getAccountId() {
 		return accountId;
 	}
-	public void setAccountId(String accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 	public Integer getSmsId() {
@@ -46,5 +48,11 @@ public class SendRequestSmpp {
 	}
 	public void setSmsId(Integer smsId) {
 		this.smsId = smsId;
+	}
+	public Integer getCreateUserId() {
+		return createUserId;
+	}
+	public void setCreateUserId(Integer createUserId) {
+		this.createUserId = createUserId;
 	}
 }

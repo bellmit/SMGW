@@ -9,10 +9,27 @@
 			<div class="ibox-content">
 				<div class="form-group">
 					<div class="form-inline">
-						<div class="form-group">
-							<label class="control-label">关键字：</label>
-						<input type="text" placeholder="任务名称" class="form-control fc-clear" style="width: 300px;" id="keyword">
+						<label <#if (loginUser.roleCode!)!="ADMIN">style="display:none;"</#if> class="control-label">账号：</label>
+						<select <#if (loginUser.roleCode!)!="ADMIN">style="display:none;"</#if> id="createUserId" class="form-control" style="width: 160px;">
+							<option value="0" selected="selected">全部</option>
+							<#list users as user>
+								<option value="${user.id}">${user.nickName}</option>
+							</#list>
+						</select>
+						<label class="control-label">时间范围：</label>
+						<div class="input-group">
+							<div class="input-icon-group">
+								<input type="text" class="form-control fc-clear form_datetime" id="beginTime" placeholder="" /> <span id="scan" class="glyphicon glyphicon-calendar"> </span>
+							</div>
 						</div>
+						<span>至</span>
+						<div class="input-group">
+							<div class="input-icon-group">
+								<input type="text" class="form-control fc-clear form_datetime" id="endTime" placeholder="" /> <span id="scan" class="glyphicon glyphicon-calendar"> </span>
+							</div>
+						</div>
+						<label class="control-label">关键字：</label>
+						<input type="text" placeholder="任务名称" class="form-control fc-clear" style="width: 300px;" id="keyword">
 						<span class="btnCon">
 							<button type="button" class="btn btn-primary btn-sm" onclick="sms.query();">查询</button>
 						</span>
@@ -41,6 +58,9 @@
 			         return {
 			        	 pageNumber: (params.offset / params.limit),  //页码
 			        	 pageSize: params.limit,  //页面大小
+			        	 beginTime:$("#beginTime").val(),
+			        	 endTime:$("#endTime").val(),
+			        	 createUserId:$("#createUserId").val(),
 			        	 keyword:keyword
 			         };
 			     },
@@ -66,9 +86,18 @@
  							return index+1;
  						 }
 			         },
-			         {field: 'nickName',halign: 'center', align: 'center',title: '用户'},
 			         {field: 'title', halign: 'center', align: 'center',title: '任务名称'},
 			         {field: 'taskId', halign: 'center', align: 'center',title: '任务ID'},
+			         {field: 'sendTime', halign: 'center', align: 'center',title: '发送时间',formatter:function (value, row, index) {
+		                    if(value){
+		                        var date = new Date(value);
+		                        return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+		                    }else{
+		                        return '-';
+		                    }
+		                }},
+			         {field: 'nickName',halign: 'center', align: 'center',title: '用户'},
+			         {field: 'channelName', halign: 'center', align: 'center',title: '线路名称'},
 			         {field: 'totalCount', halign: 'center',align: 'center',title: '发送数量'},
 			         {field: 'successCount', halign: 'center',align: 'center',title: '成功条数'},
 			         {field: 'failCount', halign: 'center',align: 'center',title: '失败条数'},

@@ -33,5 +33,6 @@ public class SmsBatch extends BaseModel {
     @Column(name = "createUserId") private Integer createUserId;//创建人
     @Column(name = "updateTime") private Timestamp updateTime;//修改时间
     @Column(name = "updateUserId") private Integer updateUserId;//修改人
+    @Column(name = "submitTaskId") private String submitTaskId;//httpv2提交批次id
     
 }

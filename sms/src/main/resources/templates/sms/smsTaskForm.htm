@@ -9,8 +9,8 @@
 						<p class="memo"></p>
 					</div>
 					<div class="sms-txt">
-						<div class="sms-txtinfo" v-show="form.content">
-							<span class="sms">{{form.content}} </span>
+						<div class="sms-txtinfo" v-show="form.content||form.signature">
+							<span class="sms">{{form|getPreview}} </span>
 						</div>
 					</div>
 				</div>
@@ -20,8 +20,12 @@
 	<div class="taskbox-form" style="width:100%;">
 		<div style="height:100%;width:100%;overflow:auto;padding:0px 20px 20px 20px;" v-cloak>
 		   	<el-form ref="form" :model="form" :rules="formrules" :label-position="labelPosition" >
-		        <el-form-item label="名称：" prop="title">
-		        	<el-input type="text" v-model="form.title" placeholder="名称" maxlength="200"></el-input>
+		        <el-form-item label="当前线路：" >
+		        	<span style="font-weight: 600;">${accountName!''}</span>
+		        </el-form-item>
+		         <br>
+		        <el-form-item label="任务名称：" prop="title">
+		        	<el-input type="text" v-model="form.title" placeholder="任务名称" maxlength="30"></el-input>
 		        </el-form-item>
 		        <br>
 		        <#if Session.code_menuIdMap["zdySend"]?exists >
@@ -37,14 +41,24 @@
 		        	<el-input type="text" v-model="form.templateTitle" disabled="disabled" placeholder="" maxlength="200"></el-input>
 		        	<el-button size="small" @click="chooseTemplate">选择模板</el-button>
 		        </el-form-item>
+		        <el-form-item label="签名选择：">
+		           <el-select v-model="form.signature" clearable placeholder="请选择">
+					    <el-option
+					      v-for="item in signatureList"
+					      :key="item.title"
+					      :label="item.title"
+					      :value="item.title">
+					    </el-option>
+			       </el-select>
+		        </el-form-item>
 		        <br>
 		        <el-form-item label="短信内容：" prop="content">
 		        	<el-input v-if="smsType=='1'" type="textarea" :rows="8" disabled="disabled" v-model="form.content" placeholder="" maxlength="500"></el-input>
 		        	<el-input v-if="smsType=='2'" type="textarea" id="textarea" :rows="8" v-model="form.content" placeholder="" maxlength="500"></el-input>
-		        	<div class="blue">当前字数{{form.content.length}}个字，计费{{form.content.length|getSmsSize}}条</div>
+		        	<div class="blue">当前字数{{form|getLength}}个字，计费{{form|getSmsSize}}条</div>
 		        </el-form-item>
 		        <br>
-		        <el-form-item  v-if="smsType=='2'" label="插入变量：" >
+		        <el-form-item  v-if="smsType=='2'&&channelType!='4'" label="插入变量：" >
 		        	<el-select v-model="cell" placeholder="请选择" style="width:200px;">
 					    <el-option
 					      v-for="item in options"
@@ -93,10 +107,6 @@
 			        </el-date-picker>
 		        </el-form-item>
 		        <br>
-		        <el-form-item label="当前线路：" >
-		        	<span style="font-weight: 600;">${accountName!''}</span>
-		        </el-form-item>
-		        <br>
 		        <el-form-item label="  ">
 		        	<el-button size="small" @click="resetAll">重置</el-button>
 		        	<el-button size="small" type="primary" @click="createTask" >发送</el-button>
@@ -110,14 +120,17 @@
         el:"#messageForm",
         data:{
             labelPosition: 'right',
-            smsType:"1",
+            smsType:"1",//1模板发送 2自定义发送
             sendTime:"1",
+            channelType:"0",
+            signatureList:[],
             form:{
             	title:'',
             	templateTitle:'',
             	taskId:'0',
             	content:'',
-            	sendTimeStr:''
+            	sendTimeStr:'',
+            	signature:''
             },
             cell:'B',
             options:[
@@ -161,15 +174,33 @@
         	let that = this;
         	this.form.sendTimeStr=new Date().format("yyyy-MM-dd hh:mm:ss");
         	
+        	this.channelType="${channelType!}";
         	let warning='${warning!}';
         	if(warning=='1'){
         		toastr.warning("当前未完成任务数量已达上限！");
         	}
+        	this.signatureList=${signatureList!};
         },
         filters:{
-            getSmsSize(value) {
-            	let size = Math.ceil(value/70);
+        	getLength(form) {
+        		let length = form.content.length;
+        		if(form.signature){
+        			length=length+2+form.signature.length;
+        		}
+	        	return length;
+            },
+            getSmsSize(form) {
+        		let length = 2+form.signature.length+form.content.length;
+            	let size = Math.ceil(length/70);
 	        	 return size;
+            },
+            getPreview(form) {
+            	let contentStr='';
+            	if(form.signature){
+            		contentStr='【'+form.signature+'】';
+            	}
+            	contentStr+=form.content;
+	        	return contentStr;
             }
         },
         methods:{
@@ -203,6 +234,7 @@
         		this.form.title='';
         		this.form.templateTitle='';
         		this.form.content='';
+        		this.form.signature='';
         		this.form.sendTimeStr='';
         		this.totalPhone=0;
         		this.failPhone=0;
@@ -217,32 +249,54 @@
                     		return false;
                     	}
                     	
-                    	$(".loadingMask").show();
                     	let param = {
                     			title:this.form.title,
                     			taskId:this.form.taskId,
                     			content:this.form.content,
+                    			signature:this.form.signature,
                     			channelType:this.form.channelType,
                     			sendTimeStr:new Date(this.form.sendTimeStr).format("yyyy-MM-dd hh:mm:ss")
                     	}
-                     	$.ajax({
-         					url:"${ctx}/smsTask/createTask",
-         					type:"post",
-         					dataType:"json",
-         					data:param,
-         					success:function({result,data}){
-                            	$(".loadingMask").hide();
-         						if(result=="success"){
-         							toastr.success("操作成功！");
-         							messageForm.resetAll();
-         						}else{
-         							toastr.error(data);
-         						}
-         					},
-         					error:function(){
-                            	$(".loadingMask").hide();
-         					}
-         				});
+                    	
+                    	let title = "您确定要发送吗？";
+                    	if(this.repeatPhone>0){
+                    		title="当前"+this.repeatPhone+"条重复手机号码，您确定要去重后发送吗？";
+                    	}
+                    	var d = top.dialog({
+                            title: '提示',
+                            width : 200,
+                            height : 50,
+                            padding:50,
+                            content: title,
+                            okValue: '确 定',
+                            ok: function () {
+                                d.close()
+                            	$(".loadingMask").show();
+                            	$.ajax({
+                 					url:"${ctx}/smsTask/createTask",
+                 					type:"post",
+                 					dataType:"json",
+                 					data:param,
+                 					success:function({result,data}){
+                                    	$(".loadingMask").hide();
+                 						if(result=="success"){
+                 							toastr.success("操作成功！");
+                 							messageForm.resetAll();
+                 						}else{
+                 							toastr.error(data);
+                 						}
+                 					},
+                 					error:function(){
+                                    	$(".loadingMask").hide();
+                 					}
+                 				});
+                                return false;
+                            },
+                            cancelValue: '取消',
+                            cancel: function () {
+                            }
+                        });
+                        d.showModal();
                     }
         		});
         	},
@@ -428,7 +482,6 @@
     });
 </script>
 <style>
-	.el-select .el-input{width:200px;}
 	.el-button--mini, .el-button--small{font-size:13px;}
 	.el-radio-button--small .el-radio-button__inner{font-size:13px;}
 </style>

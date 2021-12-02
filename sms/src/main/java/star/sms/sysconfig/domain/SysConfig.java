@@ -27,4 +27,5 @@ public class SysConfig extends BaseModel {
 	@Column(name="logo") private String logo; //logo
 	@Column(name="systemName") private String systemName; //名称
 	@Column(name="logoHome") private String logoHome; //homelogo
+	@Column(name="saveDays") private Integer saveDays; //数据保存天数
 }

@@ -1,6 +1,7 @@
 package star.sms.logs.service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import star.sms._frame.base.BaseServiceProxy;
 import star.sms.logs.dao.LogsRepository;
 import star.sms.logs.domain.Logs;
 import star.sms.sms.domain.SmsTask;
+import star.sms.sysconfig.domain.SysConfig;
+import star.sms.sysconfig.service.SysConfigService;
 
 /**
  * 日志信息
@@ -40,6 +43,9 @@ public class LogsService extends BaseServiceProxy<Logs> {
 	@Resource
 	private EntityManager entityManager;
 	
+	@Resource
+	private SysConfigService smsConfigService;
+	
 	@Override
 	protected BaseRepository<Logs> getBaseRepository() {
 		return logsRepository;
@@ -57,6 +63,7 @@ public class LogsService extends BaseServiceProxy<Logs> {
 			l.setLogNr(logNr);
 			l.setLogTjr(getLoginUser().getNickName());
 			this.save(l);
+			log.info(logNr);
 			return true;
 		} catch (Exception e) {
 			log.error("写日志错误。"+e.getMessage());
@@ -92,16 +99,50 @@ public class LogsService extends BaseServiceProxy<Logs> {
 	 * @param userId
 	 */
 	public void clean(Integer userId) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<SmsTask> list = jdbcTemplate.query("select * from tb_sms_task where createTime<now() and createUserId='"+userId+"' and sendStatus in (-1,1,2,3)", new BeanPropertyRowMapper<SmsTask>(SmsTask.class));
 		String ids="";
 		for(SmsTask task:list) {
 			ids = ids+task.getId()+",";
+			this.addData("清除任务信息：{任务ID："+task.getId()+"，任务名称："+task.getTitle()+"，会员名称："+task.getNickName()+"，任务发送时间："+(task.getSendTime()==null?"":sdf.format(task.getSendTime()))+"，任务数据总条数："+task.getTotalCount()+"}");
 		}
 		if (ids.endsWith(",")) ids = ids.substring(0, ids.length() - 1);
 		if(ids.length()>0) {
 			List<String> sqlList = new ArrayList<String>();
 			sqlList.add("delete from tb_sms where taskId in ("+ids+") ");
 			sqlList.add("delete from tb_sms_batch where taskId in ("+ids+") ");
+			
+			for(String sql:sqlList) {
+				try {
+					jdbcTemplate.update(sql);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 定时清除指定所有用户的记录
+	 * @param userId
+	 */
+	public void cleanAll() {
+		SysConfig sysConfig = smsConfigService.getConfig();
+		Integer saveDays = sysConfig.getSaveDays()==null?0:sysConfig.getSaveDays();
+		this.addData("清除任务信息,保留"+saveDays+"天数据");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<SmsTask> list = jdbcTemplate.query("select * from tb_sms_task where DATEDIFF(NOW(),sendTime)>"+saveDays+" and sendStatus in (-1,1,2,3)", new BeanPropertyRowMapper<SmsTask>(SmsTask.class));
+		String ids="";
+		for(SmsTask task:list) {
+			ids = ids+task.getId()+",";
+			this.addData("清除任务信息：{任务ID："+task.getId()+"，任务名称："+task.getTitle()+"，会员名称："+task.getNickName()+"，任务发送时间："+(task.getSendTime()==null?"":sdf.format(task.getSendTime()))+"，任务数据总条数："+task.getTotalCount()+"}");
+		}
+		if (ids.endsWith(",")) ids = ids.substring(0, ids.length() - 1);
+		if(ids.length()>0) {
+			List<String> sqlList = new ArrayList<String>();
+			sqlList.add("delete from tb_sms_task where id in ("+ids+") ");
+			sqlList.add("delete from tb_sms_batch where taskId in ("+ids+") ");
+			sqlList.add("delete from tb_sms where taskId in ("+ids+") ");
 			
 			for(String sql:sqlList) {
 				try {

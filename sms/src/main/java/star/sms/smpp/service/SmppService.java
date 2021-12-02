@@ -1,3 +1,4 @@
+
 package star.sms.smpp.service;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import star.smscore.BaseMessage;
 import star.smscore.codec.smpp.msg.SubmitSm;
 import star.smscore.codec.smpp.msg.SubmitSmResp;
 import star.smscore.common.util.ChannelUtil;
+import star.smscore.connect.manager.EndpointEntity;
 import star.smscore.connect.manager.EndpointEntity.ChannelType;
 import star.smscore.connect.manager.EndpointEntity.SupportLongMessage;
 import star.smscore.connect.manager.EndpointManager;
@@ -40,9 +42,17 @@ public class SmppService {
 	@Autowired
 	private SystemConfig systemConfig;
 	
-	public void sendSms(String id,Integer smsId,String phone,String smsContent) throws Exception {
-		if(StringUtils.isEmpty(id)) return;
-		log.info("SMPP通道开始发送短信息，id:"+id+",smsId:"+smsId+",phone:"+phone+",smsContent:"+smsContent);
+	/**
+	 * 接受mq消息发送
+	 * @param id
+	 * @param smsId
+	 * @param phone
+	 * @param smsContent
+	 * @throws Exception
+	 */
+	public void sendSms(int platManagerId,String accountId,Integer smsId,String phone,String smsContent) throws Exception {
+		if(StringUtils.isEmpty(accountId)) return;
+		log.info("SMPP通道开始发送短信息，id:"+accountId+",smsId:"+smsId+",phone:"+phone+",smsContent:"+smsContent);
 		SubmitSm request = new SubmitSm();
 		if(!phone.startsWith("86")) phone = "86"+phone;
 		request.setDestAddress(new star.smscore.codec.smpp.Address((byte)1,(byte)1,phone));
@@ -50,7 +60,7 @@ public class SmppService {
 		request.setSmsMsg(new SmsTextMessage(smsContent, SmppSmsDcs.getGeneralDataCodingDcs(SmsAlphabet.UCS2, SmsMsgClass.CLASS_UNKNOWN)));
 		request.setRegisteredDelivery((byte)1);
 		
-		List<Promise<BaseMessage>> futures = ChannelUtil.syncWriteLongMsgToEntity(id,request);
+		List<Promise<BaseMessage>> futures = ChannelUtil.syncWriteLongMsgToEntity(accountId,request);
 		if(futures!=null) {
 			for(Promise<BaseMessage>  promise: futures){
 				//接收到response后回调Listener方法
@@ -65,31 +75,54 @@ public class SmppService {
 							log.info("smpp消息发送成功，messageId:{}",response.getMessageId());
 							//修改短信状态，并计费
 							if(response.getCommandStatus()==0) {
-								smsService.updateSmsForSmpp(id,smsId,response,true);
+								smsService.updateSmsForSmpp(platManagerId,accountId,smsId,response,true);
 							}else {
-								smsService.updateSmsForSmpp(id,smsId,response,false);
+								smsService.updateSmsForSmpp(platManagerId,accountId,smsId,response,false);
 							}
 						}else{
 							//打印错误原因
 							log.error("smpp消息发送失败，response:{}",future.cause());
 							SubmitSmResp response = (SubmitSmResp) future.get();
-							smsService.updateSmsForSmpp(id,smsId,response,false);
+							smsService.updateSmsForSmpp(platManagerId,accountId,smsId,response,false);
 						}
 					}
 				});
 			}
 		}else {
 			//通道尚未注册成功
-			SubmitSmResp response = new SubmitSmResp();
-			response.setMessageId("");
-			response.setResultMessage("通道尚未注册成功");
-			response.setCommandStatus(-1);
-			smsService.updateSmsForSmpp(id,smsId,response,false);
+			/**
+			 * 这里新增一个逻辑。就是判断一下通道是否是可以连接的，如果是不能连接，那么久状态设置为发送失败，如果可以连接则重置为0待发送状态
+			 */
+			EndpointEntity e = EndpointManager.INS.getEndpointEntity(accountId);
+			if (e != null && e.getSingletonConnector() != null && e.getSingletonConnector().getConnectionNum() > 0) {
+				log.warn("短信发送失败，重置为待发送状态，smpp通道id {}", accountId);
+				smsService.updateSmsForSmppInit(platManagerId, smsId);
+			} else if (e == null) {
+				log.warn("短信发送失败，尚未绑定通道，smpp通道id {}", accountId);
+				SubmitSmResp response = new SubmitSmResp();
+				response.setMessageId("");
+				response.setResultMessage("线路中断");
+				response.setCommandStatus(-1);
+				smsService.updateSmsForSmpp(platManagerId, accountId, smsId, response, false);
+			} else {
+				log.warn("smpp通道  {} 未知错误，发送消息失败 ", accountId);
+				SubmitSmResp response = new SubmitSmResp();
+				response.setMessageId("");
+				response.setResultMessage("线路中断");
+				response.setCommandStatus(-1);
+				smsService.updateSmsForSmpp(platManagerId, accountId, smsId, response, false);
+			}
+
 		}
 	}
-	
+	/**
+	 * 删除通道
+	 * @param id
+	 */
 	public void disableChannel(String id) {
-		if(!systemConfig.getIsAdmin()) return;
+		if(!systemConfig.getIsTest()) {
+			if(!systemConfig.getIsAdmin()) return;
+		}
 		final EndpointManager manager = EndpointManager.INS;
 		try {
 			manager.remove(id);
@@ -97,9 +130,14 @@ public class SmppService {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * 创建通道
+	 * @param account
+	 */
 	public void enableChannel(AccountInfo account) {
-		if(!systemConfig.getIsAdmin()) return;
+		if(!systemConfig.getIsTest()) {
+			if(!systemConfig.getIsAdmin()) return;
+		}
 		final EndpointManager manager = EndpointManager.INS;
 		try {
 			SMPPClientEndpointEntity client = new SMPPClientEndpointEntity();
@@ -110,7 +148,7 @@ public class SmppService {
 			client.setPassword(account.getPassword());
 			client.setChannelType(ChannelType.DUPLEX);
 			
-			client.setMaxChannels((short)5);
+			client.setMaxChannels((short)1);
 			client.setRetryWaitTimeSec((short)100);
 			client.setUseSSL(false);
 			client.setReSendFailMsg(true);

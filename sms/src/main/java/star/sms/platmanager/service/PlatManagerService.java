@@ -286,7 +286,7 @@ public class PlatManagerService extends BaseServiceProxy<PlatManager> {
 		
 		StringBuffer selectSql = new StringBuffer();
 		selectSql.append("SELECT m.id AS id, m.login_name AS loginName, m.nick_name AS nickName ");
-		selectSql.append(", m.phone AS phone, m.state AS state,m.price,n.money,m.priority,a.title,m.secret ");
+		selectSql.append(", m.phone AS phone, m.state AS state,m.price,m.percent,n.money,m.priority,a.title,m.secret ");
 		
 		String orderBySql = "ORDER BY m.id DESC ";
 		// 封装并返回
@@ -381,5 +381,17 @@ public class PlatManagerService extends BaseServiceProxy<PlatManager> {
 	
 	public Integer getUserCount() {
 		return jdbcTemplate.queryForObject("select count(1) from tb_plat_manager where isDelete=0 and state='100'", Integer.class);
+	}
+
+	
+	/**
+	 * @param state
+	 * @return
+	 */
+	public List<PlatManager> findValidUser(){
+		if(!getLoginUser().getRoleCode().equals("ADMIN")) {
+			return new ArrayList<>();
+		}
+		return jdbcTemplate.query("select * from tb_plat_manager where isDelete=0 and state='100' and login_name <> 'admin' ", new BeanPropertyRowMapper<PlatManager>(PlatManager.class));
 	}
 }

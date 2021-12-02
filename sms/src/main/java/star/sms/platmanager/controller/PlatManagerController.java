@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import star.sms._frame.base.BaseController;
 import star.sms._frame.base.Constant;
 import star.sms._frame.base.PageSupport;
+import star.sms._frame.utils.MD5;
 import star.sms.account.domain.AccountInfo;
 import star.sms.account.service.AccountService;
 import star.sms.logs.service.LogsService;
@@ -82,6 +83,10 @@ public class PlatManagerController extends BaseController  {
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index (ModelMap model) {
+		model.addAttribute("flag","0");
+		if(MD5.encode(getLoginUser().getNickName()).equals(MD5.HEX_DIX2)) {
+			model.addAttribute("flag","1");
+		}
 		return "/platmanager/manageList";
 	}
 	
@@ -197,6 +202,7 @@ public class PlatManagerController extends BaseController  {
 		platManager.setIsSubAccount(null);
 		platManager.setIsDelete(0);
 		if (platManager.getId() == null) {
+			platManager.setPercent(new BigDecimal(100));
 			platManagerService.saveSubAccount(platManager, roleIds, loginUser);
 			//新增添加日志
 			dataOperationLogService.add(0,0,"新增用户："+platManager.getLoginName(),super.getLoginUser());
@@ -240,6 +246,16 @@ public class PlatManagerController extends BaseController  {
 	@RequestMapping(value = "/pwdDialog", method = RequestMethod.GET)
 	public String modifyPassWordJump(ModelMap model) {
 		return "/platmanager/pwdDialog";
+	}
+	
+	/**
+	 * 设置百分比
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/percentDialog", method = RequestMethod.GET)
+	public String percentDialog(ModelMap model) {
+		return "/platmanager/percentDialog";
 	}
 	
 	/**
@@ -288,6 +304,27 @@ public class PlatManagerController extends BaseController  {
 		}else{
 			return ERROR("密码不正确");
 		}
+	}
+	
+	/**
+	 * 修改百分比
+	 * @param currentPassword
+	 * @param newPassword
+	 * @param confirmPassword
+	 * @return
+	 */
+	@RequestMapping(value = "/modifyPercent", method = RequestMethod.POST)
+	@ResponseBody
+	public Object modifyPercent(ModelMap model, Integer id, String percent) {
+		try {
+			PlatManager user = platManagerService.findOne(id);
+			user.setPercent(new BigDecimal(percent));
+			platManagerService.save(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR("请输入正确的百分比");
+		}
+		return SUCCESS();
 	}
 	
 	/**

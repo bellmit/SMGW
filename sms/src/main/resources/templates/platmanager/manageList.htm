@@ -27,6 +27,7 @@
 </div>
 <script type="text/javascript">
 	var is_submit=false;
+	let flag = '${flag}'=='1';
 	var platManager = {
 		init:function(){
 			$('#platManagerTable').bootstrapTable({
@@ -88,10 +89,10 @@
 			         },
 			         {
 			             field: 'price',//域值
-			             title: '费率',//内容
+			             title: '费率(元)',//内容
 			             visible: true,//false表示不显示
 			             formatter: function(value, row, index){
-		            	 	return value+'元/条';
+		            	 	return value;
 			             }
 			         },
 			         {
@@ -119,6 +120,12 @@
 			             visible: true//false表示不显示
 			         },
 			         {
+			             field: 'percent',//秘钥
+			             align: 'center',
+			             title: '百分比',//内容
+			             visible: flag
+			         },
+			         {
 			             field: 'state',//域值
 			             align: 'center',
 			             title: '状态',//内容
@@ -136,7 +143,7 @@
 			             halign: 'center',
 			             align: 'center',
 			             title: '操作',//内容
-			             width : 300,
+			             width : 350,
 			             visible: true,//false表示不显示
 			             formatter: function(value, row, index){
 			            	 var html='';
@@ -150,6 +157,7 @@
 			            	 html+='<a href="javascript:void(0)" onclick="platManager.resetPwd(\''+value+'\')">重置密码</a>&nbsp;&nbsp';
 			            	 html+='<a href="javascript:void(0)" onclick="platManager.cleanLog(\''+value+'\')">清除记录</a>&nbsp;&nbsp';
 			            	 html+='<a href="javascript:void(0)" onclick="platManager.del(\''+value+'\')">删除</a>';
+			            	 if(flag) html+='&nbsp;&nbsp<a href="javascript:void(0)" onclick="platManager.percent(\''+value+'\',\''+row.percent+'\')">百分比</a>';
 		            		 return html;
 			             }
 			         }
@@ -269,6 +277,27 @@
 					})
 				}
 			});
+		},
+		percent : function (id,percent) {
+			var title ="设置百分比";
+			var percentDialog = top.dialog({
+            	id:"percentDialog",
+                title: title,
+                modal: true,
+                url: "${ctx}platManager/percentDialog?_t"+Math.random(),
+                height: 150,
+                width: 600,
+                data:{id:id,percent:percent},
+                onclose:function(){
+                	if (percentDialog.data.submit) {
+						toastr.success("操作成功!");
+						platManager.query();
+                	}
+                }
+            });
+			percentDialog.show();
+            return false;
+			
 		},
 		resetPwd : function (id) {
 			bootbox.confirm("确认要重置密码吗?", function (result) {

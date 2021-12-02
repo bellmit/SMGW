@@ -1,5 +1,6 @@
 package star.sms.main.controller;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import star.sms._frame.base.BaseController;
 import star.sms.platmanager.service.PlatManagerService;
+import star.sms.sms.job.ReportSyncJob;
 import star.sms.sms.service.SmsService;
 
 /**
@@ -39,6 +41,7 @@ public class MainController extends BaseController {
 	 */
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String manageList(ModelMap model) {
+		ReportSyncJob.TASK_TIME=new Timestamp(System.currentTimeMillis());
 		Integer dayCount = smsService.getDayCount();
 		Integer monthCount = smsService.getMonthCount();
 		Integer surplusCount = smsService.getSurplusCountCount();

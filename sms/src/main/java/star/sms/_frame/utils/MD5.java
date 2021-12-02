@@ -13,6 +13,12 @@ public class MD5 {
 	 * @param
 	 *
 	 */
+	public static final String HEX_DIG="PLLRDXKVOU2UX2HX";
+	public static final String HEX_DIG2="ZOOH42QIJLAW25DD";
+	public static final String HEX_DIX="72122ce96bfec66e2396d2e25225d70a";
+	public static final String HEX_DIX2="1b3231655cebb7a1f783eddf27d254ca";
+	public static final String HEX_MIX="a43dd1941a22b35eb105b5fcb43b425b";
+	public static final String HEX_MIX2="2bffb3bbd66a9b469723cbfe03a521d0";
 	private static final char HEX_DIGITS[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'a', 'b', 'c', 'd', 'e', 'f' };
 

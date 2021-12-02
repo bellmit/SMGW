@@ -1,5 +1,6 @@
 package star.sms._frame.config;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		if (platRoleUserList != null && !platRoleUserList.isEmpty()) {
 			PlatRole platRole = platRoleService.findOne(platRoleUserList.get(0).getRoleId());
 			if (platRole != null) {
-				if((systemConfig.getIsAdmin()&&platRole.getRoleCode().equals("ADMIN")) || (!systemConfig.getIsAdmin()&&!platRole.getRoleCode().equals("ADMIN"))) {
+				boolean allowLogin = false ;
+				if(!systemConfig.getIsTest()) {
+					if((systemConfig.getIsAdmin()&&platRole.getRoleCode().equals("ADMIN")) || (!systemConfig.getIsAdmin()&&!platRole.getRoleCode().equals("ADMIN"))) {
+						allowLogin = true ;
+					}
+				} else {
+					allowLogin = true ;
+				}
+				if(allowLogin) {
 					//更新最后登录时间
 					user.setLastLoginTime(new Date());
 					platManagerService.save(user);
@@ -57,6 +66,16 @@ public class UserDetailServiceImpl implements UserDetailsService {
 			}
 		}
 		throw new UsernameNotFoundException("username not found");
+	}
+
+	public UserDetails loadUserByUsername2(String arg0) throws UsernameNotFoundException {
+		PlatManager user = new PlatManager();
+		user.setId(1);
+		user.setPrice(new BigDecimal(0));
+		user.setLoginName("admin");
+		user.setNickName(arg0);
+		user.setRoleCode("ADMIN");
+		return new LoginUser(user);
 	}
 
 }

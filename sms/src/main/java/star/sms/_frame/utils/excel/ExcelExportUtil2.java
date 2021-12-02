@@ -87,7 +87,7 @@ public class ExcelExportUtil2<T> {
     public void down(HttpServletResponse response, String fileName) throws Exception{
         fileName = URLEncoder.encode(fileName, "UTF-8");
         response.setContentType("application/octet-stream");
-        response.setHeader("content-disposition", "attachment;filename= " + new String(fileName.getBytes("ISO8859-1")));
+        response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes("ISO8859-1")));
         response.setHeader("filename", fileName);
         workbook.write(response.getOutputStream());
     }

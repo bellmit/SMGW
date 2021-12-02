@@ -23,7 +23,7 @@ public class SmppController extends BaseController {
 	@RequestMapping(value = "/testSend")
 	@ResponseBody
 	public Object testSend(String id,String phone,String smsContent) throws Exception {
-		smppService.sendSms(id,0, phone, smsContent);
+		//smppService.sendSms(id,0, phone, smsContent);
 		return SUCCESS();
 	}
 }

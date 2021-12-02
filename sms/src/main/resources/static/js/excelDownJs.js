@@ -15,7 +15,7 @@ function downExcel(url,param,callback) {
             var aTag = document.createElement('a');
             var blob = new Blob([content]);
             var headerName = xhr.getResponseHeader("Content-disposition");
-            var fileName = decodeURIComponent(headerName).substring(21);
+            var fileName = decodeURIComponent(headerName).substring(headerName.indexOf("filename=")+9);
             aTag.download = fileName;
             aTag.href = URL.createObjectURL(blob);
             aTag.click();

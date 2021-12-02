@@ -22,6 +22,10 @@ public class SmsCode {
 	// SMPP状态代码表
 	public static Map<String, String> smppMap = new HashMap<String, String>();
 	
+	
+	// httpV2STAT状态代码表
+	public static Map<String, String> httpV2ErrorMap = new HashMap<String, String>();
+	
 	static {
 		// STATUS错误代码表
 		statusMap.put(0, "成功");
@@ -78,7 +82,7 @@ public class SmsCode {
 		
 		//所有map中未注明的状态都是Reserved状态 提交线路失败
 		smppMap.put("-1", "通道尚未注册成功");
-		smppMap.put("0", "发送成功");//No Error
+		smppMap.put("0", "短信投递成功");//No Error
 		smppMap.put("1", "消息长度错误");//Message Length is invalid
 		smppMap.put("2", "指令长度错误");//Command Length is invalid
 		smppMap.put("3", "无效的指令id");//Invalid Command ID
@@ -134,5 +138,11 @@ public class SmsCode {
 		smppMap.put("EXPIRED", "短信过期");
 		smppMap.put("DELETED", "已被删除");
 		smppMap.put("REJECTED", "已被拒绝");
+		
+		//httpV2错误返回值
+		httpV2ErrorMap.put("1", "用户名或密码不能为空");
+		httpV2ErrorMap.put("2", "用户名或密码错误");
+		httpV2ErrorMap.put("3", "该用户不允许查看状态报告");
+		httpV2ErrorMap.put("4", "参数不正确");
 	}
 }

@@ -13,8 +13,8 @@
 							<label class="control-label">账号：</label>
 							<select id="account" class="form-control" style="width: 160px;">
 								<option value="all" selected="selected">全部</option>
-								<#list options as option>
-									<option value="${option}">${option}</option>
+								<#list accountInfoList as option>
+									<option value="${option.id}">${option.title}(${option.account})</option>
 								</#list>
 							</select>
 							<label class="control-label">时间范围：</label>

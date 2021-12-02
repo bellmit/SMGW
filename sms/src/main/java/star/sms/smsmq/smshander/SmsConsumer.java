@@ -60,7 +60,9 @@ public class SmsConsumer {
 	
 	@PostConstruct
 	public void consumer() throws Exception {
-		if(!systemConfig.getIsAdmin()) return;
+		if(!systemConfig.getIsTest()) {
+			if(!systemConfig.getIsAdmin()) return;
+		}
 		for(int i=0;i<1;i++) {
 			String instanceName="consumer"+i;
 			logger.info(" 创建消费者实例："+ instanceName);
@@ -91,11 +93,28 @@ public class SmsConsumer {
 				// 设置一次消费消息的条数，默认为1条
 				defaultMQPushConsumer.setConsumeMessageBatchMaxSize(consumeMessageBatchMaxSize);
 				// 订阅topic
-				defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_SEND_HTTP, SmsmqConfig.SMS_SEND_HTTP);
-				defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_STAT_HTTP, SmsmqConfig.SMS_STAT_HTTP);
-				defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_SEND_SMPP, SmsmqConfig.SMS_SEND_SMPP);
+				for (int topicNum = 0; topicNum < 32; topicNum++) {
+					defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_SEND_SMPP+"_"+topicNum, SmsmqConfig.SMS_SEND_SMPP+"_"+topicNum);
+					logger.info(" 创建订阅topic:"+ SmsmqConfig.SMS_SEND_SMPP+"_"+topicNum);
+				}
+				//短信消费者订阅多个topic,订阅32个用来区分不同通道
+				for (int topicNum = 0; topicNum < 32; topicNum++) {
+					defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_SEND_HTTPV2+"_"+topicNum, SmsmqConfig.SMS_SEND_HTTPV2+"_"+topicNum);
+					logger.info(" 创建订阅topic:"+ SmsmqConfig.SMS_SEND_HTTPV2+"_"+topicNum);
+				}
+				defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_STAT_HTTPV2, SmsmqConfig.SMS_STAT_HTTPV2);
+				logger.info(" 创建订阅topic:"+ SmsmqConfig.SMS_STAT_HTTPV2);
+				
+				//短信消费者订阅多个topic,订阅32个用来区分不同通道
+				for (int topicNum = 0; topicNum < 32; topicNum++) {
+					defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_SEND_HTTPV3+"_"+topicNum, SmsmqConfig.SMS_SEND_HTTPV3+"_"+topicNum);
+					logger.info(" 创建订阅topic:"+ SmsmqConfig.SMS_SEND_HTTPV3+"_"+topicNum);
+				}
+				defaultMQPushConsumer.subscribe(SmsmqConfig.SMS_STAT_HTTPV3, SmsmqConfig.SMS_STAT_HTTPV3);
+				logger.info(" 创建订阅topic:"+ SmsmqConfig.SMS_STAT_HTTPV3);
 	
 				defaultMQPushConsumer.registerMessageListener(new MessageListenerConcurrently() {
+					@SuppressWarnings("deprecation")
 					@Override
 					public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
 							ConsumeConcurrentlyContext consumeconcurrentlycontext) {
@@ -117,8 +136,16 @@ public class SmsConsumer {
 								smsConsumerHanlder.smsSendHttp(msg);
 							} else if (msg.getTopic().equals(SmsmqConfig.SMS_STAT_HTTP)){
 								smsConsumerHanlder.smsStatHttp(msg);
-							} else if (msg.getTopic().equals(SmsmqConfig.SMS_SEND_SMPP)){
+							} else if (msg.getTopic().startsWith(SmsmqConfig.SMS_SEND_SMPP+"_")){
 								smsConsumerHanlder.smsSendSmpp(msg);
+							} else if (msg.getTopic().startsWith(SmsmqConfig.SMS_SEND_HTTPV2+"_")){
+								smsConsumerHanlder.smsSendHttpV2(msg);
+							} else if (msg.getTopic().equals(SmsmqConfig.SMS_STAT_HTTPV2)){
+								smsConsumerHanlder.smsStatHttpV2(msg);
+							} else if (msg.getTopic().startsWith(SmsmqConfig.SMS_SEND_HTTPV3+"_")){
+								smsConsumerHanlder.smsSendHttpV3(msg);
+							} else if (msg.getTopic().equals(SmsmqConfig.SMS_STAT_HTTPV3)){
+								smsConsumerHanlder.smsStatHttpV3(msg);
 							}
 						} catch (Exception e) {
 							// 如果失败重试次数还没到三次则继续重试
